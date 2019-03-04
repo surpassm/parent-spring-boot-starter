@@ -4,7 +4,7 @@
 package com.github.surpassm.security.session;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.surpassm.security.common.jackson.Result;
+import com.github.surpassm.common.jackson.Result;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

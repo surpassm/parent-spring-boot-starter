@@ -1,7 +1,7 @@
 package com.example.demo.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.surpassm.security.common.jackson.Result;
+import com.github.surpassm.common.jackson.Result;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;

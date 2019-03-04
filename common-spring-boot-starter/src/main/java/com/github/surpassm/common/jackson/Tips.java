@@ -1,4 +1,4 @@
-package com.github.surpassm.security.common.jackson;
+package com.github.surpassm.common.jackson;
 
 /**
  * @author mc

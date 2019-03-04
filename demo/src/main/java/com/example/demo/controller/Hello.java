@@ -1,12 +1,11 @@
 package com.example.demo.controller;
 
 import com.example.demo.annotation.AuthorizationToken;
-import com.github.surpassm.security.common.jackson.Result;
+import com.github.surpassm.common.jackson.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2RefreshToken;
 import org.springframework.security.oauth2.provider.token.TokenStore;

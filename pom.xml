@@ -13,6 +13,8 @@
     <modules>
         <module>demo</module>
         <module>security-spring-boot-starter</module>
+        <module>common-spring-boot-starter</module>
+        <module>tool-spring-boot-starter</module>
     </modules>
 
     

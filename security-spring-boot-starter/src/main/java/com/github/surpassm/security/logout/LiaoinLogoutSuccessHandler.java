@@ -1,7 +1,7 @@
 package com.github.surpassm.security.logout;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.surpassm.security.common.jackson.Result;
+import com.github.surpassm.common.jackson.Result;
 import com.github.surpassm.security.properties.SecurityProperties;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

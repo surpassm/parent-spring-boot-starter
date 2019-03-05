@@ -32,9 +32,9 @@ import java.util.*;
 @Getter
 @Setter
 @SuppressWarnings("serial")
-@ApiModel(value = "用户信息")
+@ApiModel(value = "用户")
 @NameStyle(Style.camelhump)
-@org.hibernate.annotations.Table(appliesTo = "f_user_info", comment = "用户信息")
+@org.hibernate.annotations.Table(appliesTo = "f_user_info", comment = "用户")
 @Table(name = "f_user_info", uniqueConstraints = {@UniqueConstraint(name = "username_unique", columnNames = {"username"})})
 public class UserInfo extends BasicEntity implements UserDetails,CredentialsContainer {
 
@@ -185,7 +185,10 @@ public class UserInfo extends BasicEntity implements UserDetails,CredentialsCont
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
 	private Date landingTime;
 
-
+	@Transient
+	@ApiModelProperty("拥有角色")
+	@NotNull(groups = {UserInfoUpdatePcSimpleView.class,UserInfoInsertPcSimpleView.class},message = "参数不能为为空")
+	private List<Role> roleList ;
 
 
 

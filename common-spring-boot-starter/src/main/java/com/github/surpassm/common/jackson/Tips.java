@@ -24,7 +24,13 @@ public enum Tips {
     CODE_FALSE("验证码错误"),
     PARAMETER_ERROR("参数有误"),
 
-
+	passwordFormatError("密码格式错误，请填写小写字母、大写字母、数字、特殊符号的两种及两种以上"),
+	departmentDataNull("组织不存在"),
+	regionDataNull("区域不存在"),
+	bankCodeError("银行卡号有误"),
+	CarNumberRepeat("车牌号重复"),
+	NotRepeatDelete("不能重复删除"),
+	nameRepeat("名称重复"),
 
     ;
     public Integer code;

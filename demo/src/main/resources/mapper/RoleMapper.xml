@@ -110,11 +110,13 @@
 
     <select id="findByUserId" resultType="com.example.demo.entity.Role">
         SELECT
-            r.*
+          r.*
         FROM
-            f_role r
-        LEFT JOIN m_user_role mr ON mr.roleId = r.id
-        LEFT JOIN f_user_info u ON u.id = mr.userId
+          f_role r
+          LEFT JOIN m_user_role mr
+            ON mr.`role_id` = r.id
+          LEFT JOIN f_user_info u
+            ON u.id = mr.`user_info_id`
         WHERE
             r.is_delete = #{roleIsDeleteStatus}
         AND u.is_delete = #{userIsDeleteStatus}

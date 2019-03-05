@@ -60,4 +60,6 @@ swagger:
   enabled: true
   title: "权限框架 API"
   base-package: com.example.demo.controller
-
+mybatis:
+  type-aliases-package: com.example.demo.controller
+  mapper-locations: classpath:mapper/*.xml

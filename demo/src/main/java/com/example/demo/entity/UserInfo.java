@@ -34,8 +34,8 @@ import java.util.*;
 @SuppressWarnings("serial")
 @ApiModel(value = "用户信息")
 @NameStyle(Style.camelhump)
-@Table(name = "f_user_info")
 @org.hibernate.annotations.Table(appliesTo = "f_user_info", comment = "用户信息")
+@Table(name = "f_user_info", uniqueConstraints = {@UniqueConstraint(name = "username_unique", columnNames = {"username"})})
 public class UserInfo extends BasicEntity implements UserDetails,CredentialsContainer {
 
 	@Transient

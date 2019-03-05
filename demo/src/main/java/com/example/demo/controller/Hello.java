@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.annotation.AuthorizationToken;
 import com.github.surpassm.common.jackson.Result;
+import com.github.surpassm.config.annotation.AuthorizationToken;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;

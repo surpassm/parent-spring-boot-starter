@@ -1,4 +1,4 @@
-package com.example.demo.util;
+package com.github.surpassm.tool.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

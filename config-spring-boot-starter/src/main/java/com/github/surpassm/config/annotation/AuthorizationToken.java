@@ -1,4 +1,4 @@
-package com.example.demo.annotation;
+package com.github.surpassm.config.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

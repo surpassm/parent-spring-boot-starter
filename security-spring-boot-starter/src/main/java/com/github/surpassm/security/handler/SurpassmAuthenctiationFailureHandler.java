@@ -1,7 +1,7 @@
 package com.github.surpassm.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.surpassm.security.common.jackson.Result;
+import com.github.surpassm.common.jackson.Result;
 import com.github.surpassm.security.enums.LoginResponseType;
 import com.github.surpassm.security.properties.SecurityProperties;
 import lombok.extern.slf4j.Slf4j;

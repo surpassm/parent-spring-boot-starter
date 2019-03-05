@@ -1,4 +1,4 @@
-package com.example.demo.config;
+package com.github.surpassm.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.surpassm.common.jackson.Result;

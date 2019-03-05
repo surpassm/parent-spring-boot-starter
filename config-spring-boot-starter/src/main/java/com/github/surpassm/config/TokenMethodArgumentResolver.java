@@ -1,6 +1,6 @@
-package com.example.demo.config;
+package com.github.surpassm.config;
 
-import com.example.demo.annotation.AuthorizationToken;
+import com.github.surpassm.config.annotation.AuthorizationToken;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -11,11 +11,10 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 /**
- * @description:
- * @author: mc
- * @createDate: 2018/7/2 14:57
- * @updateRemark:
- * @version: 1.0
+ * @author mc
+ * Create date 2019/3/4 15:53
+ * Version 1.0
+ * Description
  */
 @Component
 public class TokenMethodArgumentResolver implements HandlerMethodArgumentResolver {

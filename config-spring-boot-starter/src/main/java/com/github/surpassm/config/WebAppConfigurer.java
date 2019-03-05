@@ -1,24 +1,20 @@
-package com.example.demo.config;
+package com.github.surpassm.config;
 
-import com.example.demo.util.FileUtils;
 import com.github.surpassm.security.properties.SecurityProperties;
-import org.apache.commons.collections4.CollectionUtils;
+import com.github.surpassm.tool.util.FileUtils;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.StringUtils;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * @description:
- * @author:         mc
- * @createDate:     2018/7/2 14:58
- * @updateRemark:
- * @version:        1.0
+ * @author mc
+ * Create date 2019/3/4 15:53
+ * Version 1.0
+ * Description
  */
 @Configuration
 public class WebAppConfigurer implements WebMvcConfigurer {

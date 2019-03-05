@@ -1,6 +1,5 @@
-package com.example.demo.util;
+package com.github.surpassm.tool.util;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,13 +14,12 @@ import java.util.List;
  * Version 1.0
  * Description
  */
-@Slf4j
 public class FileUtils {
 
 
     static String FILE_UPLOAD_PATH = "/upload/";
 
-    public static com.example.demo.common.File upload(MultipartFile file, HttpServletRequest request, String path) throws Exception {
+    public static com.github.surpassm.common.pojo.File upload(MultipartFile file, HttpServletRequest request, String path) throws Exception {
         String fileName = System.currentTimeMillis() + "." + getFileType(file);
         int size = (int) file.getSize();
         String filePath = "/" + path + "/" + nowDate() + "/";
@@ -33,7 +31,7 @@ public class FileUtils {
         try {
             //保存文件
             file.transferTo(dest);
-            return com.example.demo.common.File.builder()
+            return com.github.surpassm.common.pojo.File.builder()
                     .fileName(getFileName(file))
                     .fileSuffix("." + getFileType(file))
                     .url(filePath + fileName)

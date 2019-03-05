@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.liaoin.bridge.mapper.UserInfoMapper">
+<mapper namespace="com.example.demo.mapper.UserInfoMapper">
 
-    <insert id="insertSelectiveCustom" parameterType="com.liaoin.bridge.entity.UserInfo">
+    <insert id="insertSelectiveCustom" parameterType="com.example.demo.entity.UserInfo">
         insert into f_user_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
         <if test="id != null">
@@ -109,7 +109,7 @@
         </trim>
     </insert>
     <!-- 根据账号查询用户信息 -->
-    <select id="selectOneByUserName" resultType="com.liaoin.bridge.entity.UserInfo">
+    <select id="selectOneByUserName" resultType="com.example.demo.entity.UserInfo">
         SELECT * FROM f_user_info WHERE username=#{username}
 
     </select>
@@ -126,5 +126,6 @@
         #{id},#{item}
         )
     </foreach >
+    </insert>
 
 </mapper>

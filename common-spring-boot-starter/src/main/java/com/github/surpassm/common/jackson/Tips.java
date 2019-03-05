@@ -18,7 +18,7 @@ public enum Tips {
     USER_PASSWORD_FALSE("用户名或密码错误"),
     USER_PASSWORD_F("旧密码错误"),
     USER_PASSWORD_ERROE("密码错误"),
-
+	USER_INFO_ERROR("用户信息不存在"),
     MSG_NOT("信息不存在"),
     MSG_YES("信息已存在"),
     CODE_FALSE("验证码错误"),

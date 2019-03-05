@@ -36,4 +36,15 @@ public interface RoleMapper extends tk.mybatis.mapper.common.Mapper<Role> {
 	 * @return
 	 */
 	List<Role> selectByPrimaryKeys(@Param("roleList") List<Role> roleList);
+
+	/**
+	 * 根据用户系统标识查询角色列表
+	 * @param roleIsDeleteStatus 角色是否删除
+	 * @param userIsDeleteStatus 用户是否删除
+	 * @param userId 用户系统标识
+	 * @return
+	 */
+	List<Role> findByUserId(@Param("roleIsDeleteStatus") Integer roleIsDeleteStatus,
+							@Param("userIsDeleteStatus") Integer userIsDeleteStatus,
+							@Param("userId") Integer userId);
 }

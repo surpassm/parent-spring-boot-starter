@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.liaoin.bridge.mapper.RoleMapper">
+<mapper namespace="com.example.demo.mapper.RoleMapper">
 
-    <insert id="insertSelectiveCustom" useGeneratedKeys="true" keyProperty="id" parameterType="com.liaoin.bridge.entity.Role">
+    <insert id="insertSelectiveCustom" useGeneratedKeys="true" keyProperty="id" parameterType="com.example.demo.entity.Role">
         insert into f_role
         <trim prefix="(" suffix=")" suffixOverrides=",">
         <if test="id != null">
@@ -100,11 +100,26 @@
 
     </delete>
 
-    <select id="selectByPrimaryKeys" resultType="com.liaoin.oil.entity.user.Role">
+    <select id="selectByPrimaryKeys" resultType="com.example.demo.entity.Role">
 
         select * from f_role where id in
         <foreach collection="roleList" item="item" index="index" open="(" separator="," close=")">
             #{item.id}
         </foreach>
+    </select>
+
+    <select id="findByUserId" resultType="com.example.demo.entity.Role">
+        SELECT
+            r.*
+        FROM
+            f_role r
+        LEFT JOIN m_user_role mr ON mr.roleId = r.id
+        LEFT JOIN f_user_info u ON u.id = mr.userId
+        WHERE
+            r.is_delete = #{roleIsDeleteStatus}
+        AND u.is_delete = #{userIsDeleteStatus}
+        AND u.id = #{userId}
+
+
     </select>
 </mapper>

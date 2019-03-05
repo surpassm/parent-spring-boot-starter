@@ -1,8 +1,17 @@
 package com.example.demo.security;
 
+import com.example.demo.entity.UserInfo;
+import com.example.demo.mapper.RoleMapper;
+import com.example.demo.mapper.UserInfoMapper;
+import com.github.surpassm.common.jackson.Tips;
+import com.github.surpassm.security.exception.SurpassmAuthenticationException;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,6 +20,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author mc
@@ -18,10 +30,14 @@ import javax.annotation.Resource;
  * @date 2018/9/10 10:24
  * @description
  */
+@Slf4j
 @Component
 public class SurpassmUserDetailsServiceImpl implements UserDetailsService {
 
-	private Logger logger = LoggerFactory.getLogger(getClass());
+	@Resource
+	private UserInfoMapper userInfoMapper;
+	@Resource
+	private RoleMapper roleMapper;
 
 	@Resource
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -32,13 +48,23 @@ public class SurpassmUserDetailsServiceImpl implements UserDetailsService {
 	}
 
 
-	UserDetails buildUser(String username) {
-		// 根据用户名查找用户信息
-		//根据查找到的用户信息判断用户是否被冻结
-		String password = bCryptPasswordEncoder.encode("123456");
-		logger.info("数据库密码是:"+password);
-		return new User(username, password,
+	private UserDetails buildUser(String username) {
+		log.info("用户开始登陆:"+username);
+		if (StringUtils.isEmpty(username)) {
+			throw new SurpassmAuthenticationException(Tips.PARAMETER_ERROR.msg);
+		}
+		UserInfo userInfo = userInfoMapper.selectOneByUserName(username);
+		if (userInfo == null) {
+			throw new SurpassmAuthenticationException(Tips.USER_INFO_ERROR.msg);
+		}
+		List<GrantedAuthority> securityRoles = new ArrayList<>();
+		roleMapper.findByUserId(0, 0, userInfo.getId())
+				.forEach(i -> securityRoles.add(new SimpleGrantedAuthority(i.getName())));
+		//更新登陆时间
+		userInfo.setLandingTime(new Date());
+		userInfoMapper.updateByPrimaryKeySelective(userInfo);
+		return new UserInfo(userInfo.getId(),username, userInfo.getPassword(),
 				true, true, true, true,
-				AuthorityUtils.commaSeparatedStringToAuthorityList("admin,ROLE_USER"));
+				securityRoles);
 	}
 }

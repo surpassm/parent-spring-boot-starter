@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.UserInfo;
 import com.github.surpassm.common.jackson.Result;
 import com.github.surpassm.config.BeanConfig;
 import com.github.surpassm.config.annotation.AuthorizationToken;
@@ -40,7 +41,7 @@ public class LoginController {
 	@ApiOperation(value = "使用token获取用户基本信息")
 	@ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
 	public Result save(@ApiParam(hidden = true)@AuthorizationToken String accessToken) {
-		return ok(beanConfig.getAccessToken(accessToken));
+		return ok(beanConfig.getAccessToken(accessToken,UserInfo.class));
 	}
 
 	@PostMapping("refreshToken")

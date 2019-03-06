@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 
@@ -64,7 +65,7 @@ public class UserInfoController {
     @ApiOperation(value = "根据主键查询")
     @ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
     public Result findById(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
-                           @ApiParam(value = "主键",required = true)@RequestParam(value = "id") Integer id) {
+									 @ApiParam(value = "主键",required = true)@RequestParam(value = "id") Integer id) {
         return userInfoService.findById(accessToken,id);
     }
 

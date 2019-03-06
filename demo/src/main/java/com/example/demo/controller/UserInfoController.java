@@ -2,16 +2,13 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.UserInfo;
 import com.example.demo.service.UserInfoService;
+import com.github.surpassm.common.constant.Constant;
 import com.github.surpassm.common.jackson.Result;
 import com.github.surpassm.config.annotation.AuthorizationToken;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 
@@ -33,6 +30,9 @@ public class UserInfoController {
 
     @PostMapping("insert")
     @ApiOperation(value = "新增")
+    @ApiResponses({
+            @ApiResponse(code=Constant.SUCCESS_CODE,message=Constant.SUCCESS_MSG,response=Result.class),
+            @ApiResponse(code=Constant.FAIL_CODE,message=Constant.FAIL_MSG,response=Result.class)})
     @ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
     public Result insert(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
 						 @Validated(UserInfo.UserInfoInsertPcSimpleView.class) @RequestBody UserInfo userInfo, BindingResult errors) {
@@ -44,6 +44,9 @@ public class UserInfoController {
 
     @PostMapping("update")
     @ApiOperation(value = "修改")
+    @ApiResponses({
+            @ApiResponse(code=Constant.SUCCESS_CODE,message=Constant.SUCCESS_MSG,response=Result.class),
+            @ApiResponse(code=Constant.FAIL_CODE,message=Constant.FAIL_MSG,response=Result.class)})
     @ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
     public Result update(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
 						 @Validated(UserInfo.UserInfoUpdatePcSimpleView.class) @RequestBody UserInfo userInfo,BindingResult errors) {
@@ -55,6 +58,9 @@ public class UserInfoController {
 
     @PostMapping("getById")
     @ApiOperation(value = "根据主键删除")
+    @ApiResponses({
+            @ApiResponse(code=Constant.SUCCESS_CODE,message=Constant.SUCCESS_MSG,response=Result.class),
+            @ApiResponse(code=Constant.FAIL_CODE,message=Constant.FAIL_MSG,response=Result.class)})
     @ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
     public Result deleteGetById(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
                                 @ApiParam(value = "主键",required = true)@RequestParam(value = "id") Integer id) {
@@ -63,6 +69,9 @@ public class UserInfoController {
 
     @PostMapping("findById")
     @ApiOperation(value = "根据主键查询")
+    @ApiResponses({
+            @ApiResponse(code=Constant.SUCCESS_CODE,message=Constant.SUCCESS_MSG,response=UserInfo.class),
+            @ApiResponse(code=Constant.FAIL_CODE,message=Constant.FAIL_MSG,response=Result.class)})
     @ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
     public Result findById(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
 									 @ApiParam(value = "主键",required = true)@RequestParam(value = "id") Integer id) {
@@ -71,6 +80,7 @@ public class UserInfoController {
 
     @PostMapping("pageQuery")
     @ApiOperation(value = "条件分页查询")
+    @ApiResponses({@ApiResponse(code=Constant.SUCCESS_CODE,message=Constant.SUCCESS_MSG,response=UserInfo.class)})
     @ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
     public Result pageQuery(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
                             @ApiParam(value = "第几页", required = true) @RequestParam(value = "page") Integer page,

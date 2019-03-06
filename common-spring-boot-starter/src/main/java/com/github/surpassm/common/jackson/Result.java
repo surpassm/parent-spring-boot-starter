@@ -37,8 +37,8 @@ public class Result{
 	private Object data;
 
 	public Result(Object data) {
-		this.code = 200;
-		this.message = "OK";
+		this.code = Tips.SUCCESS.code;
+		this.message = Tips.SUCCESS.msg;
 		this.data = data;
 	}
 

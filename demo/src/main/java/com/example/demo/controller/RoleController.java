@@ -61,7 +61,7 @@ public class RoleController {
     @PostMapping("findById")
     @ApiOperation(value = "根据主键查询")
 	@ApiResponses({
-			@ApiResponse(code=0,message="0k",response=Role.class),
+			@ApiResponse(code=200,message="0k",response=Role.class),
 			@ApiResponse(code=400,message="失败",response=Result.class)
 	})
     @ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")

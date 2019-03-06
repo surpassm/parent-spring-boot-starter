@@ -1,7 +1,6 @@
 package com.github.surpassm.common.jackson;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -77,24 +76,6 @@ public class Result{
 
 	public static Result fail(Object data) {
 		return new Result(Tips.FAIL.code, Tips.FAIL.msg, data);
-	}
-
-
-
-	public Integer getCode() {
-		return code;
-	}
-
-	public void setCode(Integer code) {
-		this.code = code;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
 	}
 
 	public Object getData() {

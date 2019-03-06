@@ -4,10 +4,8 @@ import com.example.demo.entity.Role;
 import com.example.demo.service.RoleService;
 import com.github.surpassm.common.jackson.Result;
 import com.github.surpassm.config.annotation.AuthorizationToken;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +32,7 @@ public class RoleController {
     @ApiOperation(value = "新增")
     @ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
     public Result insert(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
-						 @Valid Role role, BindingResult errors) {
+						 @Valid @RequestBody Role role, BindingResult errors) {
         if (errors.hasErrors()){
 			return Result.fail(errors.getAllErrors());
 		}
@@ -45,7 +43,7 @@ public class RoleController {
     @ApiOperation(value = "修改")
     @ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
     public Result update(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
-						 @Valid Role role,BindingResult errors) {
+						 @Valid @RequestBody Role role,BindingResult errors) {
         if (errors.hasErrors()){
 			return Result.fail(errors.getAllErrors());
 		}
@@ -62,6 +60,10 @@ public class RoleController {
 
     @PostMapping("findById")
     @ApiOperation(value = "根据主键查询")
+	@ApiResponses({
+			@ApiResponse(code=0,message="0k",response=Role.class),
+			@ApiResponse(code=400,message="失败",response=Result.class)
+	})
     @ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
     public Result findById(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
                            @ApiParam(value = "主键",required = true)@RequestParam(value = "id") Integer id) {
@@ -70,12 +72,13 @@ public class RoleController {
 
     @PostMapping("pageQuery")
     @ApiOperation(value = "条件分页查询")
+	@ApiResponse(code=0,message="0k",response=Role.class)
     @ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
     public Result pageQuery(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
                             @ApiParam(value = "第几页", required = true) @RequestParam(value = "page") Integer page,
                             @ApiParam(value = "多少条",required = true)@RequestParam(value = "size") Integer size,
                             @ApiParam(value = "排序字段")@RequestParam(value = "sort",required = false) String sort,
-                            Role role) {
+							@RequestBody Role role) {
         return roleService.pageQuery(accessToken,page, size, sort, role);
     }
 }

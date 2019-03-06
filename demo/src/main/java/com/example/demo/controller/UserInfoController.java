@@ -35,7 +35,7 @@ public class UserInfoController {
     @ApiOperation(value = "新增")
     @ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
     public Result insert(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
-						 @Validated(UserInfo.UserInfoInsertPcSimpleView.class) UserInfo userInfo, BindingResult errors) {
+						 @Validated(UserInfo.UserInfoInsertPcSimpleView.class) @RequestBody UserInfo userInfo, BindingResult errors) {
         if (errors.hasErrors()){
 			return Result.fail(errors.getAllErrors());
 		}
@@ -46,7 +46,7 @@ public class UserInfoController {
     @ApiOperation(value = "修改")
     @ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
     public Result update(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
-						 @Validated(UserInfo.UserInfoUpdatePcSimpleView.class) UserInfo userInfo,BindingResult errors) {
+						 @Validated(UserInfo.UserInfoUpdatePcSimpleView.class) @RequestBody UserInfo userInfo,BindingResult errors) {
         if (errors.hasErrors()){
 			return Result.fail(errors.getAllErrors());
 		}
@@ -76,7 +76,7 @@ public class UserInfoController {
                             @ApiParam(value = "第几页", required = true) @RequestParam(value = "page") Integer page,
                             @ApiParam(value = "多少条",required = true)@RequestParam(value = "size") Integer size,
                             @ApiParam(value = "排序字段")@RequestParam(value = "sort",required = false) String sort,
-                            UserInfo userInfo) {
+							@RequestBody UserInfo userInfo) {
         return userInfoService.pageQuery(accessToken,page, size, sort, userInfo);
     }
 }

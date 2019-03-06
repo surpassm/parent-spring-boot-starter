@@ -44,7 +44,7 @@ public class RegionServiceImpl implements RegionService {
         if (region == null){
             return fail(Tips.PARAMETER_ERROR.msg);
         }
-        UserInfo loginUserInfo = (UserInfo)beanConfig.getAccessToken(accessToken);
+        UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken, UserInfo.class);
         region.setCreateUserId(loginUserInfo.getId());
         region.setCreateTime(new Date());
         region.setIsDelete(0);
@@ -57,7 +57,7 @@ public class RegionServiceImpl implements RegionService {
         if (region == null){
             return fail(Tips.PARAMETER_ERROR.msg);
         }
-        UserInfo loginUserInfo = (UserInfo)beanConfig.getAccessToken(accessToken);
+        UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken, UserInfo.class);
         region.setUpdateUserId(loginUserInfo.getId());
         region.setUpdateTime(new Date());
         regionMapper.updateByPrimaryKeySelective(region);
@@ -73,7 +73,7 @@ public class RegionServiceImpl implements RegionService {
         if(region == null){
             return fail(Tips.MSG_NOT.msg);
         }
-        UserInfo loginUserInfo = (UserInfo)beanConfig.getAccessToken(accessToken);
+        UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken, UserInfo.class);
         region.setDeleteUserId(loginUserInfo.getId());
         region.setDeleteTime(new Date());
         region.setIsDelete(1);

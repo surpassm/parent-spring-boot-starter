@@ -1,5 +1,6 @@
 package com.github.surpassm.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.surpassm.security.exception.SurpassmAuthenticationException;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -19,8 +20,10 @@ public class BeanConfig {
 
 	@Resource
 	private TokenStore redisTokenStore;
+	@Resource
+	private ObjectMapper objectMapper;
 
-	public Object getAccessToken(String accessToken){
+	public <T> T getAccessToken(String accessToken,Class<T> beanType){
 		OAuth2AccessToken oAuth2AccessToken = redisTokenStore.readAccessToken(accessToken);
 		if (oAuth2AccessToken == null){
 			throw new SurpassmAuthenticationException("token已失效");
@@ -30,9 +33,14 @@ public class BeanConfig {
 			throw new SurpassmAuthenticationException("请登陆");
 		}
 		Object object = additionalInformation.get("userInfo");
-		if (object == null){
+		try {
+			if (object != null) {
+				String s = objectMapper.writeValueAsString(object);
+				return objectMapper.readValue(s, beanType);
+			}
+		} catch (Exception e) {
 			throw new SurpassmAuthenticationException("请登陆");
 		}
-			return object;
+		throw new SurpassmAuthenticationException("请登陆");
 	}
 }

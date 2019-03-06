@@ -49,7 +49,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (userInfo == null){
             return fail(Tips.PARAMETER_ERROR.msg);
         }
-		UserInfo loginUserInfo = (UserInfo)beanConfig.getAccessToken(accessToken);
+		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken, UserInfo.class);
 		userInfo.setCreateTime(new Date());
         userInfo.setCreateUserId(loginUserInfo.getId());
         userInfo.setIsDelete(0);
@@ -73,7 +73,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 		List<Integer> roleIdList = new ArrayList<>();
 		roleList.forEach(i -> roleIdList.add(i.getId()));
 
-		UserInfo loginUserInfo = (UserInfo)beanConfig.getAccessToken(accessToken);
+		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken, UserInfo.class);
 		UserInfo user = userInfoMapper.selectByPrimaryKey(userInfo.getId());
 		String password = userInfo.getPassword();
 		//删除当前用户所有角色
@@ -109,7 +109,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         if(userInfo == null){
             return fail(Tips.MSG_NOT.msg);
         }
-		UserInfo loginUserInfo = (UserInfo)beanConfig.getAccessToken(accessToken);
+		UserInfo loginUserInfo =beanConfig.getAccessToken(accessToken, UserInfo.class);
         userInfo.setDeleteTime(new Date());
         userInfo.setDeleteUserId(loginUserInfo.getId());
         userInfo.setIsDelete(1);

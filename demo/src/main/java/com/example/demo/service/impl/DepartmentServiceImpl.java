@@ -43,8 +43,8 @@ public class DepartmentServiceImpl implements DepartmentService {
         if (department == null){
             return fail(Tips.PARAMETER_ERROR.msg);
         }
-        UserInfo loginUserInfo = (UserInfo)beanConfig.getAccessToken(accessToken);
-        department.setCreateUserId(loginUserInfo.getId());
+		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken, UserInfo.class);
+		department.setCreateUserId(loginUserInfo.getId());
         department.setCreateTime(new Date());
         department.setIsDelete(0);
         departmentMapper.insertSelectiveCustom(department);
@@ -56,7 +56,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         if (department == null){
             return fail(Tips.PARAMETER_ERROR.msg);
         }
-        UserInfo loginUserInfo = (UserInfo)beanConfig.getAccessToken(accessToken);
+        UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken, UserInfo.class);
         department.setUpdateUserId(loginUserInfo.getId());
         department.setUpdateTime(new Date());
         departmentMapper.updateByPrimaryKeySelective(department);
@@ -72,7 +72,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         if(department == null){
             return fail(Tips.MSG_NOT.msg);
         }
-        UserInfo loginUserInfo = (UserInfo)beanConfig.getAccessToken(accessToken);
+        UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken, UserInfo.class);
         department.setDeleteUserId(loginUserInfo.getId());
         department.setDeleteTime(new Date());
         department.setIsDelete(1);

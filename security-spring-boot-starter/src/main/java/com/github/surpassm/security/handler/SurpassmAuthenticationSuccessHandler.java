@@ -75,7 +75,12 @@ public class SurpassmAuthenticationSuccessHandler extends SavedRequestAwareAuthe
         //获取密码
         String clientSecret = tokens[1];
 		//根据用户名得到clientDetails
-		ClientDetails clientDetails = clientDetailsService.loadClientByClientId(clientId);
+		ClientDetails clientDetails = null;
+		try {
+			clientDetails = clientDetailsService.loadClientByClientId(clientId);
+		}catch (Exception e){
+			throw new UnapprovedClientAuthenticationException("clientSecret不匹配"+clientId);
+		}
 		//验证clientDetails
 		if (clientDetails == null){
 			throw new UnapprovedClientAuthenticationException("client配置不存在"+clientId);

@@ -44,7 +44,7 @@ public class MenuServiceImpl implements MenuService {
         if (menu == null){
             return fail(Tips.PARAMETER_ERROR.msg);
         }
-        UserInfo loginUserInfo = (UserInfo)beanConfig.getAccessToken(accessToken);
+        UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken, UserInfo.class);
         menu.setCreateUserId(loginUserInfo.getId());
         menu.setCreateTime(new Date());
         menu.setIsDelete(0);
@@ -57,7 +57,7 @@ public class MenuServiceImpl implements MenuService {
         if (menu == null){
             return fail(Tips.PARAMETER_ERROR.msg);
         }
-        UserInfo loginUserInfo = (UserInfo)beanConfig.getAccessToken(accessToken);
+        UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken, UserInfo.class);
         menu.setUpdateUserId(loginUserInfo.getId());
         menu.setUpdateTime(new Date());
         menuMapper.updateByPrimaryKeySelective(menu);
@@ -73,7 +73,7 @@ public class MenuServiceImpl implements MenuService {
         if(menu == null){
             return fail(Tips.MSG_NOT.msg);
         }
-        UserInfo loginUserInfo = (UserInfo)beanConfig.getAccessToken(accessToken);
+        UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken, UserInfo.class);
         menu.setDeleteUserId(loginUserInfo.getId());
         menu.setDeleteTime(new Date());
         menu.setIsDelete(1);

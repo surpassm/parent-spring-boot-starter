@@ -47,7 +47,7 @@ public class RoleServiceImpl implements RoleService {
         if (role == null){
             return fail(Tips.PARAMETER_ERROR.msg);
         }
-        UserInfo loginUserInfo = (UserInfo)beanConfig.getAccessToken(accessToken);
+        UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken, UserInfo.class);
 
 		List<Menu> menuList = menuMapper.selectByMenuList(role.getMenuList());
 		if (menuList.size() != 0){
@@ -77,7 +77,7 @@ public class RoleServiceImpl implements RoleService {
 		if (role == null){
 			return fail(Tips.PARAMETER_ERROR.msg);
 		}
-		UserInfo loginUserInfo = (UserInfo)beanConfig.getAccessToken(accessToken);
+		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken, UserInfo.class);
 		Role selectByPrimaryKey = roleMapper.selectByPrimaryKey(role.getId());
 		if (selectByPrimaryKey == null){
 			return fail(Tips.MSG_NOT.msg);
@@ -105,7 +105,7 @@ public class RoleServiceImpl implements RoleService {
 		if(role == null){
 			return fail(Tips.MSG_NOT.msg);
 		}
-		UserInfo loginUserInfo = (UserInfo)beanConfig.getAccessToken(accessToken);
+		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken, UserInfo.class);
 		role.setDeleteTime(new Date());
 		role.setDeleteUserId(loginUserInfo.getId());
 		role.setIsDelete(1);

@@ -2,6 +2,7 @@ package com.github.surpassm.common.jackson;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.github.surpassm.common.constant.Constant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -37,8 +38,8 @@ public class Result{
 	private Object data;
 
 	public Result(Object data) {
-		this.code = Tips.SUCCESS.code;
-		this.message = Tips.SUCCESS.msg;
+		this.code = Constant.SUCCESS_CODE;
+		this.message = Constant.SUCCESS_MSG;
 		this.data = data;
 	}
 
@@ -61,11 +62,11 @@ public class Result{
 		return new Result(new ArrayList<>());
 	}
 	public static Result fail() {
-		return new Result(Tips.FAIL.code, Tips.FAIL.msg);
+		return new Result(Constant.FAIL_CODE, Constant.FAIL_MSG);
 	}
 
 	public static Result fail(String msg) {
-		return new Result(Tips.FAIL.code, msg);
+		return new Result(Constant.FAIL_CODE, msg);
 	}
 
 	public static Result fail(Integer code, String msg) {
@@ -75,7 +76,7 @@ public class Result{
 
 
 	public static Result fail(Object data) {
-		return new Result(Tips.FAIL.code, Tips.FAIL.msg, data);
+		return new Result(Constant.FAIL_CODE, Constant.FAIL_MSG, data);
 	}
 
 	public Object getData() {

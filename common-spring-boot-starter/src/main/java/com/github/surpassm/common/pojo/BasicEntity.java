@@ -20,27 +20,40 @@ import java.util.Date;
 @Setter
 @SuppressWarnings("serial")
 @MappedSuperclass
+@ApiModel(value = "公共类")
 public class BasicEntity implements Serializable {
 
-
+	@ApiModelProperty(hidden = true)
 	@Column(columnDefinition="int(11) COMMENT '是否删除 0=否、1=是'")
 	private Integer isDelete;
+
+	@ApiModelProperty(hidden = true)
 	@Column(columnDefinition="datetime COMMENT '创建时间'")
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
 	private Date createTime;
+
+	@ApiModelProperty(hidden = true)
 	@Column(columnDefinition="datetime COMMENT '更新时间'")
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
 	private Date updateTime;
+
+	@ApiModelProperty(hidden = true)
 	@Column(columnDefinition="datetime COMMENT '删除时间'")
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
 	private Date deleteTime;
+
+	@ApiModelProperty(hidden = true)
 	@Column(columnDefinition="int(11) COMMENT '创建用户编号'")
 	private Integer createUserId;
+
+	@ApiModelProperty(hidden = true)
 	@Column(columnDefinition="int(11) COMMENT '更新用户编号'")
 	private Integer updateUserId;
+
+	@ApiModelProperty(hidden = true)
 	@Column(columnDefinition="int(11) COMMENT '删除用户编号'")
 	private Integer deleteUserId;
 }

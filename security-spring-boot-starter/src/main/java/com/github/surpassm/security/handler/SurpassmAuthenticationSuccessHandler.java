@@ -97,7 +97,7 @@ public class SurpassmAuthenticationSuccessHandler extends SavedRequestAwareAuthe
 		//交由authorizationServerTokenServices 创建token得到令牌
 		OAuth2AccessToken oAuth2AccessToken = authorizationServerTokenServices.createAccessToken(oAuth2Authentication);
 		//获取登陆成功的当前用户信息
-		User principal = (User) authentication.getPrincipal();
+		Object principal = authentication.getPrincipal();
 		Map<String, Object> additionalInformation = new HashMap<>(16);
 		additionalInformation.put("userInfo",principal);
 		((DefaultOAuth2AccessToken)oAuth2AccessToken).setAdditionalInformation(additionalInformation);

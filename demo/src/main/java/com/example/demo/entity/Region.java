@@ -26,6 +26,8 @@ import java.util.Date;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @SuppressWarnings("serial")
 @ApiModel(description = "区域")
 @NameStyle(Style.camelhump)

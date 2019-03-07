@@ -26,6 +26,8 @@ import java.util.Date;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @SuppressWarnings("serial")
 @ApiModel(value = "权限")
 @NameStyle(Style.camelhump)

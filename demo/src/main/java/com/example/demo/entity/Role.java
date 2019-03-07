@@ -27,6 +27,8 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @SuppressWarnings("serial")
 @ApiModel(value = "角色")
 @NameStyle(Style.camelhump)

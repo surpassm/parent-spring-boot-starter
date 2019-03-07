@@ -14,19 +14,23 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ApiModel(value = "文件类")
 public class File {
 
 	/**
 	 * 文件名称
 	 */
+	@ApiModelProperty(hidden = true)
 	private String fileName;
 	/**
 	 * 文件后缀
 	 */
+	@ApiModelProperty(hidden = true)
 	private String fileSuffix;
 	/**
 	 * 文件路径
 	 */
+	@ApiModelProperty(hidden = true)
 	private String url;
 
 }

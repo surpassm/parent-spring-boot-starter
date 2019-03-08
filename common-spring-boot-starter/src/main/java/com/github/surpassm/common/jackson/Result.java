@@ -16,6 +16,7 @@ import java.util.ArrayList;
  * date 2018/10/30 12:52
  * description
  */
+@Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @ApiModel(value = "返回类")
 public class Result{
@@ -35,7 +36,7 @@ public class Result{
 	 * 响应中的数据
 	 */
 	@ApiModelProperty(value = "响应中的数据")
-	private Object data;
+	private Object data="";
 
 	public Result(Object data) {
 		this.code = Constant.SUCCESS_CODE;
@@ -59,7 +60,7 @@ public class Result{
 	}
 
 	public static Result ok() {
-		return new Result(new ArrayList<>());
+		return new Result("");
 	}
 	public static Result fail() {
 		return new Result(Constant.FAIL_CODE, Constant.FAIL_MSG);

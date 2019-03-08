@@ -48,15 +48,8 @@ public class LoginController {
 
 	@PostMapping("refreshToken")
 	@ApiOperation(value = "刷新token时效")
-	@ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
-	public Result refreshToken(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
-							   @ApiParam(value = "刷新token")@RequestParam String refreshToken,
-							   @ApiParam(value = "head")@RequestParam String head) {
-		OAuth2AccessToken oAuth2AccessToken = redisTokenStore.readAccessToken(accessToken);
-		if (oAuth2AccessToken == null){
-			return Result.fail("请登陆");
-		}
-
+	public Result refreshToken(@ApiParam(value = "刷新token")@RequestParam String refreshToken,
+							   @ApiParam(value = "head 应用账号密码Basic64位加密")@RequestParam String head) {
 		try {
 			OAuth2AccessToken refresh = surpassmAuthenticationSuccessHandler.refresh(refreshToken, head);
 			return ok(refresh);

@@ -2,20 +2,23 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.UserInfo;
 import com.github.surpassm.common.jackson.Result;
-import com.github.surpassm.config.BeanConfig;
+import com.example.demo.security.BeanConfig;
 import com.github.surpassm.config.annotation.AuthorizationToken;
+import com.github.surpassm.security.handler.SurpassmAuthenticationSuccessHandler;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.common.OAuth2RefreshToken;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
+import java.io.IOException;
+
+import static com.github.surpassm.common.jackson.Result.fail;
 import static com.github.surpassm.common.jackson.Result.ok;
 
 
@@ -43,7 +46,7 @@ public class LoginController {
 	@ApiOperation(value = "使用token获取用户基本信息")
 	@ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
 	public Result save(@ApiParam(hidden = true)@AuthorizationToken String accessToken) {
-		return ok(beanConfig.getAccessToken(accessToken,UserInfo.class));
+		return ok(beanConfig.getAccessToken(accessToken));
 	}
 
 	@PostMapping("refreshToken")

@@ -1,7 +1,11 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.entity.Department;
+import com.example.demo.entity.Region;
 import com.example.demo.entity.Role;
 import com.example.demo.entity.UserInfo;
+import com.example.demo.mapper.DepartmentMapper;
+import com.example.demo.mapper.RegionMapper;
 import com.example.demo.mapper.RoleMapper;
 import com.example.demo.mapper.UserInfoMapper;
 import com.example.demo.service.UserInfoService;
@@ -9,7 +13,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.surpassm.common.jackson.Result;
 import com.github.surpassm.common.jackson.Tips;
-import com.github.surpassm.config.BeanConfig;
+import com.example.demo.security.BeanConfig;
 import com.github.surpassm.tool.util.ValidateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -53,7 +57,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (userInfo == null){
             return fail(Tips.PARAMETER_ERROR.msg);
         }
-		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken, UserInfo.class);
+		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
 		userInfo.setCreateTime(new Date());
         userInfo.setCreateUserId(loginUserInfo.getId());
         //新增账户初始正常
@@ -126,7 +130,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 		List<Integer> roleIdList = new ArrayList<>();
 		roleList.forEach(i -> roleIdList.add(i.getId()));
 
-		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken, UserInfo.class);
+		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
 		UserInfo user = userInfoMapper.selectByPrimaryKey(userInfo.getId());
 		String password = userInfo.getPassword();
 		//删除当前用户所有角色
@@ -161,7 +165,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         if(userInfo == null){
             return fail(Tips.MSG_NOT.msg);
         }
-		UserInfo loginUserInfo =beanConfig.getAccessToken(accessToken, UserInfo.class);
+		UserInfo loginUserInfo =beanConfig.getAccessToken(accessToken);
         userInfo.setDeleteTime(new Date());
         userInfo.setDeleteUserId(loginUserInfo.getId());
         userInfo.setIsDelete(1);

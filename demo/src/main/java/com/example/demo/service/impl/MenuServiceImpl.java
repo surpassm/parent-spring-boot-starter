@@ -8,7 +8,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.surpassm.common.jackson.Result;
 import com.github.surpassm.common.jackson.Tips;
-import com.github.surpassm.config.BeanConfig;
+import com.example.demo.security.BeanConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +44,7 @@ public class MenuServiceImpl implements MenuService {
         if (menu == null){
             return fail(Tips.PARAMETER_ERROR.msg);
         }
-        UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken, UserInfo.class);
+        UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
         menu.setCreateUserId(loginUserInfo.getId());
         menu.setCreateTime(new Date());
         menu.setIsDelete(0);
@@ -57,7 +57,7 @@ public class MenuServiceImpl implements MenuService {
         if (menu == null){
             return fail(Tips.PARAMETER_ERROR.msg);
         }
-        UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken, UserInfo.class);
+        UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
         menu.setUpdateUserId(loginUserInfo.getId());
         menu.setUpdateTime(new Date());
         menuMapper.updateByPrimaryKeySelective(menu);
@@ -73,7 +73,7 @@ public class MenuServiceImpl implements MenuService {
         if(menu == null){
             return fail(Tips.MSG_NOT.msg);
         }
-        UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken, UserInfo.class);
+        UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
         menu.setDeleteUserId(loginUserInfo.getId());
         menu.setDeleteTime(new Date());
         menu.setIsDelete(1);

@@ -7,7 +7,7 @@ import com.example.demo.service.DepartmentService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.surpassm.common.jackson.Tips;
-import com.github.surpassm.config.BeanConfig;
+import com.example.demo.security.BeanConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +43,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         if (department == null){
             return fail(Tips.PARAMETER_ERROR.msg);
         }
-		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken, UserInfo.class);
+		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
 		department.setCreateUserId(loginUserInfo.getId());
         department.setCreateTime(new Date());
         department.setIsDelete(0);
@@ -56,7 +56,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         if (department == null){
             return fail(Tips.PARAMETER_ERROR.msg);
         }
-        UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken, UserInfo.class);
+        UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
         department.setUpdateUserId(loginUserInfo.getId());
         department.setUpdateTime(new Date());
         departmentMapper.updateByPrimaryKeySelective(department);
@@ -72,7 +72,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         if(department == null){
             return fail(Tips.MSG_NOT.msg);
         }
-        UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken, UserInfo.class);
+        UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
         department.setDeleteUserId(loginUserInfo.getId());
         department.setDeleteTime(new Date());
         department.setIsDelete(1);

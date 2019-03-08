@@ -8,7 +8,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.surpassm.common.jackson.Result;
 import com.github.surpassm.common.jackson.Tips;
-import com.github.surpassm.config.BeanConfig;
+import com.example.demo.security.BeanConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +44,7 @@ public class RegionServiceImpl implements RegionService {
         if (region == null){
             return fail(Tips.PARAMETER_ERROR.msg);
         }
-        UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken, UserInfo.class);
+        UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
         region.setCreateUserId(loginUserInfo.getId());
         region.setCreateTime(new Date());
         region.setIsDelete(0);
@@ -57,7 +57,7 @@ public class RegionServiceImpl implements RegionService {
         if (region == null){
             return fail(Tips.PARAMETER_ERROR.msg);
         }
-        UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken, UserInfo.class);
+        UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
         region.setUpdateUserId(loginUserInfo.getId());
         region.setUpdateTime(new Date());
         regionMapper.updateByPrimaryKeySelective(region);
@@ -73,7 +73,7 @@ public class RegionServiceImpl implements RegionService {
         if(region == null){
             return fail(Tips.MSG_NOT.msg);
         }
-        UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken, UserInfo.class);
+        UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
         region.setDeleteUserId(loginUserInfo.getId());
         region.setDeleteTime(new Date());
         region.setIsDelete(1);

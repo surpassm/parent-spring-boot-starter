@@ -40,19 +40,21 @@ public class UserInfo extends BasicEntity implements UserDetails,CredentialsCont
 
 	@Transient
 	@ApiModelProperty(hidden = true)
-	private final Set<GrantedAuthority> authorities;
+	private  Set<GrantedAuthority> authorities;
 	@Transient
 	@ApiModelProperty(hidden = true)
-	private final boolean accountNonExpired;
+	private  boolean accountNonExpired;
 	@Transient
 	@ApiModelProperty(hidden = true)
-	private final boolean accountNonLocked;
+	private  boolean accountNonLocked;
 	@Transient
 	@ApiModelProperty(hidden = true)
-	private final boolean credentialsNonExpired;
+	private  boolean credentialsNonExpired;
 	@Transient
 	@ApiModelProperty(hidden = true)
-	private final boolean enabled;
+	private  boolean enabled;
+
+	public UserInfo(){}
 
 	public UserInfo(Integer id, String username, String password, boolean enabled,
 					boolean accountNonExpired, boolean credentialsNonExpired,

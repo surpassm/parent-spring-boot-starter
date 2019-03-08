@@ -43,6 +43,10 @@ public class UserInfoServiceImpl implements UserInfoService {
 	private RoleMapper roleMapper;
 	@Resource
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Resource
+	private DepartmentMapper departmentMapper;
+	@Resource
+	private RegionMapper regionMapper;
 
     @Override
     public Result insert(String accessToken, UserInfo userInfo) {
@@ -52,8 +56,57 @@ public class UserInfoServiceImpl implements UserInfoService {
 		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken, UserInfo.class);
 		userInfo.setCreateTime(new Date());
         userInfo.setCreateUserId(loginUserInfo.getId());
+        //新增账户初始正常
         userInfo.setIsDelete(0);
-        userInfoMapper.insertSelectiveCustom(userInfo);
+        //效验密码
+        if (!ValidateUtil.isPassword(userInfo.getPassword())){
+        	return fail(Tips.passwordFormatError.msg);
+		}
+		//效验手机号
+		if (!ValidateUtil.isMobilePhone(userInfo.getMobile())){
+        	return fail("手机格式错误");
+		}
+		//效验手姓名
+		if (!ValidateUtil.isRealName(userInfo.getName())){
+			return fail("姓名格式错误");
+		}
+		//查看账号是否存在
+		UserInfo u = new UserInfo();
+		u.setUsername(userInfo.getUsername());
+		int one = userInfoMapper.selectCount(u);
+		if (one != 0){
+			return fail("账号重复，请重新输入");
+		}
+
+		Department queryDepartment = Department.builder().id(userInfo.getDepartmentId()).build();
+		queryDepartment.setIsDelete(0);
+
+		Department department = departmentMapper.selectOne(queryDepartment);
+		if (department == null) {
+			return fail(Tips.departmentDataNull.msg);
+		}
+
+		Region queryRegion = Region.builder().id(userInfo.getRegionId()).build();
+		Region region = regionMapper.selectOne(queryRegion);
+		if (region == null) {
+			return fail(Tips.regionDataNull.msg);
+		}
+
+		List<Role> roleList = roleMapper.selectByPrimaryKeys(userInfo.getRoleList());
+		if (roleList.size() == 0) {
+			return fail("角色信息不存在");
+		}
+		//取出数据库中角色信息ID列表赋值给用户角色关系表,防止ID注入
+		List<Integer> roleIdList = new ArrayList<>();
+		roleList.forEach(i -> roleIdList.add(i.getId()));
+
+		//密码加密处理
+		userInfo.setPassword(bCryptPasswordEncoder.encode(userInfo.getPassword()));
+
+		userInfoMapper.insertSelectiveCustom(userInfo);
+		//新增用户角色
+		userInfoMapper.insertUserAndRole(userInfo.getId(), roleIdList);
+
         return ok();
     }
 

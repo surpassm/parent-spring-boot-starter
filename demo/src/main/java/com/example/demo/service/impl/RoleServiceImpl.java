@@ -125,7 +125,7 @@ public class RoleServiceImpl implements RoleService {
 		}
 		//查询当前角色所有权限列表
 		List<Menu> menuList = menuMapper.selectMenuList(role.getId());
-		role.getMenuList().addAll(menuList);
+		role.setMenuList(new ArrayList<>(menuList));
 		return ok(role);
 
     }

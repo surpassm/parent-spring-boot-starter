@@ -28,7 +28,7 @@ import static com.github.surpassm.common.jackson.Result.ok;
 @Slf4j
 @CrossOrigin
 @RestController
-@RequestMapping("/Login/")
+@RequestMapping("/login/")
 @Api(tags  =  "6、TokenAPI")
 public class LoginController {
 
@@ -36,6 +36,8 @@ public class LoginController {
 	private TokenStore redisTokenStore;
 	@Resource
 	private BeanConfig beanConfig;
+	@Resource
+	private SurpassmAuthenticationSuccessHandler surpassmAuthenticationSuccessHandler;
 
 	@PostMapping("hello")
 	@ApiOperation(value = "使用token获取用户基本信息")
@@ -48,12 +50,20 @@ public class LoginController {
 	@ApiOperation(value = "刷新token时效")
 	@ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
 	public Result refreshToken(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
-							   @ApiParam(value = "刷新token")@RequestParam String refreshToken) {
+							   @ApiParam(value = "刷新token")@RequestParam String refreshToken,
+							   @ApiParam(value = "head")@RequestParam String head) {
 		OAuth2AccessToken oAuth2AccessToken = redisTokenStore.readAccessToken(accessToken);
 		if (oAuth2AccessToken == null){
 			return Result.fail("请登陆");
 		}
-		OAuth2RefreshToken oAuth2RefreshToken = redisTokenStore.readRefreshToken(refreshToken);
-		return ok(oAuth2RefreshToken);
+
+		try {
+			OAuth2AccessToken refresh = surpassmAuthenticationSuccessHandler.refresh(refreshToken, head);
+			return ok(refresh);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return fail();
+		}
+
 	}
 }

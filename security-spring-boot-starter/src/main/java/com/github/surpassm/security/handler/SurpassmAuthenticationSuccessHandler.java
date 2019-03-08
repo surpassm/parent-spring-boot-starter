@@ -105,7 +105,7 @@ public class SurpassmAuthenticationSuccessHandler extends SavedRequestAwareAuthe
 		redisTokenStore.storeAccessToken(oAuth2AccessToken,oAuth2Authentication);
 		//返回前端JSON
 		response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write(objectMapper.writeValueAsString(oAuth2AccessToken));
+        response.getWriter().write(objectMapper.writeValueAsString(new Result(oAuth2AccessToken)));
 
         /**第二套方案（基于jwt生成token返回用户标识）*/
 		/*//获取登陆成功的当前用户信息

@@ -137,8 +137,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 			if (!ValidateUtil.isPassword(userInfo.getPassword())) {
 				return fail(Tips.passwordFormatError.msg);
 			}
-			if (!password.equals(user.getPassword())) {
-				//密码加密处理
+			if (!bCryptPasswordEncoder.matches(password,user.getPassword())){
 				String passwordNew = bCryptPasswordEncoder.encode(password);
 				userInfo.setPassword(passwordNew);
 			}

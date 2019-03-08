@@ -119,7 +119,7 @@
     </select>
 
     <select id="selectMenuList" resultType="com.example.demo.entity.Menu">
-        SELECT m.* FROM f_menu m LEFT JOIN m_role_menu rm ON rm.menuId = m.id  where rm.roleId=#{id}
+        SELECT m.* FROM f_menu m LEFT JOIN m_role_menu rm ON rm.menu_id = m.id  where rm.role_id=#{id}
     </select>
     <select id="selectByMenuList" resultType="com.example.demo.entity.Menu">
         select * from f_menu where id in

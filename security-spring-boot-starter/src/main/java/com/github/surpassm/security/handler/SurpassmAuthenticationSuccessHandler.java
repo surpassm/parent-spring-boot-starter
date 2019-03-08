@@ -1,12 +1,14 @@
 package com.github.surpassm.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.surpassm.common.jackson.Result;
 import com.github.surpassm.security.exception.SurpassmAuthenticationException;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.util.encoders.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
@@ -147,4 +149,32 @@ public class SurpassmAuthenticationSuccessHandler extends SavedRequestAwareAuthe
         }
         return new String[] { token.substring(0, delim), token.substring(delim + 1) };
     }
+
+    public OAuth2AccessToken refresh(String refreshToken,String head) throws IOException {
+		String[] tokens = extractAndDecodeHeader(head, null);
+		assert tokens.length == 2;
+		//获取用户名
+		String clientId = tokens[0];
+		//获取密码
+		String clientSecret = tokens[1];
+		//根据用户名得到clientDetails
+		ClientDetails clientDetails = null;
+		try {
+			clientDetails = clientDetailsService.loadClientByClientId(clientId);
+		}catch (Exception e){
+			throw new UnapprovedClientAuthenticationException("clientSecret不匹配"+clientId);
+		}
+		//验证clientDetails
+		if (clientDetails == null){
+			throw new UnapprovedClientAuthenticationException("client配置不存在"+clientId);
+		}else if (!StringUtils.equals(clientDetails.getClientSecret(),clientSecret)){
+			throw new UnapprovedClientAuthenticationException("clientSecret不匹配"+clientId);
+		}
+		/**第一套方案（基于redis生成token返回用户标识）*/
+		//创建一个TokenRequest,空MAP、clientId、Scope具备权限、custom自定义grantType标识
+		TokenRequest tokenRequest = new TokenRequest(MapUtils.EMPTY_SORTED_MAP,clientId,clientDetails.getScope(),"custom");
+
+		OAuth2AccessToken oAuth2AccessToken = authorizationServerTokenServices.refreshAccessToken(refreshToken, tokenRequest);
+		return oAuth2AccessToken;
+	}
 }

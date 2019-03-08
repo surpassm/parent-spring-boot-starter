@@ -34,7 +34,7 @@ import java.util.Map;
  * @author mc
  * @date 2018/08/27 7:11
  */
-@Component("liaoinAuthenticationSuccessHandler")
+@Component("surpassmAuthenticationSuccessHandler")
 public class SurpassmAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
     private Logger logger = LoggerFactory.getLogger(getClass());

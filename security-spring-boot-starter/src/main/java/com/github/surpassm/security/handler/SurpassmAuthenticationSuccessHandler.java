@@ -175,6 +175,12 @@ public class SurpassmAuthenticationSuccessHandler extends SavedRequestAwareAuthe
 		TokenRequest tokenRequest = new TokenRequest(MapUtils.EMPTY_SORTED_MAP,clientId,clientDetails.getScope(),"custom");
 
 		OAuth2AccessToken oAuth2AccessToken = authorizationServerTokenServices.refreshAccessToken(refreshToken, tokenRequest);
+		OAuth2Authentication authentication = redisTokenStore.readAuthenticationForRefreshToken(oAuth2AccessToken.getRefreshToken());
+		Object principal = authentication.getUserAuthentication().getPrincipal();
+		Map<String, Object> additionalInformation = new HashMap<>(16);
+		additionalInformation.put("userInfo",principal);
+		((DefaultOAuth2AccessToken)oAuth2AccessToken).setAdditionalInformation(additionalInformation);
+		redisTokenStore.storeAccessToken(oAuth2AccessToken, authentication);
 		return oAuth2AccessToken;
 	}
 }

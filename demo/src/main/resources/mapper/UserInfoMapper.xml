@@ -115,12 +115,12 @@
     </select>
 
     <delete id="deleteUserAndRole">
-        DELETE  from m_user_role where userId =#{id}
+        DELETE  from m_user_role where user_info_id =#{id}
 
     </delete>
 
     <insert id="insertUserAndRole">
-    insert into m_user_role (userId,roleId) values
+    insert into m_user_role (user_info_id,role_id) values
     <foreach collection ="roleIdList" item="item" index= "index" separator =",">
         (
         #{id},#{item}

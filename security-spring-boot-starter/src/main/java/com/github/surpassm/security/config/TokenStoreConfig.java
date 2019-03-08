@@ -31,7 +31,7 @@ public class TokenStoreConfig {
     private RedisConnectionFactory redisConnectionFactory;
 
     @Bean
-//    @ConditionalOnProperty(prefix = "surpassm.security.oAuth2",name = "storeType",havingValue = "redis")
+    @ConditionalOnProperty(prefix = "surpassm.security.oAuth2",name = "storeType",havingValue = "redis",matchIfMissing = true)
     public TokenStore redisTokenStore(){
         return new RedisTokenStore(redisConnectionFactory);
     }
@@ -40,7 +40,7 @@ public class TokenStoreConfig {
      * 定义jwt
      */
     @Configuration
-    @ConditionalOnProperty(prefix = "surpassm.security.oAuth2",name = "storeType",havingValue = "jwt",matchIfMissing = true)
+    @ConditionalOnProperty(prefix = "surpassm.security.oAuth2",name = "storeType",havingValue = "jwt")
     public static class JwtTokenConfig{
         @Resource
         private SecurityProperties securityProperties;

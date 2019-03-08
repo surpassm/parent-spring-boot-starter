@@ -48,10 +48,10 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
     @Resource
     private TokenStore redisTokenStore;
 
-    @Autowired
+    @Autowired(required = false)
     private JwtAccessTokenConverter jwtAccessTokenConverter;
 
-    @Autowired
+    @Autowired(required = false)
     private TokenEnhancer jwtTokenEnhancer;
 
 

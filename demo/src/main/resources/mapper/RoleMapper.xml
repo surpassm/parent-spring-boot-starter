@@ -86,7 +86,7 @@
     </insert>
 
     <insert id="insertRoleMenu" >
-        insert into m_role_menu (roleId,menuId) values
+        insert into m_role_menu (role_id,menu_id) values
         <foreach collection ="ids" item="item" index= "index" separator =",">
             (
             #{id},#{item}
@@ -96,7 +96,7 @@
     </insert>
 
     <delete id="deleteByRoleAndMenu">
-        DELETE  from m_role_menu where roleId =#{id}
+        DELETE  from m_role_menu where role_id =#{id}
 
     </delete>
 

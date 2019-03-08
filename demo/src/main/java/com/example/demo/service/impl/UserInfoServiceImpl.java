@@ -180,6 +180,11 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (userInfo == null){
 			return fail(Tips.MSG_NOT.msg);
 		}
+	    userInfo.setPassword(null);
+		List<Role> byUserId = roleMapper.findByUserId(0, 0, userInfo.getId());
+        if (byUserId.size() != 0){
+        	userInfo.setRoleList(byUserId);
+		}
         return ok(userInfo);
 
     }

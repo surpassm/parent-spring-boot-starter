@@ -21,6 +21,7 @@
         <module>common-spring-boot-starter</module>
         <module>tool-spring-boot-starter</module>
         <module>config-spring-boot-starter</module>
+        <module>activiti-spring-boot-starter</module>
     </modules>
 
     <properties>

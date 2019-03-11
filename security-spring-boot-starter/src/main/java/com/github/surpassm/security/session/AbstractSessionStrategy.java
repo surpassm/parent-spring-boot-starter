@@ -64,7 +64,7 @@ public class AbstractSessionStrategy {
 			logger.info("session失效,跳转到"+targetUrl);
 			redirectStrategy.sendRedirect(request, response, targetUrl);
 		}else{
-			String message = "session已失效";
+			String message = "会话已失效";
 			if(isConcurrency()){
 				message = message + "，有可能是并发登录导致的";
 			}

@@ -1,5 +1,7 @@
 package com.github.surpassm.security.config;
 
+import com.github.surpassm.security.code.sms.DefaultSmsCodeSenderImpl;
+import com.github.surpassm.security.code.sms.SmsCodeSender;
 import com.github.surpassm.security.logout.LiaoinLogoutSuccessHandler;
 import com.github.surpassm.security.properties.SecurityProperties;
 import com.github.surpassm.security.session.LiaoinExpiredSessionStrategy;
@@ -48,5 +50,15 @@ public class SecurityBeanConfig {
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder(){
 		return new BCryptPasswordEncoder();
+	}
+
+	/**
+	 * 如果容器中不存在SmsCodeSender bean就执行该方法
+	 * @return SmsCodeSender
+	 */
+	@Bean
+	@ConditionalOnMissingBean(SmsCodeSender.class)
+	public SmsCodeSender smsCodeSender() {
+		return new DefaultSmsCodeSenderImpl();
 	}
 }

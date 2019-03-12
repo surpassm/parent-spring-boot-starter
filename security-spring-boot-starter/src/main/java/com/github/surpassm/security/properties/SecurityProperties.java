@@ -3,6 +3,7 @@ package com.github.surpassm.security.properties;
 import com.github.surpassm.security.constants.SecurityConstants;
 import com.github.surpassm.security.enums.LoginResponseType;
 import com.github.surpassm.security.properties.app.Oauth2Properties;
+import com.github.surpassm.security.properties.sms.SmsCodeProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -91,5 +92,9 @@ public class SecurityProperties {
 	 * OAuth2相关配置
 	 */
     private Oauth2Properties oAuth2 = new Oauth2Properties();
+	/**
+	 * 短信验证码
+	 */
+	private SmsCodeProperties sms = new SmsCodeProperties();
 
 }

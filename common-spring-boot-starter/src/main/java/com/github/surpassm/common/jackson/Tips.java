@@ -31,6 +31,11 @@ public enum Tips {
 	CarNumberRepeat("车牌号重复"),
 	NotRepeatDelete("不能重复删除"),
 	nameRepeat("名称重复"),
+	illegalIdentifier("非法标识符"),
+	AssociatedDataExistsAndCannotBeDeleted("存在关联数据，无法删除"),
+	phoneFormatError("手机号码格式错误"),
+
+
 
     ;
     public Integer code;

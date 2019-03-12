@@ -105,6 +105,14 @@ public class RoleServiceImpl implements RoleService {
 		if(role == null){
 			return fail(Tips.MSG_NOT.msg);
 		}
+		int roleAndMenuCount = roleMapper.selectRoleAndMenuCount(role.getId());
+		if (roleAndMenuCount != 0){
+			return fail(Tips.AssociatedDataExistsAndCannotBeDeleted.msg);
+		}
+		int userAndRoleCount =  roleMapper.selectUserAndRoleCount(role.getId());
+		if (userAndRoleCount != 0){
+			return fail(Tips.AssociatedDataExistsAndCannotBeDeleted.msg);
+		}
 		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
 		role.setDeleteTime(new Date());
 		role.setDeleteUserId(loginUserInfo.getId());

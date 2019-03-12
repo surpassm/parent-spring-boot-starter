@@ -128,4 +128,7 @@
         </foreach>
 
     </select>
+    <select id="selectRoleAndMenuCount" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM `m_role_menu` WHERE menu_id=#{id}
+    </select>
 </mapper>

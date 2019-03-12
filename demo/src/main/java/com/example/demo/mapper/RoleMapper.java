@@ -47,4 +47,8 @@ public interface RoleMapper extends tk.mybatis.mapper.common.Mapper<Role> {
 	List<Role> findByUserId(@Param("roleIsDeleteStatus") Integer roleIsDeleteStatus,
 							@Param("userIsDeleteStatus") Integer userIsDeleteStatus,
 							@Param("userId") Integer userId);
+
+	int selectRoleAndMenuCount(Integer id);
+
+	int selectUserAndRoleCount(Integer id);
 }

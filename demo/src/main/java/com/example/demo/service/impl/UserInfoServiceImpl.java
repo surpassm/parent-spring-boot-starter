@@ -158,19 +158,23 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public Result deleteGetById(String accessToken,Integer id){
-        if (id == null){
-            return fail(Tips.PARAMETER_ERROR.msg);
-        }
-        UserInfo userInfo = userInfoMapper.selectByPrimaryKey(id);
-        if(userInfo == null){
-            return fail(Tips.MSG_NOT.msg);
-        }
+		if (id == null){
+			return fail(Tips.PARAMETER_ERROR.msg);
+		}
+		UserInfo userInfo = userInfoMapper.selectByPrimaryKey(id);
+		if(userInfo == null){
+			return fail(Tips.MSG_NOT.msg);
+		}
+		int userAndRoleCount = userInfoMapper.selectUserAndRoleCount(userInfo.getId());
+		if (userAndRoleCount != 0){
+			return fail(Tips.AssociatedDataExistsAndCannotBeDeleted.msg);
+		}
 		UserInfo loginUserInfo =beanConfig.getAccessToken(accessToken);
-        userInfo.setDeleteTime(new Date());
-        userInfo.setDeleteUserId(loginUserInfo.getId());
-        userInfo.setIsDelete(1);
-        userInfoMapper.updateByPrimaryKeySelective(userInfo);
-        return ok();
+		userInfo.setDeleteTime(new Date());
+		userInfo.setDeleteUserId(loginUserInfo.getId());
+		userInfo.setIsDelete(1);
+		userInfoMapper.updateByPrimaryKeySelective(userInfo);
+		return ok();
     }
 
 

@@ -4,94 +4,95 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.mapper.RoleMapper">
 
-    <insert id="insertSelectiveCustom" useGeneratedKeys="true" keyProperty="id" parameterType="com.example.demo.entity.Role">
+    <insert id="insertSelectiveCustom" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.example.demo.entity.Role">
         insert into f_role
         <trim prefix="(" suffix=")" suffixOverrides=",">
-        <if test="id != null">
-            id,
-        </if>
-        <if test="createTime != null">
-            create_time,
-        </if>
-        <if test="createUserId != null">
-            create_user_id,
-        </if>
-        <if test="deleteTime != null">
-            delete_time,
-        </if>
-        <if test="deleteUserId != null">
-            delete_user_id,
-        </if>
-        <if test="describes != null">
-            describes,
-        </if>
-        <if test="isDelete != null">
-            is_delete,
-        </if>
-        <if test="name != null">
-            name,
-        </if>
-        <if test="roleIndex != null">
-            role_index,
-        </if>
-        <if test="securityRoles != null">
-            security_roles,
-        </if>
-        <if test="updateTime != null">
-            update_time,
-        </if>
-        <if test="updateUserId != null">
-            update_user_id,
-        </if>
+            <if test="id != null">
+                id,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="createUserId != null">
+                create_user_id,
+            </if>
+            <if test="deleteTime != null">
+                delete_time,
+            </if>
+            <if test="deleteUserId != null">
+                delete_user_id,
+            </if>
+            <if test="describes != null">
+                describes,
+            </if>
+            <if test="isDelete != null">
+                is_delete,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="roleIndex != null">
+                role_index,
+            </if>
+            <if test="securityRoles != null">
+                security_roles,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="updateUserId != null">
+                update_user_id,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-        <if test="id != null">
-            #{id},
-        </if>
-        <if test="createTime != null">
-            #{createTime},
-        </if>
-        <if test="createUserId != null">
-            #{createUserId},
-        </if>
-        <if test="deleteTime != null">
-            #{deleteTime},
-        </if>
-        <if test="deleteUserId != null">
-            #{deleteUserId},
-        </if>
-        <if test="describes != null">
-            #{describes},
-        </if>
-        <if test="isDelete != null">
-            #{isDelete},
-        </if>
-        <if test="name != null">
-            #{name},
-        </if>
-        <if test="roleIndex != null">
-            #{roleIndex},
-        </if>
-        <if test="securityRoles != null">
-            #{securityRoles},
-        </if>
-        <if test="updateTime != null">
-            #{updateTime},
-        </if>
-        <if test="updateUserId != null">
-            #{updateUserId},
-        </if>
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="createUserId != null">
+                #{createUserId},
+            </if>
+            <if test="deleteTime != null">
+                #{deleteTime},
+            </if>
+            <if test="deleteUserId != null">
+                #{deleteUserId},
+            </if>
+            <if test="describes != null">
+                #{describes},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete},
+            </if>
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="roleIndex != null">
+                #{roleIndex},
+            </if>
+            <if test="securityRoles != null">
+                #{securityRoles},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+            <if test="updateUserId != null">
+                #{updateUserId},
+            </if>
 
         </trim>
     </insert>
 
-    <insert id="insertRoleMenu" >
+    <insert id="insertRoleMenu">
         insert into m_role_menu (role_id,menu_id) values
-        <foreach collection ="ids" item="item" index= "index" separator =",">
+        <foreach collection="ids" item="item" index="index" separator=",">
             (
             #{id},#{item}
             )
-        </foreach >
+        </foreach>
 
     </insert>
 
@@ -123,5 +124,12 @@
         AND u.id = #{userId}
 
 
+    </select>
+
+    <select id="selectRoleAndMenuCount" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM `m_role_menu` WHERE role_id=#{id}
+    </select>
+    <select id="selectUserAndRoleCount" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM `m_user_role` WHERE role_id=#{id}
     </select>
 </mapper>

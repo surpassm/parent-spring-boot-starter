@@ -31,4 +31,6 @@ public interface MenuMapper extends tk.mybatis.mapper.common.Mapper<Menu> {
 	List<Menu> selectMenuList(Integer id);
 
 	List<Menu> selectByMenuList(List<Menu> menuList);
+
+	int selectRoleAndMenuCount(Integer id);
 }

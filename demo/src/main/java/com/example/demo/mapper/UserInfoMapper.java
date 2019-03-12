@@ -36,4 +36,6 @@ public interface UserInfoMapper extends tk.mybatis.mapper.common.Mapper<UserInfo
 	 * @param roleIdList
 	 */
 	void insertUserAndRole(@Param("id") Integer id, @Param("roleIdList") List<Integer> roleIdList);
+
+	int selectUserAndRoleCount(Integer id);
 }

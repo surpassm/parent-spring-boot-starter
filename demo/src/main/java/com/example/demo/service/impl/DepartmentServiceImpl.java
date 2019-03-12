@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.Department;
 import com.example.demo.entity.UserInfo;
 import com.example.demo.mapper.DepartmentMapper;
+import com.example.demo.mapper.UserInfoMapper;
 import com.example.demo.service.DepartmentService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -37,6 +38,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     private DepartmentMapper departmentMapper;
     @Resource
 	private BeanConfig beanConfig;
+	@Resource
+	private UserInfoMapper userInfoMapper;
 
     @Override
     public Result insert(String accessToken, Department department) {
@@ -65,19 +68,29 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Result deleteGetById(String accessToken,Integer id){
-        if (id == null){
-            return fail(Tips.PARAMETER_ERROR.msg);
-        }
-        Department department = departmentMapper.selectByPrimaryKey(id);
-        if(department == null){
-            return fail(Tips.MSG_NOT.msg);
-        }
-        UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
-        department.setDeleteUserId(loginUserInfo.getId());
-        department.setDeleteTime(new Date());
-        department.setIsDelete(1);
-        departmentMapper.updateByPrimaryKeySelective(department);
-        return ok();
+		if (id == null){
+			return fail(Tips.PARAMETER_ERROR.msg);
+		}
+		Department department = departmentMapper.selectByPrimaryKey(id);
+		if(department == null){
+			return fail(Tips.MSG_NOT.msg);
+		}
+		UserInfo userInfo = new UserInfo();
+		userInfo.setDepartmentId(department.getId());
+		int userInfoCount = userInfoMapper.selectCount(userInfo);
+		if (userInfoCount != 0){
+			return fail(Tips.AssociatedDataExistsAndCannotBeDeleted.msg);
+		}
+		int departmentCount = departmentMapper.selectCount(Department.builder().parentId(department.getId()).build());
+		if (departmentCount != 0){
+			return fail(Tips.AssociatedDataExistsAndCannotBeDeleted.msg);
+		}
+		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
+		department.setDeleteUserId(loginUserInfo.getId());
+		department.setDeleteTime(new Date());
+		department.setIsDelete(1);
+		departmentMapper.updateByPrimaryKeySelective(department);
+		return ok();
     }
 
 

@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.Region;
 import com.example.demo.entity.UserInfo;
 import com.example.demo.mapper.RegionMapper;
+import com.example.demo.mapper.UserInfoMapper;
 import com.example.demo.service.RegionService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -38,6 +39,8 @@ public class RegionServiceImpl implements RegionService {
     private RegionMapper regionMapper;
     @Resource
 	private BeanConfig beanConfig;
+	@Resource
+	private UserInfoMapper userInfoMapper;
 
     @Override
     public Result insert(String accessToken, Region region) {
@@ -66,19 +69,25 @@ public class RegionServiceImpl implements RegionService {
 
     @Override
     public Result deleteGetById(String accessToken,Integer id){
-        if (id == null){
-            return fail(Tips.PARAMETER_ERROR.msg);
-        }
-        Region region = regionMapper.selectByPrimaryKey(id);
-        if(region == null){
-            return fail(Tips.MSG_NOT.msg);
-        }
-        UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
-        region.setDeleteUserId(loginUserInfo.getId());
-        region.setDeleteTime(new Date());
-        region.setIsDelete(1);
-        regionMapper.updateByPrimaryKeySelective(region);
-        return ok();
+		if (id == null){
+			return fail(Tips.PARAMETER_ERROR.msg);
+		}
+		Region region = regionMapper.selectByPrimaryKey(id);
+		if(region == null){
+			return fail(Tips.MSG_NOT.msg);
+		}
+		UserInfo userInfo = new UserInfo();
+		userInfo.setRegionId(region.getId());
+		int userInfoCount = userInfoMapper.selectCount(userInfo);
+		if (userInfoCount != 0){
+			return fail(Tips.AssociatedDataExistsAndCannotBeDeleted.msg);
+		}
+		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
+		region.setDeleteUserId(loginUserInfo.getId());
+		region.setDeleteTime(new Date());
+		region.setIsDelete(1);
+		regionMapper.updateByPrimaryKeySelective(region);
+		return ok();
     }
 
 

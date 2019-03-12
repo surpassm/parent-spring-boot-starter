@@ -66,19 +66,28 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public Result deleteGetById(String accessToken, Integer id){
-        if (id == null){
-            return fail(Tips.PARAMETER_ERROR.msg);
-        }
-        Menu menu = menuMapper.selectByPrimaryKey(id);
-        if(menu == null){
-            return fail(Tips.MSG_NOT.msg);
-        }
-        UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
-        menu.setDeleteUserId(loginUserInfo.getId());
-        menu.setDeleteTime(new Date());
-        menu.setIsDelete(1);
-        menuMapper.updateByPrimaryKeySelective(menu);
-        return ok();
+		if (id == null){
+			return fail(Tips.PARAMETER_ERROR.msg);
+		}
+		Menu menu = menuMapper.selectByPrimaryKey(id);
+		if(menu == null){
+			return fail(Tips.MSG_NOT.msg);
+		}
+		int menuCount = menuMapper.selectCount(Menu.builder().parentId(id).build());
+		if (menuCount != 0){
+			return fail(Tips.AssociatedDataExistsAndCannotBeDeleted.msg);
+		}
+		int roleAndMenuCount = menuMapper.selectRoleAndMenuCount(menu.getId());
+		if (roleAndMenuCount != 0){
+			return fail(Tips.AssociatedDataExistsAndCannotBeDeleted.msg);
+		}
+
+		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
+		menu.setDeleteUserId(loginUserInfo.getId());
+		menu.setDeleteTime(new Date());
+		menu.setIsDelete(1);
+		menuMapper.updateByPrimaryKeySelective(menu);
+		return ok();
     }
 
 

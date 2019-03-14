@@ -27,8 +27,8 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 @ApiModel(value = "组角色")
 @NameStyle(Style.camelhump)
-@Table(name = "t_group_role")
-@org.hibernate.annotations.Table(appliesTo = "t_group_role", comment = "组角色")
+@Table(name = "m_group_role")
+@org.hibernate.annotations.Table(appliesTo = "m_group_role", comment = "组角色")
 public class GroupRole extends BasicEntity implements Serializable {
 
 	public interface GroupRoleInsertPcSimpleView {}

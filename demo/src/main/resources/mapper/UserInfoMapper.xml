@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.user.UserInfoMapper">
+
+    <insert id="insertSelectiveCustom" useGeneratedKeys="true" keyProperty="id" parameterType="com.example.demo.entity.user.UserInfo">
+        insert into t_user_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="id != null">
+            id,
+        </if>
+        <if test="createTime != null">
+            create_time,
+        </if>
+        <if test="createUserId != null">
+            create_user_id,
+        </if>
+        <if test="deleteTime != null">
+            delete_time,
+        </if>
+        <if test="deleteUserId != null">
+            delete_user_id,
+        </if>
+        <if test="isDelete != null">
+            is_delete,
+        </if>
+        <if test="updateTime != null">
+            update_time,
+        </if>
+        <if test="updateUserId != null">
+            update_user_id,
+        </if>
+        <if test="departmentId != null">
+            department_id,
+        </if>
+        <if test="headUrl != null">
+            head_url,
+        </if>
+        <if test="landingTime != null">
+            landing_time,
+        </if>
+        <if test="mobile != null">
+            mobile,
+        </if>
+        <if test="name != null">
+            name,
+        </if>
+        <if test="password != null">
+            password,
+        </if>
+        <if test="regionId != null">
+            region_id,
+        </if>
+        <if test="userInfoIndex != null">
+            user_info_index,
+        </if>
+        <if test="username != null">
+            username,
+        </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="id != null">
+            #{id},
+        </if>
+        <if test="createTime != null">
+            #{createTime},
+        </if>
+        <if test="createUserId != null">
+            #{createUserId},
+        </if>
+        <if test="deleteTime != null">
+            #{deleteTime},
+        </if>
+        <if test="deleteUserId != null">
+            #{deleteUserId},
+        </if>
+        <if test="isDelete != null">
+            #{isDelete},
+        </if>
+        <if test="updateTime != null">
+            #{updateTime},
+        </if>
+        <if test="updateUserId != null">
+            #{updateUserId},
+        </if>
+        <if test="departmentId != null">
+            #{departmentId},
+        </if>
+        <if test="headUrl != null">
+            #{headUrl},
+        </if>
+        <if test="landingTime != null">
+            #{landingTime},
+        </if>
+        <if test="mobile != null">
+            #{mobile},
+        </if>
+        <if test="name != null">
+            #{name},
+        </if>
+        <if test="password != null">
+            #{password},
+        </if>
+        <if test="regionId != null">
+            #{regionId},
+        </if>
+        <if test="userInfoIndex != null">
+            #{userInfoIndex},
+        </if>
+        <if test="username != null">
+            #{username},
+        </if>
+
+        </trim>
+    </insert>
+</mapper>

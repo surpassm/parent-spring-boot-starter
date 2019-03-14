@@ -27,8 +27,8 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 @ApiModel(value = "用户权限")
 @NameStyle(Style.camelhump)
-@Table(name = "t_user_menu")
-@org.hibernate.annotations.Table(appliesTo = "t_user_menu", comment = "用户权限")
+@Table(name = "m_user_menu")
+@org.hibernate.annotations.Table(appliesTo = "m_user_menu", comment = "用户权限")
 public class UserMenu extends BasicEntity implements Serializable {
 	public interface UserMenuInsertPcSimpleView {}
 

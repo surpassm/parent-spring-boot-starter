@@ -27,8 +27,8 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 @ApiModel(value = "组权限")
 @NameStyle(Style.camelhump)
-@Table(name = "t_group_menu")
-@org.hibernate.annotations.Table(appliesTo = "t_group_menu", comment = "组权限")
+@Table(name = "m_group_menu")
+@org.hibernate.annotations.Table(appliesTo = "m_group_menu", comment = "组权限")
 public class GroupMenu extends BasicEntity implements Serializable {
 
 	public interface GroupMenuInsertPcSimpleView {}

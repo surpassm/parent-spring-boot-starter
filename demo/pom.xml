@@ -59,11 +59,11 @@
             <artifactId>config-spring-boot-starter</artifactId>
             <version>0.0.1</version>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>com.github.surpassm</groupId>
             <artifactId>activiti-spring-boot-starter</artifactId>
             <version>0.0.1</version>
-        </dependency>
+        </dependency>-->
 
         <dependency>
             <groupId>com.spring4all</groupId>

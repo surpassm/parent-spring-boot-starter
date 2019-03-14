@@ -27,8 +27,8 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 @ApiModel(value = "用户组")
 @NameStyle(Style.camelhump)
-@Table(name = "t_user_group")
-@org.hibernate.annotations.Table(appliesTo = "t_user_group", comment = "用户组")
+@Table(name = "m_user_group")
+@org.hibernate.annotations.Table(appliesTo = "m_user_group", comment = "用户组")
 public class UserGroup extends BasicEntity implements Serializable {
 	public interface UserGroupInsertPcSimpleView {}
 

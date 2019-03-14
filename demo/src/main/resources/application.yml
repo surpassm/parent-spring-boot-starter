@@ -65,6 +65,9 @@ swagger:
     user:
       title: "用户"
       base-package: com.example.demo.controller.user
+    common:
+      title: "公共"
+      base-package: com.example.demo.controller.common
 mybatis:
   type-aliases-package: com.example.demo.controller
   mapper-locations: classpath:mapper/*.xml

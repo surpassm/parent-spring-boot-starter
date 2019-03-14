@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.example.demo.controller.common;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;

@@ -1,8 +1,6 @@
 package com.example.demo.security;
 
 import com.example.demo.entity.user.UserInfo;
-import com.example.demo.mapper.user.RoleMapper;
-import com.example.demo.mapper.user.UserInfoMapper;
 import com.github.surpassm.common.jackson.Tips;
 import com.github.surpassm.security.exception.SurpassmAuthenticationException;
 import lombok.extern.slf4j.Slf4j;
@@ -30,10 +28,10 @@ import java.util.List;
 @Component
 public class SurpassmUserDetailsServiceImpl implements UserDetailsService {
 
-	@Resource
-	private UserInfoMapper userInfoMapper;
-	@Resource
-	private RoleMapper roleMapper;
+//	@Resource
+//	private UserInfoMapper userInfoMapper;
+//	@Resource
+//	private RoleMapper roleMapper;
 
 	@Resource
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -45,22 +43,23 @@ public class SurpassmUserDetailsServiceImpl implements UserDetailsService {
 
 
 	private UserDetails buildUser(String username) {
-		log.info("用户开始登陆:"+username);
-		if (StringUtils.isEmpty(username)) {
-			throw new SurpassmAuthenticationException(Tips.PARAMETER_ERROR.msg);
-		}
-		UserInfo userInfo = userInfoMapper.selectOneByUserName(username);
-		if (userInfo == null) {
-			throw new SurpassmAuthenticationException(Tips.USER_INFO_ERROR.msg);
-		}
-		List<GrantedAuthority> securityRoles = new ArrayList<>();
-		roleMapper.findByUserId(0, 0, userInfo.getId())
-				.forEach(i -> securityRoles.add(new SimpleGrantedAuthority(i.getName())));
-		//更新操作时间
-		userInfo.setLandingTime(new Date());
-		userInfoMapper.updateByPrimaryKeySelective(userInfo);
-		return new UserInfo(userInfo.getId(),username, userInfo.getPassword(),
-				true, true, true, true,
-				securityRoles);
+//		log.info("用户开始登陆:"+username);
+//		if (StringUtils.isEmpty(username)) {
+//			throw new SurpassmAuthenticationException(Tips.PARAMETER_ERROR.msg);
+//		}
+//		UserInfo userInfo = userInfoMapper.selectOneByUserName(username);
+//		if (userInfo == null) {
+//			throw new SurpassmAuthenticationException(Tips.USER_INFO_ERROR.msg);
+//		}
+//		List<GrantedAuthority> securityRoles = new ArrayList<>();
+//		roleMapper.findByUserId(0, 0, userInfo.getId())
+//				.forEach(i -> securityRoles.add(new SimpleGrantedAuthority(i.getName())));
+//		//更新操作时间
+//		userInfo.setLandingTime(new Date());
+//		userInfoMapper.updateByPrimaryKeySelective(userInfo);
+//		return new UserInfo(userInfo.getId(),username, userInfo.getPassword(),
+//				true, true, true, true,
+//				securityRoles);
+		return null;
 	}
 }

@@ -55,8 +55,8 @@ public class RoleServiceImpl implements RoleService {
 		}
 		Role build = Role.builder().name(role.getName()).build();
 		build.setIsDelete(0);
-		List<Role> roleList = roleMapper.select(build);
-		if(roleList.size() != 0){
+		int roleCount = roleMapper.selectCount(build);
+		if(roleCount != 0){
 			return fail("角色名称已存在");
 		}
 		//取出所有权限的ID
@@ -133,7 +133,7 @@ public class RoleServiceImpl implements RoleService {
 		}
 		//查询当前角色所有权限列表
 		List<Menu> menuList = menuMapper.selectMenuList(role.getId());
-		role.setMenuList(new ArrayList<>(menuList));
+		role.setMenuList(menuList);
 		return ok(role);
 
     }

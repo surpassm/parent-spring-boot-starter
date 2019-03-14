@@ -36,8 +36,6 @@ import static com.github.surpassm.common.jackson.Result.ok;
 public class LoginController {
 
 	@Resource
-	private TokenStore redisTokenStore;
-	@Resource
 	private BeanConfig beanConfig;
 	@Resource
 	private SurpassmAuthenticationSuccessHandler surpassmAuthenticationSuccessHandler;

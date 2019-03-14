@@ -1,7 +1,6 @@
 package com.example.demo.security;
 
-import com.example.demo.entity.UserInfo;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.demo.entity.user.UserInfo;
 import com.github.surpassm.security.exception.SurpassmAuthenticationException;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;

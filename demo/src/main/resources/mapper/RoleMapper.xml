@@ -2,10 +2,10 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.demo.mapper.RoleMapper">
+<mapper namespace="com.example.demo.mapper.user.RoleMapper">
 
     <insert id="insertSelectiveCustom" useGeneratedKeys="true" keyProperty="id"
-            parameterType="com.example.demo.entity.Role">
+            parameterType="com.example.demo.entity.user.Role">
         insert into f_role
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -101,7 +101,7 @@
 
     </delete>
 
-    <select id="selectByPrimaryKeys" resultType="com.example.demo.entity.Role">
+    <select id="selectByPrimaryKeys" resultType="com.example.demo.entity.user.Role">
 
         select * from f_role where id in
         <foreach collection="roleList" item="item" index="index" open="(" separator="," close=")">
@@ -109,7 +109,7 @@
         </foreach>
     </select>
 
-    <select id="findByUserId" resultType="com.example.demo.entity.Role">
+    <select id="findByUserId" resultType="com.example.demo.entity.user.Role">
         SELECT
           r.*
         FROM

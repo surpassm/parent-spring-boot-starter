@@ -57,10 +57,14 @@ surpassm:
 #    用户名密码登录请求处理url
     default-login-processing-url-from: /authentication/form
 #    default-property-inclusion: NON_NULL
+
 swagger:
   enabled: true
   title: "权限框架 API"
-  base-package: com.example.demo
+  docket:
+    user:
+      title: "用户"
+      base-package: com.example.demo.controller.user
 mybatis:
   type-aliases-package: com.example.demo.controller
   mapper-locations: classpath:mapper/*.xml

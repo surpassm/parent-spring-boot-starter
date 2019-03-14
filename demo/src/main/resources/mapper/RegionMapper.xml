@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.demo.mapper.RegionMapper">
+<mapper namespace="com.example.demo.mapper.user.RegionMapper">
 
-    <insert id="insertSelectiveCustom" parameterType="com.example.demo.entity.Region">
+    <insert id="insertSelectiveCustom" parameterType="com.example.demo.entity.user.Region">
         insert into f_region
         <trim prefix="(" suffix=")" suffixOverrides=",">
         <if test="id != null">

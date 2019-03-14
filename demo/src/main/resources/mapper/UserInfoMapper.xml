@@ -2,10 +2,10 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.demo.mapper.UserInfoMapper">
+<mapper namespace="com.example.demo.mapper.user.UserInfoMapper">
 
     <insert id="insertSelectiveCustom" useGeneratedKeys="true" keyProperty="id"
-            parameterType="com.example.demo.entity.UserInfo">
+            parameterType="com.example.demo.entity.user.UserInfo">
         insert into f_user_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -110,7 +110,7 @@
         </trim>
     </insert>
     <!-- 根据账号查询用户信息 -->
-    <select id="selectOneByUserName" resultType="com.example.demo.entity.UserInfo">
+    <select id="selectOneByUserName" resultType="com.example.demo.entity.user.UserInfo">
         SELECT * FROM f_user_info WHERE username=#{username}
 
     </select>

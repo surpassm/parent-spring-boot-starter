@@ -1,18 +1,14 @@
 package com.example.demo.security;
 
-import com.example.demo.entity.UserInfo;
-import com.example.demo.mapper.RoleMapper;
-import com.example.demo.mapper.UserInfoMapper;
+import com.example.demo.entity.user.UserInfo;
+import com.example.demo.mapper.user.RoleMapper;
+import com.example.demo.mapper.user.UserInfoMapper;
 import com.github.surpassm.common.jackson.Tips;
 import com.github.surpassm.security.exception.SurpassmAuthenticationException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

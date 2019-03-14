@@ -44,7 +44,7 @@ public class MobileServiceImpl implements MobileService {
 			return fail(Tips.phoneFormatError.msg);
 		}
 		Boolean isData = redisTemplate.hasKey(phone);
-		if (isData){
+		if (isData !=null && isData){
 			return fail("请稍后再试");
 		}
 		//生成6位短信码并设定过期时间

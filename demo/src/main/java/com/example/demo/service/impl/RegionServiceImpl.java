@@ -78,8 +78,15 @@ public class RegionServiceImpl implements RegionService {
 		}
 		UserInfo userInfo = new UserInfo();
 		userInfo.setRegionId(region.getId());
+		userInfo.setIsDelete(0);
 		int userInfoCount = userInfoMapper.selectCount(userInfo);
 		if (userInfoCount != 0){
+			return fail(Tips.AssociatedDataExistsAndCannotBeDeleted.msg);
+		}
+		Region build = Region.builder().parentId(region.getId()).build();
+		build.setIsDelete(0);
+		int regionCount = regionMapper.selectCount(build);
+		if (regionCount != 0){
 			return fail(Tips.AssociatedDataExistsAndCannotBeDeleted.msg);
 		}
 		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);

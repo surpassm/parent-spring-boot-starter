@@ -21,7 +21,7 @@ import javax.annotation.Resource;
 @CrossOrigin
 @RestController
 @RequestMapping("/role/")
-@Api(tags  =  "Api")
+@Api(tags  =  "角色Api")
 public class RoleController {
 
     @Resource

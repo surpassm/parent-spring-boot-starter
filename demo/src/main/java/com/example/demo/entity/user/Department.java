@@ -15,6 +15,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author mc
@@ -47,7 +48,7 @@ public class Department extends BasicEntity implements Serializable {
 	private Integer id;
 
 	@NotBlank(groups = {DepartmentInsertPcSimpleView.class,DepartmentUpdatePcSimpleView.class},message = "参数不能为为空或空串")
-	@ApiModelProperty("名称")
+	@ApiModelProperty(value = "名称",example = "重庆市")
 	private String name ;
 
 	@ApiModelProperty("父级Id")
@@ -55,5 +56,9 @@ public class Department extends BasicEntity implements Serializable {
 
 	@ApiModelProperty("排序字段")
 	private Integer departmentIndex ;
+
+	@Transient
+	@ApiModelProperty(value = "下级区域列表",hidden = true)
+	private List<Department> children;
 
 }

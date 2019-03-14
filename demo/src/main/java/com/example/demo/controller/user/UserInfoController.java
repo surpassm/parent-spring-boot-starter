@@ -21,7 +21,7 @@ import javax.annotation.Resource;
 @CrossOrigin
 @RestController
 @RequestMapping("/userInfo/")
-@Api(tags  =  "Api")
+@Api(tags  =  "用户Api")
 public class UserInfoController {
 
     @Resource

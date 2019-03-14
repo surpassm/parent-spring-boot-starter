@@ -71,3 +71,6 @@ swagger:
 mybatis:
   type-aliases-package: com.example.demo.controller
   mapper-locations: classpath:mapper/*.xml
+logging:
+  level:
+    com.example.demo.mapper.user: trace

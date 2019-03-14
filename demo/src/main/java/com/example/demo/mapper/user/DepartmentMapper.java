@@ -2,6 +2,8 @@ package com.example.demo.mapper.user;
 
 import com.example.demo.entity.user.Department;
 
+import java.util.List;
+
 /**
   * @author mc
   * Create date 2019-03-14 20:41:03
@@ -11,4 +13,18 @@ import com.example.demo.entity.user.Department;
 public interface DepartmentMapper extends tk.mybatis.mapper.common.Mapper<Department> {
 
     int insertSelectiveCustom(Department department);
+
+	/**
+	 * 根据父级Id查询
+	 * @param parentId
+	 * @return
+	 */
+	List<Department> selectChildByParentId(Integer parentId);
+
+	/**
+	 * 根据主键查询自己和所有子级
+	 * @param id
+	 * @return
+	 */
+	List<Department> selectSelfAndChildByParentId(Integer id);
 }

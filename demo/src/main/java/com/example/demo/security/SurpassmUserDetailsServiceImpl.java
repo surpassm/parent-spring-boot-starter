@@ -1,12 +1,16 @@
 package com.example.demo.security;
 
 import com.example.demo.entity.user.UserInfo;
+import com.example.demo.mapper.user.RoleMapper;
+import com.example.demo.mapper.user.UserInfoMapper;
 import com.github.surpassm.common.jackson.Tips;
 import com.github.surpassm.security.exception.SurpassmAuthenticationException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,10 +32,10 @@ import java.util.List;
 @Component
 public class SurpassmUserDetailsServiceImpl implements UserDetailsService {
 
-//	@Resource
-//	private UserInfoMapper userInfoMapper;
-//	@Resource
-//	private RoleMapper roleMapper;
+	@Resource
+	private UserInfoMapper userInfoMapper;
+	@Resource
+	private RoleMapper roleMapper;
 
 	@Resource
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -60,6 +64,10 @@ public class SurpassmUserDetailsServiceImpl implements UserDetailsService {
 //		return new UserInfo(userInfo.getId(),username, userInfo.getPassword(),
 //				true, true, true, true,
 //				securityRoles);
-		return null;
+		String password = bCryptPasswordEncoder.encode("123456");
+		log.info("数据库密码是:"+password);
+		return new User(username, password,
+				true, true, true, true,
+				AuthorityUtils.commaSeparatedStringToAuthorityList("admin,ROLE_USER"));
 	}
 }

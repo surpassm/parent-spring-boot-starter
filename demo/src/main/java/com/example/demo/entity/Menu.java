@@ -31,8 +31,8 @@ import java.util.Date;
 @SuppressWarnings("serial")
 @ApiModel(value = "权限")
 @NameStyle(Style.camelhump)
-@Table(name = "f_menu")
-@org.hibernate.annotations.Table(appliesTo = "f_menu", comment = "权限")
+@Table(name = "t_menu")
+@org.hibernate.annotations.Table(appliesTo = "t_menu", comment = "权限")
 public class Menu extends BasicEntity implements Serializable {
 	public interface MenuInsertPcSimpleView {}
 

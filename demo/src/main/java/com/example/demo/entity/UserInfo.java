@@ -34,8 +34,8 @@ import java.util.*;
 @SuppressWarnings("serial")
 @ApiModel(value = "用户")
 @NameStyle(Style.camelhump)
-@org.hibernate.annotations.Table(appliesTo = "f_user_info", comment = "用户")
-@Table(name = "f_user_info", uniqueConstraints = {@UniqueConstraint(name = "username_unique", columnNames = {"username"})})
+@org.hibernate.annotations.Table(appliesTo = "t_user_info", comment = "用户")
+@Table(name = "t_user_info", uniqueConstraints = {@UniqueConstraint(name = "username_unique", columnNames = {"username"})})
 public class UserInfo extends BasicEntity implements UserDetails,CredentialsContainer {
 
 	@Transient
@@ -142,6 +142,16 @@ public class UserInfo extends BasicEntity implements UserDetails,CredentialsCont
 	@NotNull(groups = UserInfoUpdatePcSimpleView.class,message = "参数不能为空")
 	private Integer id;
 
+	@ApiModelProperty("所属组织Id")
+	@Column(columnDefinition="int(11) COMMENT '所属组织Id'")
+	@NotNull(groups = {UserInfoUpdatePcSimpleView.class,UserInfoInsertPcSimpleView.class},message = "参数不能为为空")
+	private Integer departmentId ;
+	@ApiModelProperty("所属区域Id")
+	@Column(columnDefinition="int(11) COMMENT '所属区域Id'")
+	@NotNull(groups = {UserInfoUpdatePcSimpleView.class,UserInfoInsertPcSimpleView.class},message = "参数不能为为空")
+	private Integer regionId ;
+
+
 	@ApiModelProperty(value="姓名")
 	@Column(columnDefinition="varchar(255) COMMENT '姓名'")
 	@NotBlank(groups = {UserInfoUpdatePcSimpleView.class,UserInfoInsertPcSimpleView.class},message = "参数不能为为空或空串")
@@ -171,21 +181,14 @@ public class UserInfo extends BasicEntity implements UserDetails,CredentialsCont
 	@Column(columnDefinition="int(11) COMMENT '排序字段'")
 	private Integer userInfoIndex ;
 
-	@ApiModelProperty("所属组织Id")
-	@Column(columnDefinition="int(11) COMMENT '所属组织Id'")
-	@NotNull(groups = {UserInfoUpdatePcSimpleView.class,UserInfoInsertPcSimpleView.class},message = "参数不能为为空")
-	private Integer departmentId ;
-
-	@ApiModelProperty("所属区域Id")
-	@Column(columnDefinition="int(11) COMMENT '所属区域Id'")
-	@NotNull(groups = {UserInfoUpdatePcSimpleView.class,UserInfoInsertPcSimpleView.class},message = "参数不能为为空")
-	private Integer regionId ;
 
 	@ApiModelProperty(value = "最后登陆时间",hidden = true)
 	@Column(columnDefinition="datetime COMMENT '最后登陆时间'")
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
 	private Date landingTime;
+
+
 
 	@Transient
 	@ApiModelProperty("拥有角色")

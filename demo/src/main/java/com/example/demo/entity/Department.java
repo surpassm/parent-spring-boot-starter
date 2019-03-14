@@ -31,8 +31,8 @@ import java.util.Date;
 @SuppressWarnings("serial")
 @ApiModel(value = "部门")
 @NameStyle(Style.camelhump)
-@Table(name = "f_department")
-@org.hibernate.annotations.Table(appliesTo = "f_department", comment = "部门")
+@Table(name = "t_department")
+@org.hibernate.annotations.Table(appliesTo = "t_department", comment = "部门")
 public class Department extends BasicEntity implements Serializable {
 
 	public interface DepartmentInsertPcSimpleView {}

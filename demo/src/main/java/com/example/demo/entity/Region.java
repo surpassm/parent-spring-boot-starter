@@ -31,8 +31,8 @@ import java.util.Date;
 @SuppressWarnings("serial")
 @ApiModel(description = "区域")
 @NameStyle(Style.camelhump)
-@Table(name = "f_region")
-@org.hibernate.annotations.Table(appliesTo = "f_region", comment = "区域")
+@Table(name = "t_region")
+@org.hibernate.annotations.Table(appliesTo = "t_region", comment = "区域")
 public class Region extends BasicEntity implements Serializable {
 
 	public interface RegionInsertPcSimpleView {}

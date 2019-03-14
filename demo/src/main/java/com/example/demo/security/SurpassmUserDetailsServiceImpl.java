@@ -60,7 +60,7 @@ public class SurpassmUserDetailsServiceImpl implements UserDetailsService {
 		List<GrantedAuthority> securityRoles = new ArrayList<>();
 		roleMapper.findByUserId(0, 0, userInfo.getId())
 				.forEach(i -> securityRoles.add(new SimpleGrantedAuthority(i.getName())));
-		//更新登陆时间
+		//更新操作时间
 		userInfo.setLandingTime(new Date());
 		userInfoMapper.updateByPrimaryKeySelective(userInfo);
 		return new UserInfo(userInfo.getId(),username, userInfo.getPassword(),

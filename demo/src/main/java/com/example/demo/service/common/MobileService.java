@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.service.common;
 
 import com.github.surpassm.common.jackson.Result;
 

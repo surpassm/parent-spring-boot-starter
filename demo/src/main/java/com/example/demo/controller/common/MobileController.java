@@ -1,6 +1,6 @@
-package com.example.demo.controller;
+package com.example.demo.controller.common;
 
-import com.example.demo.service.MobileService;
+import com.example.demo.service.common.MobileService;
 import com.github.surpassm.common.jackson.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

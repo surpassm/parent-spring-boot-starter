@@ -1,4 +1,4 @@
-package com.example.demo.service.impl;
+package com.example.demo.service.common.impl;
 
 import com.github.surpassm.security.code.sms.SmsCodeSender;
 import lombok.extern.slf4j.Slf4j;

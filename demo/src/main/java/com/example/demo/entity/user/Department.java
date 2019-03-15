@@ -58,7 +58,7 @@ public class Department extends BasicEntity implements Serializable {
 	private Integer departmentIndex ;
 
 	@Transient
-	@ApiModelProperty(value = "下级区域列表",hidden = true)
+	@ApiModelProperty(value = "下级列表",hidden = true)
 	private List<Department> children;
 
 }

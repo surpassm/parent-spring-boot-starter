@@ -15,6 +15,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author mc
@@ -57,6 +58,9 @@ public class Region extends BasicEntity implements Serializable {
 	@ApiModelProperty("排序字段")
 	private Integer departmentIndex ;
 
+	@Transient
+	@ApiModelProperty(value = "下级列表",hidden = true)
+	private List<Region> children;
 
 
 

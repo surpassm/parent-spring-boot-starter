@@ -1,6 +1,7 @@
 package com.example.demo.service.user.impl;
 
 import com.example.demo.entity.user.Department;
+import com.example.demo.entity.user.Group;
 import com.example.demo.entity.user.UserInfo;
 import com.example.demo.mapper.user.DepartmentMapper;
 import com.example.demo.mapper.user.UserInfoMapper;
@@ -181,6 +182,12 @@ public class DepartmentServiceImpl implements DepartmentService {
 			if (department.getName() != null && !"".equals(department.getName().trim())) {
 				builder.where(WeekendSqls.<Department>custom().andLike(Department::getName, "%" + department.getName() + "%"));
 			}
+			if (department.getDepartmentIndex() == null){
+				builder.where(WeekendSqls.<Department>custom().andIsNull(Department::getParentId));
+			}else {
+				builder.where(WeekendSqls.<Department>custom().andEqualTo(Department::getParentId, department.getParentId()));
+			}
+		}else {
 			builder.where(WeekendSqls.<Department>custom().andIsNull(Department::getParentId));
 		}
 		Page<Department> all = (Page<Department>) departmentMapper.selectByExample(builder.build());

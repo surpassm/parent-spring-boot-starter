@@ -12,6 +12,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author mc
@@ -49,6 +50,10 @@ public class Group extends BasicEntity implements Serializable {
 	private String name;
 	@ApiModelProperty(value = "描述")
 	private String describes;
-	@ApiModelProperty(value = "父级菜单ID")
+	@ApiModelProperty(value = "父级ID")
 	private Integer parentId;
+
+	@Transient
+	@ApiModelProperty(value = "下级列表",hidden = true)
+	private List<Group> children;
 }

@@ -78,4 +78,34 @@
 
         </trim>
     </insert>
+
+
+    <resultMap id="BaseResultMap" type="com.example.demo.entity.user.Region" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
+        <result column="delete_time" property="deleteTime" jdbcType="TIMESTAMP" />
+        <result column="delete_user_id" property="deleteUserId" jdbcType="INTEGER" />
+        <result column="is_delete" property="isDelete" jdbcType="INTEGER" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="update_user_id" property="updateUserId" jdbcType="INTEGER" />
+        <result column="department_index" property="departmentIndex" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+        <collection property="children"  ofType="NewsLabel"  select="selectChildByParentId" column="id"/>
+    </resultMap>
+    <select id="selectChildByParentId" resultMap="BaseResultMap">
+      select id,`name`,parent_id from t_region where parent_id=#{parentId} and is_delete = 0
+    </select>
+    <select id="selectSelfAndChildByParentId" resultMap="BaseResultMap">
+        select id,`name`,parent_id from t_region
+        <where>
+            <if test="id != null">
+                and id=#{id}
+            </if>
+            and is_delete = 0
+        </where>
+    </select>
+
+
 </mapper>

@@ -82,7 +82,7 @@ public class DepartmentController {
         return departmentService.findById(accessToken,id);
     }
 
-	@PostMapping("findParentId")
+	@PostMapping("findChildren")
 	@ApiOperation(value = "根据父级Id查询所有子级")
 	@ApiResponses({
 			@ApiResponse(code=Constant.FAIL_SESSION_CODE,message=Constant.FAIL_SESSION_MSG),

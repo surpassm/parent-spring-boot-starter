@@ -43,4 +43,20 @@ public interface GroupService {
 	 * @return 前端返回格式
 	 */
     Result pageQuery(String accessToken, Integer page, Integer size, String sort, Group group);
+
+	/**
+	 * 根据父级Id查询
+	 * @param accessToken
+	 * @param parentId
+	 * @return
+	 */
+	Result getParentId(String accessToken, Integer parentId);
+
+	/**
+	 * 根据主键查询自己和所有子级
+	 * @param accessToken
+	 * @param id
+	 * @return
+	 */
+	Result findByOnlyAndChildren(String accessToken, Integer id);
 }

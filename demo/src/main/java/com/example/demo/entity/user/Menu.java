@@ -15,6 +15,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author mc
@@ -69,4 +70,9 @@ public class Menu extends BasicEntity implements Serializable {
 
     @ApiModelProperty(value = "菜单url后台权限控制")
     private String menuUrl;
+
+
+	@Transient
+	@ApiModelProperty(value = "下级列表",hidden = true)
+	private List<Menu> children;
 }

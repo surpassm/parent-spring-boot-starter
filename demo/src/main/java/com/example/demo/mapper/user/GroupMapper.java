@@ -1,6 +1,9 @@
 package com.example.demo.mapper.user;
 
+import com.example.demo.entity.user.Department;
 import com.example.demo.entity.user.Group;
+
+import java.util.List;
 
 /**
   * @author mc
@@ -11,4 +14,17 @@ import com.example.demo.entity.user.Group;
 public interface GroupMapper extends tk.mybatis.mapper.common.Mapper<Group> {
 
     int insertSelectiveCustom(Group group);
+	/**
+	 * 根据父级Id查询
+	 * @param parentId
+	 * @return
+	 */
+	List<Group> selectChildByParentId(Integer parentId);
+
+	/**
+	 * 根据主键查询自己和所有子级
+	 * @param id
+	 * @return
+	 */
+	List<Group> selectSelfAndChildByParentId(Integer id);
 }

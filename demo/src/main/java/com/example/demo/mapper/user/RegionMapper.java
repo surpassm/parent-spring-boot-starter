@@ -2,6 +2,8 @@ package com.example.demo.mapper.user;
 
 import com.example.demo.entity.user.Region;
 
+import java.util.List;
+
 /**
   * @author mc
   * Create date 2019-03-14 20:41:03
@@ -11,4 +13,16 @@ import com.example.demo.entity.user.Region;
 public interface RegionMapper extends tk.mybatis.mapper.common.Mapper<Region> {
 
     int insertSelectiveCustom(Region region);
+	/**
+	 * 根据父级Id查询
+	 * @param parentId
+	 * @return
+	 */
+	List<Region> selectChildByParentId(Integer parentId);
+	/**
+	 * 根据主键查询自己和所有子级
+	 * @param id
+	 * @return
+	 */
+	List<Region> selectSelfAndChildByParentId(Integer id);
 }

@@ -1,5 +1,6 @@
 package com.example.demo.controller.user;
 
+import com.example.demo.entity.user.Group;
 import com.example.demo.entity.user.Region;
 import com.example.demo.service.user.RegionService;
 import com.github.surpassm.common.constant.Constant;
@@ -11,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
 
 /**
   * @author mc
@@ -93,4 +95,28 @@ public class RegionController {
                             Region region) {
         return regionService.pageQuery(accessToken,page, size, sort, region);
     }
+
+	@PostMapping("findChildren")
+	@ApiOperation(value = "根据父级Id查询所有子级")
+	@ApiResponses({
+			@ApiResponse(code=Constant.FAIL_SESSION_CODE,message=Constant.FAIL_SESSION_MSG),
+			@ApiResponse(code=Constant.SUCCESS_CODE,message=Constant.SUCCESS_MSG,response=Region.class),
+			@ApiResponse(code=Constant.FAIL_CODE,message=Constant.FAIL_MSG,response=Result.class)})
+	@ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
+	public Result getParentId(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
+							  @ApiParam(value = "主键",required = true)@RequestParam(value = "parentId")@NotNull Integer parentId) {
+		return regionService.getParentId(accessToken,parentId);
+	}
+
+	@PostMapping("findByOnlyAndChildren")
+	@ApiOperation(value = "根据主键查询自己和所有子级")
+	@ApiResponses({
+			@ApiResponse(code=Constant.FAIL_SESSION_CODE,message=Constant.FAIL_SESSION_MSG),
+			@ApiResponse(code=Constant.SUCCESS_CODE,message=Constant.SUCCESS_MSG,response=Region.class),
+			@ApiResponse(code=Constant.FAIL_CODE,message=Constant.FAIL_MSG,response=Result.class)})
+	@ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
+	public Result findByOnlyAndChildren(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
+										@ApiParam(value = "主键",required = true)@RequestParam(value = "id")@NotNull Integer id) {
+		return regionService.findByOnlyAndChildren(accessToken,id);
+	}
 }

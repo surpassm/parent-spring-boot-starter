@@ -53,7 +53,7 @@ public class RoleMenu extends BasicEntity implements Serializable {
 	@NotNull(groups = {RoleMenuInsertPcSimpleView.class,RoleMenuUpdatePcSimpleView.class},message = "参数不能为为空")
 	private Integer menuId;
 
-	@ApiModelProperty(value="权限类型0=可访问、1=可授权",example = "1")
+	@ApiModelProperty(value="权限类型0=可访问、1=可授权",example = "1",allowableValues = "0,1")
 	@Column(columnDefinition="int(1) COMMENT '权限类型'",nullable = false)
 	@NotNull(groups = {RoleMenuInsertPcSimpleView.class,RoleMenuUpdatePcSimpleView.class},message = "参数不能为为空")
 	private Integer menuType;

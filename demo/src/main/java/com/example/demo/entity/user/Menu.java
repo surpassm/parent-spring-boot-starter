@@ -52,7 +52,7 @@ public class Menu extends BasicEntity implements Serializable {
     @ApiModelProperty(value = "菜单排序")
     private Integer menuIndex;
 
-    @ApiModelProperty(value = "权限分类（0 菜单；1 功能）")
+    @ApiModelProperty(value = "权限分类（0 菜单；1 功能）",allowableValues = "0,1")
     private Integer type;
 
 	@NotBlank(groups = {MenuInsertPcSimpleView.class,MenuUpdatePcSimpleView.class},message = "参数不能为为空或空串")

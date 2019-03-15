@@ -23,7 +23,7 @@ import javax.validation.constraints.NotNull;
 @CrossOrigin
 @RestController
 @RequestMapping("/group/")
-@Api(tags  =  "权限Api")
+@Api(tags  =  "组Api")
 public class GroupController {
 
     @Resource

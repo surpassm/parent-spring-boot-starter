@@ -11,7 +11,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
   * @author mc
@@ -97,14 +99,25 @@ public class RoleController {
 
 	@PostMapping("findMenus")
 	@ApiOperation(value = "根据主键查询角色及权限列表")
-	@ApiResponses({
-			@ApiResponse(code=Constant.FAIL_SESSION_CODE,message=Constant.FAIL_SESSION_MSG),
-			@ApiResponse(code=Constant.SUCCESS_CODE,message=Constant.SUCCESS_MSG,response=Role.class),
-			@ApiResponse(code=Constant.FAIL_CODE,message=Constant.FAIL_MSG,response=Result.class)})
+	@ApiResponses({@ApiResponse(code=Constant.FAIL_SESSION_CODE,message=Constant.FAIL_SESSION_MSG),
+				   @ApiResponse(code=Constant.SUCCESS_CODE,message=Constant.SUCCESS_MSG,response=Role.class),
+				   @ApiResponse(code=Constant.FAIL_CODE,message=Constant.FAIL_MSG,response=Result.class)})
 	@ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
 	public Result findMenus(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
 						    @ApiParam(value = "主键",required = true)@RequestParam(value = "id")@NotNull Integer id) {
 		return roleService.findMenus(accessToken,id);
+	}
+
+	@PostMapping("setRoleByMenu")
+	@ApiOperation(value = "设置角色权限",notes = "每次均需传全部权限ID，会把原有的所有权限做物理删除")
+	@ApiResponses({@ApiResponse(code=Constant.FAIL_SESSION_CODE,message=Constant.FAIL_SESSION_MSG),
+			@ApiResponse(code=Constant.SUCCESS_CODE,message=Constant.SUCCESS_MSG,response=Role.class),
+			@ApiResponse(code=Constant.FAIL_CODE,message=Constant.FAIL_MSG,response=Result.class)})
+	@ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
+	public Result setRoleByMenu(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
+								@ApiParam(value = "角色系统标识",required = true)@RequestParam(value = "id")@NotNull Integer id,
+								@ApiParam(value = "权限系统标识 多个角色请使用 ，分割",required = true)@RequestParam(value = "menuId")@NotEmpty String menuId) {
+		return roleService.setRoleByMenu(accessToken,id,menuId);
 	}
 
 }

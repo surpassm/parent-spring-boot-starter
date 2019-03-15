@@ -51,4 +51,13 @@ public interface RoleService {
 	 * @return
 	 */
 	Result findMenus(String accessToken, Integer id);
+
+	/**
+	 * 设置角色权限
+	 * @param accessToken
+	 * @param id
+	 * @param menuId
+	 * @return
+	 */
+	Result setRoleByMenu(String accessToken, Integer id, String menuId);
 }

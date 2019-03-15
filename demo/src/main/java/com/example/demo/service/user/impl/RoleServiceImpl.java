@@ -13,6 +13,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.surpassm.common.jackson.Result;
 import com.github.surpassm.common.jackson.Tips;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
@@ -190,6 +191,35 @@ public class RoleServiceImpl implements RoleService {
 			return fail(Tips.MSG_NOT.msg);
 		}
 		return ok(role);
+	}
+
+	@Override
+	public Result setRoleByMenu(String accessToken, Integer id, String menuId) {
+		UserInfo loginUser = beanConfig.getAccessToken(accessToken);
+		String[] split = StringUtils.split(",");
+
+		Role role = Role.builder().id(id).build();
+		role.setIsDelete(0);
+		int roleCount = roleMapper.selectCount(role);
+		if (roleCount == 0){
+			return fail(Tips.MSG_NOT.msg);
+		}
+		//删除原有角色对应的权限
+		Example.Builder builder = new Example.Builder(RoleMenu.class);
+		builder.where(WeekendSqls.<RoleMenu>custom().andEqualTo(RoleMenu::getIsDelete, 0));
+		builder.where(WeekendSqls.<RoleMenu>custom().andEqualTo(RoleMenu::getRoleId, id));
+		roleMenuMapper.deleteByExample(builder.build());
+		//新增现有的角色权限
+		for(String menui : split){
+			RoleMenu build = RoleMenu.builder().roleId(id).menuId(Integer.valueOf(menui)).build();
+			build.setIsDelete(0);
+			build.setCreateUserId(loginUser.getId());
+			build.setCreateTime(new Date());
+			build.setMenuType(1);
+			roleMenuMapper.insert(build);
+		}
+
+		return ok();
 	}
 }
 

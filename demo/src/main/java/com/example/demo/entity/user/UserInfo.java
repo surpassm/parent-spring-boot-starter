@@ -191,7 +191,7 @@ public class UserInfo extends BasicEntity implements UserDetails,CredentialsCont
 
 
 	@Transient
-	@ApiModelProperty("拥有角色")
+	@ApiModelProperty(value = "拥有角色",hidden = true)
 	@NotNull(groups = {UserInfoUpdatePcSimpleView.class,UserInfoInsertPcSimpleView.class},message = "参数不能为为空")
 	private List<Role> roleList ;
 

@@ -1,9 +1,11 @@
 package com.example.demo.service.user.impl;
 
 import com.example.demo.entity.user.Department;
+import com.example.demo.entity.user.Menu;
 import com.example.demo.entity.user.Region;
 import com.example.demo.entity.user.UserInfo;
 import com.example.demo.mapper.user.RegionMapper;
+import com.example.demo.mapper.user.UserInfoMapper;
 import com.example.demo.security.BeanConfig;
 import com.example.demo.service.user.RegionService;
 import com.github.pagehelper.Page;
@@ -17,11 +19,9 @@ import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.weekend.WeekendSqls;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import static com.example.demo.service.user.impl.CommonImpl.userInfoDeleteUpdata;
 import static com.github.surpassm.common.jackson.Result.fail;
 import static com.github.surpassm.common.jackson.Result.ok;
 
@@ -40,6 +40,8 @@ public class RegionServiceImpl implements RegionService {
 	private RegionMapper regionMapper;
 	@Resource
 	private BeanConfig beanConfig;
+	@Resource
+	private UserInfoMapper userInfoMapper;
 
 	@Override
 	public Result insert(String accessToken, Region region) {
@@ -47,6 +49,18 @@ public class RegionServiceImpl implements RegionService {
 			return fail(Tips.PARAMETER_ERROR.msg);
 		}
 		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
+		//效验名称是否重复
+		Region build = Region.builder().name(region.getName()).build();
+		build.setIsDelete(0);
+		int groupCount = regionMapper.selectCount(build);
+		if (groupCount != 0) {
+			return fail(Tips.nameRepeat.msg);
+		}
+		//查看父级是否存在
+		if (isEnableParent(region)) {
+			return fail(Tips.parentError.msg);
+		}
+
 		region.setCreateUserId(loginUserInfo.getId());
 		region.setCreateTime(new Date());
 		region.setIsDelete(0);
@@ -59,11 +73,39 @@ public class RegionServiceImpl implements RegionService {
 		if (region == null) {
 			return fail(Tips.PARAMETER_ERROR.msg);
 		}
+		if (region.getIsDelete() == 1){
+			return fail(Tips.PARAMETER_ERROR.msg);
+		}
 		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
+
+		Example.Builder builder = new Example.Builder(Region.class);
+		builder.where(WeekendSqls.<Region>custom().andEqualTo(Region::getIsDelete, 0));
+		builder.where(WeekendSqls.<Region>custom().andEqualTo(Region::getName, region.getName()));
+		builder.where(WeekendSqls.<Region>custom().andNotIn(Region::getId, Collections.singletonList(region.getId())));
+
+		List<Region> selectCount = regionMapper.selectByExample(builder.build());
+		if (selectCount.size() != 0) {
+			return fail(Tips.nameRepeat.msg);
+		}
+		if (isEnableParent(region)) {
+			return fail(Tips.parentError.msg);
+		}
+
+
 		region.setUpdateUserId(loginUserInfo.getId());
 		region.setUpdateTime(new Date());
 		regionMapper.updateByPrimaryKeySelective(region);
 		return ok();
+	}
+
+	private boolean isEnableParent(Region region) {
+		if (region.getParentId() != null) {
+			Region buildRegion = Region.builder().id(region.getParentId()).build();
+			buildRegion.setIsDelete(0);
+			int buildRegionCount = regionMapper.selectCount(buildRegion);
+			return buildRegionCount == 0;
+		}
+		return false;
 	}
 
 	@Override
@@ -76,6 +118,14 @@ public class RegionServiceImpl implements RegionService {
 			return fail(Tips.MSG_NOT.msg);
 		}
 		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
+
+		UserInfo userinfo = new UserInfo();
+		userinfo.setRegionId(id);
+		userinfo.setIsDelete(0);
+		int userCount = userInfoMapper.selectCount(userinfo);
+		//用户查询并删除
+		userInfoDeleteUpdata(loginUserInfo,userinfo,userCount,userInfoMapper);
+
 		region.setDeleteUserId(loginUserInfo.getId());
 		region.setDeleteTime(new Date());
 		region.setIsDelete(1);
@@ -137,10 +187,10 @@ public class RegionServiceImpl implements RegionService {
 			}
 			if (region.getParentId() != null) {
 				builder.where(WeekendSqls.<Region>custom().andEqualTo(Region::getParentId, region.getParentId()));
-			}else {
+			} else {
 				builder.where(WeekendSqls.<Region>custom().andIsNull(Region::getParentId));
 			}
-		}else {
+		} else {
 			builder.where(WeekendSqls.<Region>custom().andIsNull(Region::getParentId));
 		}
 		Page<Region> all = (Page<Region>) regionMapper.selectByExample(builder.build());

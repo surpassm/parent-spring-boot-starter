@@ -57,8 +57,8 @@ public class Role extends BasicEntity implements Serializable {
 
 	@Transient
 	@NotBlank(groups = {RoleInsertPcSimpleView.class,RoleUpdatePcSimpleView.class},message = "参数不能为为空或空串")
-	@ApiModelProperty("权限列表")
-	private List<Menu> menuList ;
+	@ApiModelProperty(value = "权限列表",hidden = true)
+	private List<Menu> menus ;
 
 	@ApiModelProperty("排序字段")
 	private Integer roleIndex ;

@@ -4,84 +4,139 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.mapper.user.RoleMapper">
 
-    <insert id="insertSelectiveCustom" useGeneratedKeys="true" keyProperty="id" parameterType="com.example.demo.entity.user.Role">
+    <insert id="insertSelectiveCustom" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.example.demo.entity.user.Role">
         insert into t_role
         <trim prefix="(" suffix=")" suffixOverrides=",">
-        <if test="id != null">
-            id,
-        </if>
-        <if test="createTime != null">
-            create_time,
-        </if>
-        <if test="createUserId != null">
-            create_user_id,
-        </if>
-        <if test="deleteTime != null">
-            delete_time,
-        </if>
-        <if test="deleteUserId != null">
-            delete_user_id,
-        </if>
-        <if test="isDelete != null">
-            is_delete,
-        </if>
-        <if test="updateTime != null">
-            update_time,
-        </if>
-        <if test="updateUserId != null">
-            update_user_id,
-        </if>
-        <if test="describes != null">
-            describes,
-        </if>
-        <if test="name != null">
-            name,
-        </if>
-        <if test="roleIndex != null">
-            role_index,
-        </if>
-        <if test="securityRoles != null">
-            security_roles,
-        </if>
+            <if test="id != null">
+                id,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="createUserId != null">
+                create_user_id,
+            </if>
+            <if test="deleteTime != null">
+                delete_time,
+            </if>
+            <if test="deleteUserId != null">
+                delete_user_id,
+            </if>
+            <if test="isDelete != null">
+                is_delete,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="updateUserId != null">
+                update_user_id,
+            </if>
+            <if test="describes != null">
+                describes,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="roleIndex != null">
+                role_index,
+            </if>
+            <if test="securityRoles != null">
+                security_roles,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-        <if test="id != null">
-            #{id},
-        </if>
-        <if test="createTime != null">
-            #{createTime},
-        </if>
-        <if test="createUserId != null">
-            #{createUserId},
-        </if>
-        <if test="deleteTime != null">
-            #{deleteTime},
-        </if>
-        <if test="deleteUserId != null">
-            #{deleteUserId},
-        </if>
-        <if test="isDelete != null">
-            #{isDelete},
-        </if>
-        <if test="updateTime != null">
-            #{updateTime},
-        </if>
-        <if test="updateUserId != null">
-            #{updateUserId},
-        </if>
-        <if test="describes != null">
-            #{describes},
-        </if>
-        <if test="name != null">
-            #{name},
-        </if>
-        <if test="roleIndex != null">
-            #{roleIndex},
-        </if>
-        <if test="securityRoles != null">
-            #{securityRoles},
-        </if>
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="createUserId != null">
+                #{createUserId},
+            </if>
+            <if test="deleteTime != null">
+                #{deleteTime},
+            </if>
+            <if test="deleteUserId != null">
+                #{deleteUserId},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+            <if test="updateUserId != null">
+                #{updateUserId},
+            </if>
+            <if test="describes != null">
+                #{describes},
+            </if>
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="roleIndex != null">
+                #{roleIndex},
+            </if>
+            <if test="securityRoles != null">
+                #{securityRoles},
+            </if>
 
         </trim>
     </insert>
+    <resultMap id="BaseResultMap" type="com.example.demo.entity.user.Role">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="create_user_id" property="createUserId" jdbcType="INTEGER"/>
+        <result column="delete_time" property="deleteTime" jdbcType="TIMESTAMP"/>
+        <result column="delete_user_id" property="deleteUserId" jdbcType="INTEGER"/>
+        <result column="is_delete" property="isDelete" jdbcType="INTEGER"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="update_user_id" property="updateUserId" jdbcType="INTEGER"/>
+        <result column="describes" property="describes" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="role_index" property="roleIndex" jdbcType="INTEGER"/>
+        <result column="security_roles" property="securityRoles" jdbcType="VARCHAR"/>
+        <collection property="menus" ofType="NewsLabel" select="selectSelfAndChildByParentId" column="id"/>
+    </resultMap>
+    <select id="findByMenus" resultMap="BaseResultMap">
+      select * from t_role where id =#{id}  and  is_delete = 0
+    </select>
+    
+    <select id="selectSelfAndChildByParentId" resultMap="MenuBaseResultMap" >
+        SELECT
+          m.*
+        FROM
+          `t_menu` m
+          LEFT JOIN `m_role_menu` rm
+            ON m.`id` = rm.`menu_id`
+        WHERE rm.`role_id` = #{id} and m.is_delete = 0 and rm.is_delete = 0
+    </select>
+
+    <resultMap id="MenuBaseResultMap" type="com.example.demo.entity.user.Menu">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="create_user_id" property="createUserId" jdbcType="INTEGER"/>
+        <result column="delete_time" property="deleteTime" jdbcType="TIMESTAMP"/>
+        <result column="delete_user_id" property="deleteUserId" jdbcType="INTEGER"/>
+        <result column="is_delete" property="isDelete" jdbcType="INTEGER"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="update_user_id" property="updateUserId" jdbcType="INTEGER"/>
+        <result column="describes" property="describes" jdbcType="VARCHAR"/>
+        <result column="menu_icon" property="menuIcon" jdbcType="VARCHAR"/>
+        <result column="menu_index" property="menuIndex" jdbcType="INTEGER"/>
+        <result column="menu_url" property="menuUrl" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="parent_id" property="parentId" jdbcType="INTEGER"/>
+        <result column="path" property="path" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <collection property="children" ofType="NewsLabel" select="selectChildByParentId" column="id"/>
+    </resultMap>
+    <select id="selectChildByParentId" resultMap="MenuBaseResultMap">
+      select id,`name`,parent_id from t_menu where parent_id=#{parentId} and is_delete = 0
+    </select>
+
+
+
 </mapper>

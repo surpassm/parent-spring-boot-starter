@@ -53,14 +53,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 		if (selectCount != 0) {
 			return fail(Tips.nameRepeat.msg);
 		}
-		if (department.getParentId() != null) {
-			Department buildDepartment = Department.builder().id(department.getParentId()).build();
-			buildDepartment.setIsDelete(0);
-			int buildDepartmentCount = departmentMapper.selectCount(buildDepartment);
-			if (buildDepartmentCount == 0) {
-				return fail(Tips.parentError.msg);
-			}
-		}
+		if (isEnableParent(department)){ return fail(Tips.parentError.msg);}
 		department.setCreateUserId(loginUserInfo.getId());
 		department.setCreateTime(new Date());
 		department.setIsDelete(0);
@@ -71,6 +64,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 	@Override
 	public Result update(String accessToken, Department department) {
 		if (department == null) {
+			return fail(Tips.PARAMETER_ERROR.msg);
+		}
+		if (department.getIsDelete() == 1){
 			return fail(Tips.PARAMETER_ERROR.msg);
 		}
 		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
@@ -84,19 +80,22 @@ public class DepartmentServiceImpl implements DepartmentService {
 		if (selectCount.size() != 0) {
 			return fail(Tips.nameRepeat.msg);
 		}
-		if (department.getParentId() != null) {
-			Department buildDepartment = Department.builder().id(department.getParentId()).build();
-			buildDepartment.setIsDelete(0);
-			int buildDepartmentCount = departmentMapper.selectCount(buildDepartment);
-			if (buildDepartmentCount == 0) {
-				return fail(Tips.parentError.msg);
-			}
-		}
+		if (isEnableParent(department)){ return fail(Tips.parentError.msg);}
 
 		department.setUpdateUserId(loginUserInfo.getId());
 		department.setUpdateTime(new Date());
 		departmentMapper.updateByPrimaryKeySelective(department);
 		return ok();
+	}
+
+	private boolean isEnableParent(Department department) {
+		if (department.getParentId() != null) {
+			Department buildDepartment = Department.builder().id(department.getParentId()).build();
+			buildDepartment.setIsDelete(0);
+			int buildDepartmentCount = departmentMapper.selectCount(buildDepartment);
+			return buildDepartmentCount == 0;
+		}
+		return false;
 	}
 
 	@Override

@@ -37,7 +37,7 @@ public class GroupController {
             @ApiResponse(code=Constant.FAIL_CODE,message=Constant.FAIL_MSG,response=Result.class)})
     @ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
     public Result insert(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
-						 @Validated(Group.GroupInsertPcSimpleView.class) Group group, BindingResult errors) {
+						 @Validated(Group.GroupInsertPcSimpleView.class)@RequestBody Group group, BindingResult errors) {
         if (errors.hasErrors()){
 			return Result.fail(errors.getAllErrors());
 		}
@@ -52,7 +52,7 @@ public class GroupController {
             @ApiResponse(code=Constant.FAIL_CODE,message=Constant.FAIL_MSG,response=Result.class)})
     @ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
     public Result update(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
-                         @Validated(Group.GroupUpdatePcSimpleView.class) Group group,BindingResult errors) {
+                         @Validated(Group.GroupUpdatePcSimpleView.class)@RequestBody Group group,BindingResult errors) {
         if (errors.hasErrors()){
 			return Result.fail(errors.getAllErrors());
 		}
@@ -92,7 +92,7 @@ public class GroupController {
                             @ApiParam(value = "第几页", required = true) @RequestParam(value = "page") Integer page,
                             @ApiParam(value = "多少条",required = true)@RequestParam(value = "size") Integer size,
                             @ApiParam(value = "排序字段")@RequestParam(value = "sort",required = false) String sort,
-                            Group group) {
+							@RequestBody Group group) {
         return groupService.pageQuery(accessToken,page, size, sort, group);
     }
 

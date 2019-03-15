@@ -1,6 +1,5 @@
 package com.example.demo.mapper.user;
 
-import com.example.demo.entity.user.Department;
 import com.example.demo.entity.user.Group;
 
 import java.util.List;
@@ -27,4 +26,5 @@ public interface GroupMapper extends tk.mybatis.mapper.common.Mapper<Group> {
 	 * @return
 	 */
 	List<Group> selectSelfAndChildByParentId(Integer id);
+
 }

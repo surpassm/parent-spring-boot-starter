@@ -1,9 +1,10 @@
 package com.example.demo.service.user.impl;
 
-import com.example.demo.entity.user.Department;
-import com.example.demo.entity.user.Group;
-import com.example.demo.entity.user.UserInfo;
+import com.example.demo.entity.user.*;
 import com.example.demo.mapper.user.GroupMapper;
+import com.example.demo.mapper.user.GroupMenuMapper;
+import com.example.demo.mapper.user.GroupRoleMapper;
+import com.example.demo.mapper.user.UserGroupMapper;
 import com.example.demo.security.BeanConfig;
 import com.example.demo.service.user.GroupService;
 import com.github.pagehelper.Page;
@@ -17,10 +18,7 @@ import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.weekend.WeekendSqls;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.github.surpassm.common.jackson.Result.fail;
 import static com.github.surpassm.common.jackson.Result.ok;
@@ -40,6 +38,12 @@ public class GroupServiceImpl implements GroupService {
 	private GroupMapper groupMapper;
 	@Resource
 	private BeanConfig beanConfig;
+	@Resource
+	private GroupMenuMapper groupMenuMapper;
+	@Resource
+	private GroupRoleMapper groupRoleMapper;
+	@Resource
+	private UserGroupMapper userGroupMapper;
 
 	@Override
 	public Result insert(String accessToken, Group group) {
@@ -47,6 +51,17 @@ public class GroupServiceImpl implements GroupService {
 			return fail(Tips.PARAMETER_ERROR.msg);
 		}
 		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
+		//效验名称是否重复
+		Group build = Group.builder().name(group.getName()).build();
+		build.setIsDelete(0);
+		int groupCount = groupMapper.selectCount(build);
+		if (groupCount != 0) {
+			return fail(Tips.nameRepeat.msg);
+		}
+		//查看父级是否存在
+		if (isEnableParent(group)) {
+			return fail(Tips.parentError.msg);
+		}
 		group.setCreateUserId(loginUserInfo.getId());
 		group.setCreateTime(new Date());
 		group.setIsDelete(0);
@@ -59,11 +74,39 @@ public class GroupServiceImpl implements GroupService {
 		if (group == null) {
 			return fail(Tips.PARAMETER_ERROR.msg);
 		}
+		if (group.getIsDelete() == 1){
+			return fail(Tips.PARAMETER_ERROR.msg);
+		}
 		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
+
+		Example.Builder builder = new Example.Builder(Group.class);
+		builder.where(WeekendSqls.<Group>custom().andEqualTo(Group::getIsDelete, 0));
+		builder.where(WeekendSqls.<Group>custom().andEqualTo(Group::getName, group.getName()));
+		builder.where(WeekendSqls.<Group>custom().andNotIn(Group::getId, Collections.singletonList(group.getId())));
+
+		List<Group> selectCount = groupMapper.selectByExample(builder.build());
+		if (selectCount.size() != 0) {
+			return fail(Tips.nameRepeat.msg);
+		}
+		if (isEnableParent(group)) {
+			return fail(Tips.parentError.msg);
+		}
+
+
 		group.setUpdateUserId(loginUserInfo.getId());
 		group.setUpdateTime(new Date());
 		groupMapper.updateByPrimaryKeySelective(group);
 		return ok();
+	}
+
+	private boolean isEnableParent(Group group) {
+		if (group.getParentId() != null) {
+			Group buildGroup = Group.builder().id(group.getParentId()).build();
+			buildGroup.setIsDelete(0);
+			int buildGroupCount = groupMapper.selectCount(buildGroup);
+			return buildGroupCount == 0;
+		}
+		return false;
 	}
 
 	@Override
@@ -76,6 +119,22 @@ public class GroupServiceImpl implements GroupService {
 			return fail(Tips.MSG_NOT.msg);
 		}
 		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
+
+		//组权限查询
+		GroupMenu groupMenu = GroupMenu.builder().groupId(id).build();
+		groupMenu.setIsDelete(0);
+		int groupMenuCount = groupMenuMapper.selectCount(groupMenu);
+		CommonImpl.groupMenuDeleteUpdata(loginUserInfo, groupMenu, groupMenuCount, groupMenuMapper);
+		//组角色查询
+		GroupRole groupRole = GroupRole.builder().groupId(id).build();
+		groupRole.setIsDelete(0);
+		int groupRoleCount = groupRoleMapper.selectCount(groupRole);
+		CommonImpl.groupRoleDeleteUpdata(loginUserInfo,groupRole,groupRoleCount,groupRoleMapper);
+		//用户组查询
+		UserGroup userGroup = UserGroup.builder().groupId(id).build();
+		userGroup.setIsDelete(0);
+		int userGroupCount = userGroupMapper.selectCount(userGroup);
+		CommonImpl.userGroupDeleteUpdata(loginUserInfo,userGroup,userGroupCount,userGroupMapper);
 		group.setDeleteUserId(loginUserInfo.getId());
 		group.setDeleteTime(new Date());
 		group.setIsDelete(1);
@@ -137,10 +196,10 @@ public class GroupServiceImpl implements GroupService {
 			}
 			if (group.getParentId() != null) {
 				builder.where(WeekendSqls.<Group>custom().andEqualTo(Group::getParentId, group.getParentId()));
-			}else {
+			} else {
 				builder.where(WeekendSqls.<Group>custom().andIsNull(Group::getParentId));
 			}
-		}else {
+		} else {
 			builder.where(WeekendSqls.<Group>custom().andIsNull(Group::getParentId));
 		}
 		Page<Group> all = (Page<Group>) groupMapper.selectByExample(builder.build());

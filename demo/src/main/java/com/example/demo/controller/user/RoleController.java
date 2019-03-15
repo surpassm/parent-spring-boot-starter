@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
 
 /**
   * @author mc
@@ -35,7 +36,7 @@ public class RoleController {
             @ApiResponse(code=Constant.FAIL_CODE,message=Constant.FAIL_MSG,response=Result.class)})
     @ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
     public Result insert(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
-						 @Validated(Role.RoleInsertPcSimpleView.class) Role role, BindingResult errors) {
+						 @Validated(Role.RoleInsertPcSimpleView.class)@RequestBody Role role, BindingResult errors) {
         if (errors.hasErrors()){
 			return Result.fail(errors.getAllErrors());
 		}
@@ -50,7 +51,7 @@ public class RoleController {
             @ApiResponse(code=Constant.FAIL_CODE,message=Constant.FAIL_MSG,response=Result.class)})
     @ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
     public Result update(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
-                         @Validated(Role.RoleUpdatePcSimpleView.class) Role role,BindingResult errors) {
+                         @Validated(Role.RoleUpdatePcSimpleView.class) @RequestBody Role role,BindingResult errors) {
         if (errors.hasErrors()){
 			return Result.fail(errors.getAllErrors());
 		}
@@ -90,7 +91,20 @@ public class RoleController {
                             @ApiParam(value = "第几页", required = true) @RequestParam(value = "page") Integer page,
                             @ApiParam(value = "多少条",required = true)@RequestParam(value = "size") Integer size,
                             @ApiParam(value = "排序字段")@RequestParam(value = "sort",required = false) String sort,
-                            Role role) {
+							@RequestBody Role role) {
         return roleService.pageQuery(accessToken,page, size, sort, role);
     }
+
+	@PostMapping("findMenus")
+	@ApiOperation(value = "根据主键查询角色及权限列表")
+	@ApiResponses({
+			@ApiResponse(code=Constant.FAIL_SESSION_CODE,message=Constant.FAIL_SESSION_MSG),
+			@ApiResponse(code=Constant.SUCCESS_CODE,message=Constant.SUCCESS_MSG,response=Role.class),
+			@ApiResponse(code=Constant.FAIL_CODE,message=Constant.FAIL_MSG,response=Result.class)})
+	@ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
+	public Result findMenus(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
+						    @ApiParam(value = "主键",required = true)@RequestParam(value = "id")@NotNull Integer id) {
+		return roleService.findMenus(accessToken,id);
+	}
+
 }

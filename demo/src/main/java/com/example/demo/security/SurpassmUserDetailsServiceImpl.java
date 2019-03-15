@@ -66,7 +66,7 @@ public class SurpassmUserDetailsServiceImpl implements UserDetailsService {
 //				securityRoles);
 		String password = bCryptPasswordEncoder.encode("123456");
 		log.info("数据库密码是:"+password);
-		return new User(username, password,
+		return new UserInfo(1,username, password,
 				true, true, true, true,
 				AuthorityUtils.commaSeparatedStringToAuthorityList("admin,ROLE_USER"));
 	}

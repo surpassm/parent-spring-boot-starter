@@ -1,9 +1,10 @@
 package com.example.demo.service.user.impl;
 
-import com.example.demo.entity.user.Department;
-import com.example.demo.entity.user.Menu;
-import com.example.demo.entity.user.UserInfo;
+import com.example.demo.entity.user.*;
+import com.example.demo.mapper.user.GroupMenuMapper;
 import com.example.demo.mapper.user.MenuMapper;
+import com.example.demo.mapper.user.RoleMenuMapper;
+import com.example.demo.mapper.user.UserMenuMapper;
 import com.example.demo.security.BeanConfig;
 import com.example.demo.service.user.MenuService;
 import com.github.pagehelper.Page;
@@ -17,11 +18,9 @@ import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.weekend.WeekendSqls;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import static com.example.demo.service.user.impl.CommonImpl.groupMenuDeleteUpdata;
 import static com.github.surpassm.common.jackson.Result.fail;
 import static com.github.surpassm.common.jackson.Result.ok;
 
@@ -40,6 +39,12 @@ public class MenuServiceImpl implements MenuService {
 	private MenuMapper menuMapper;
 	@Resource
 	private BeanConfig beanConfig;
+	@Resource
+	private GroupMenuMapper groupMenuMapper;
+	@Resource
+	private RoleMenuMapper roleMenuMapper;
+	@Resource
+	private UserMenuMapper userMenuMapper;
 
 	@Override
 	public Result insert(String accessToken, Menu menu) {
@@ -47,6 +52,19 @@ public class MenuServiceImpl implements MenuService {
 			return fail(Tips.PARAMETER_ERROR.msg);
 		}
 		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
+
+		//效验名称是否重复
+		Menu build = Menu.builder().name(menu.getName()).build();
+		build.setIsDelete(0);
+		int groupCount = menuMapper.selectCount(build);
+		if (groupCount != 0) {
+			return fail(Tips.nameRepeat.msg);
+		}
+		//查看父级是否存在
+		if (isEnableParent(menu)) {
+			return fail(Tips.parentError.msg);
+		}
+
 		menu.setCreateUserId(loginUserInfo.getId());
 		menu.setCreateTime(new Date());
 		menu.setIsDelete(0);
@@ -59,11 +77,39 @@ public class MenuServiceImpl implements MenuService {
 		if (menu == null) {
 			return fail(Tips.PARAMETER_ERROR.msg);
 		}
+		if (menu.getIsDelete() == 1){
+			return fail(Tips.PARAMETER_ERROR.msg);
+		}
 		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
+
+		Example.Builder builder = new Example.Builder(Menu.class);
+		builder.where(WeekendSqls.<Menu>custom().andEqualTo(Menu::getIsDelete, 0));
+		builder.where(WeekendSqls.<Menu>custom().andEqualTo(Menu::getName, menu.getName()));
+		builder.where(WeekendSqls.<Menu>custom().andNotIn(Menu::getId, Collections.singletonList(menu.getId())));
+
+		List<Menu> selectCount = menuMapper.selectByExample(builder.build());
+		if (selectCount.size() != 0) {
+			return fail(Tips.nameRepeat.msg);
+		}
+		if (isEnableParent(menu)) {
+			return fail(Tips.parentError.msg);
+		}
+
+
 		menu.setUpdateUserId(loginUserInfo.getId());
 		menu.setUpdateTime(new Date());
 		menuMapper.updateByPrimaryKeySelective(menu);
 		return ok();
+	}
+
+	private boolean isEnableParent(Menu menu) {
+		if (menu.getParentId() != null) {
+			Menu buildMenu = Menu.builder().id(menu.getParentId()).build();
+			buildMenu.setIsDelete(0);
+			int buildmenuMapperCount = menuMapper.selectCount(buildMenu);
+			return buildmenuMapperCount == 0;
+		}
+		return false;
 	}
 
 	@Override
@@ -76,6 +122,22 @@ public class MenuServiceImpl implements MenuService {
 			return fail(Tips.MSG_NOT.msg);
 		}
 		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
+		//组权限查询
+		GroupMenu groupMenu = GroupMenu.builder().menuId(id).build();
+		groupMenu.setIsDelete(0);
+		int groupMenuCount = groupMenuMapper.selectCount(groupMenu);
+		groupMenuDeleteUpdata(loginUserInfo,groupMenu,groupMenuCount,groupMenuMapper);
+		//角色权限查询
+		RoleMenu roleMenu = RoleMenu.builder().menuId(id).build();
+		roleMenu.setIsDelete(0);
+		int roleMenuCount = roleMenuMapper.selectCount(roleMenu);
+		CommonImpl.roleMenuDeleteUpdata(loginUserInfo, roleMenu, roleMenuCount, roleMenuMapper);
+		//用户权限查询
+		UserMenu userMenu = UserMenu.builder().menuId(id).build();
+		userMenu.setIsDelete(0);
+		int userMenuCount = userMenuMapper.selectCount(userMenu);
+		CommonImpl.userMenuDeleteUpdata(loginUserInfo, userMenu, userMenuCount, userMenuMapper);
+
 		menu.setDeleteUserId(loginUserInfo.getId());
 		menu.setDeleteTime(new Date());
 		menu.setIsDelete(1);
@@ -152,10 +214,10 @@ public class MenuServiceImpl implements MenuService {
 			}
 			if (menu.getType() != null) {
 				builder.where(WeekendSqls.<Menu>custom().andEqualTo(Menu::getType, menu.getType()));
-			}else {
+			} else {
 				builder.where(WeekendSqls.<Menu>custom().andIsNull(Menu::getParentId));
 			}
-		}else {
+		} else {
 			builder.where(WeekendSqls.<Menu>custom().andIsNull(Menu::getParentId));
 		}
 		Page<Menu> all = (Page<Menu>) menuMapper.selectByExample(builder.build());

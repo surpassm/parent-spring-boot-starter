@@ -48,7 +48,7 @@ public class Department extends BasicEntity implements Serializable {
 	private Integer id;
 
 	@NotBlank(groups = {DepartmentInsertPcSimpleView.class,DepartmentUpdatePcSimpleView.class},message = "参数不能为为空或空串")
-	@ApiModelProperty(value = "名称",example = "重庆市")
+	@ApiModelProperty(value = "名称",example = "研发部")
 	private String name ;
 
 	@ApiModelProperty("父级Id")

@@ -109,14 +109,14 @@ public class RoleController {
 	}
 
 	@PostMapping("setRoleByMenu")
-	@ApiOperation(value = "设置角色权限",notes = "每次均需传全部权限ID，会把原有的所有权限做物理删除")
+	@ApiOperation(value = "设置角色权限",notes = "每次均需传全部权限ID，会把角色原有的所有权限做物理删除")
 	@ApiResponses({@ApiResponse(code=Constant.FAIL_SESSION_CODE,message=Constant.FAIL_SESSION_MSG),
 			@ApiResponse(code=Constant.SUCCESS_CODE,message=Constant.SUCCESS_MSG,response=Role.class),
 			@ApiResponse(code=Constant.FAIL_CODE,message=Constant.FAIL_MSG,response=Result.class)})
 	@ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
 	public Result setRoleByMenu(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
 								@ApiParam(value = "角色系统标识",required = true)@RequestParam(value = "id")@NotNull Integer id,
-								@ApiParam(value = "权限系统标识 多个角色请使用 ，分割",required = true)@RequestParam(value = "menuId")@NotEmpty String menuId) {
+								@ApiParam(value = "权限系统标识 多个权限请使用 ，分割",required = true)@RequestParam(value = "menuId")@NotEmpty String menuId) {
 		return roleService.setRoleByMenu(accessToken,id,menuId);
 	}
 

@@ -2,6 +2,7 @@ package com.example.demo.controller.user;
 
 import com.example.demo.entity.user.Department;
 import com.example.demo.entity.user.Group;
+import com.example.demo.entity.user.Role;
 import com.example.demo.service.user.GroupService;
 import com.github.surpassm.common.constant.Constant;
 import com.github.surpassm.common.jackson.Result;
@@ -12,6 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -118,5 +120,29 @@ public class GroupController {
 	public Result findByOnlyAndChildren(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
 										@ApiParam(value = "主键",required = true)@RequestParam(value = "id")@NotNull Integer id) {
 		return groupService.findByOnlyAndChildren(accessToken,id);
+	}
+
+	@PostMapping("setGroupByMenu")
+	@ApiOperation(value = "设置组的权限",notes = "每次均需传全部权限ID，会把组原有的所有权限做物理删除")
+	@ApiResponses({@ApiResponse(code=Constant.FAIL_SESSION_CODE,message=Constant.FAIL_SESSION_MSG),
+			@ApiResponse(code=Constant.SUCCESS_CODE,message=Constant.SUCCESS_MSG,response=Role.class),
+			@ApiResponse(code=Constant.FAIL_CODE,message=Constant.FAIL_MSG,response=Result.class)})
+	@ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
+	public Result setGroupByMenu(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
+								 @ApiParam(value = "角色系统标识",required = true)@RequestParam(value = "id")@NotNull Integer id,
+								 @ApiParam(value = "权限系统标识 多个权限请使用 ，分割",required = true)@RequestParam(value = "menuId")@NotEmpty String menuId) {
+		return groupService.setGroupByMenu(accessToken,id,menuId);
+	}
+
+	@PostMapping("setGroupByRole")
+	@ApiOperation(value = "设置组的角色",notes = "每次均需传全部角色ID，会把组原有的所有角色做物理删除")
+	@ApiResponses({@ApiResponse(code=Constant.FAIL_SESSION_CODE,message=Constant.FAIL_SESSION_MSG),
+			@ApiResponse(code=Constant.SUCCESS_CODE,message=Constant.SUCCESS_MSG,response=Role.class),
+			@ApiResponse(code=Constant.FAIL_CODE,message=Constant.FAIL_MSG,response=Result.class)})
+	@ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
+	public Result setGroupByRole(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
+								 @ApiParam(value = "角色系统标识",required = true)@RequestParam(value = "id")@NotNull Integer id,
+								 @ApiParam(value = "角色系统标识 多个角色请使用 ，分割",required = true)@RequestParam(value = "roleIds")@NotEmpty String roleIds) {
+		return groupService.setGroupByRole(accessToken,id,roleIds);
 	}
 }

@@ -196,8 +196,10 @@ public class RoleServiceImpl implements RoleService {
 	@Override
 	public Result setRoleByMenu(String accessToken, Integer id, String menuId) {
 		UserInfo loginUser = beanConfig.getAccessToken(accessToken);
-		String[] split = StringUtils.split(",");
-
+		String[] splits = StringUtils.split(menuId,",");
+		if (splits == null || splits.length == 0){
+			return fail(Tips.PARAMETER_ERROR.msg);
+		}
 		Role role = Role.builder().id(id).build();
 		role.setIsDelete(0);
 		int roleCount = roleMapper.selectCount(role);
@@ -210,7 +212,7 @@ public class RoleServiceImpl implements RoleService {
 		builder.where(WeekendSqls.<RoleMenu>custom().andEqualTo(RoleMenu::getRoleId, id));
 		roleMenuMapper.deleteByExample(builder.build());
 		//新增现有的角色权限
-		for(String menui : split){
+		for(String menui : splits){
 			RoleMenu build = RoleMenu.builder().roleId(id).menuId(Integer.valueOf(menui)).build();
 			build.setIsDelete(0);
 			build.setCreateUserId(loginUser.getId());

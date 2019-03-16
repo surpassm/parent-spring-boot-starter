@@ -12,6 +12,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.surpassm.common.jackson.Result;
 import com.github.surpassm.common.jackson.Tips;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
@@ -219,6 +220,65 @@ public class GroupServiceImpl implements GroupService {
 	public Result findByOnlyAndChildren(String accessToken, Integer id) {
 		List<Group> groups = groupMapper.selectSelfAndChildByParentId(id);
 		return ok(groups);
+	}
+
+	@Override
+	public Result setGroupByMenu(String accessToken, Integer id, String menuId) {
+		UserInfo loginUser = beanConfig.getAccessToken(accessToken);
+		String[] splits = StringUtils.split(menuId,",");
+		if (splits == null || splits.length == 0){
+			return fail(Tips.PARAMETER_ERROR.msg);
+		}
+		Group group = Group.builder().id(id).build();
+		group.setIsDelete(0);
+		int groupCount = groupMapper.selectCount(group);
+		if (groupCount == 0){
+			return fail(Tips.MSG_NOT.msg);
+		}
+		//删除原有组对应的权限
+		Example.Builder builder = new Example.Builder(RoleMenu.class);
+		builder.where(WeekendSqls.<GroupMenu>custom().andEqualTo(GroupMenu::getIsDelete, 0));
+		builder.where(WeekendSqls.<GroupMenu>custom().andEqualTo(GroupMenu::getGroupId, id));
+		groupMenuMapper.deleteByExample(builder.build());
+		//新增现有的角色权限
+		for(String split : splits){
+			GroupMenu build = GroupMenu.builder().groupId(id).menuId(Integer.valueOf(split)).build();
+			build.setIsDelete(0);
+			build.setCreateUserId(loginUser.getId());
+			build.setCreateTime(new Date());
+			build.setMenuType(1);
+			groupMenuMapper.insert(build);
+		}
+		return ok();
+	}
+
+	@Override
+	public Result setGroupByRole(String accessToken, Integer id, String roleIds) {
+		UserInfo loginUser = beanConfig.getAccessToken(accessToken);
+		String[] splits = StringUtils.split(roleIds,",");
+		if (splits == null || splits.length == 0){
+			return fail(Tips.PARAMETER_ERROR.msg);
+		}
+		Group group = Group.builder().id(id).build();
+		group.setIsDelete(0);
+		int groupCount = groupMapper.selectCount(group);
+		if (groupCount == 0){
+			return fail(Tips.MSG_NOT.msg);
+		}
+		//删除原有组对应的角色
+		Example.Builder builder = new Example.Builder(GroupRole.class);
+		builder.where(WeekendSqls.<GroupRole>custom().andEqualTo(GroupRole::getIsDelete, 0));
+		builder.where(WeekendSqls.<GroupRole>custom().andEqualTo(GroupRole::getGroupId, id));
+		groupRoleMapper.deleteByExample(builder.build());
+		//新增现有的角色
+		for(String split : splits){
+			GroupRole build = GroupRole.builder().groupId(id).roleId(Integer.valueOf(split)).build();
+			build.setIsDelete(0);
+			build.setCreateUserId(loginUser.getId());
+			build.setCreateTime(new Date());
+			groupRoleMapper.insert(build);
+		}
+		return ok();
 	}
 }
 

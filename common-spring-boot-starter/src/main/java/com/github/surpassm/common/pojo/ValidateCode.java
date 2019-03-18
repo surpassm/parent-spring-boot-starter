@@ -19,6 +19,8 @@ public class ValidateCode implements Serializable {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private LocalDateTime expireTime;
 
+	private Integer sendLimit=0;
+
 	public ValidateCode(){}
 
     public ValidateCode(String code, int expireIn){

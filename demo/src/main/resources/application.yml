@@ -85,6 +85,9 @@ swagger:
     common:
       title: "公共"
       base-package: com.example.demo.controller.common
+    mobile:
+      title: "移动端"
+      base-package: com.example.demo.controller.mobile
 
 mybatis:
   type-aliases-package: com.example.demo.controller

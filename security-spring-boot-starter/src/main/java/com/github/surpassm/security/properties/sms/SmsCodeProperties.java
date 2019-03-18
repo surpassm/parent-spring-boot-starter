@@ -22,4 +22,16 @@ public class SmsCodeProperties {
 	 * 那些拦截需要验证码
 	 */
 	private String url;
+	/**
+	 * 单个手机发送次数限制
+	 */
+	private int limit = 100;
+	/**
+	 * 单个手机发送次数限制时长 单位：分钟
+	 */
+	private int limitDuration = 1440;
+	/**
+	 * 前端验证发送限制缓存key
+	 */
+	private String limitKey = "surpassm";
 }

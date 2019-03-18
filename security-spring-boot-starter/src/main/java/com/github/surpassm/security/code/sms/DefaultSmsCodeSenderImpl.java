@@ -11,7 +11,7 @@ public class DefaultSmsCodeSenderImpl implements SmsCodeSender {
 
 	@Override
 	public void send(ServletWebRequest request, String mobile, String code) {
-		log.info("向手机"+mobile+"发送短信验证码"+code);
+		log.info("手机"+mobile+"发送短信验证码"+code);
 	}
 
 }

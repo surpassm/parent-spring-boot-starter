@@ -1,5 +1,6 @@
 package com.github.surpassm.common.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -15,6 +16,7 @@ public class ValidateCode implements Serializable {
 
     private String code;
 
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private LocalDateTime expireTime;
 
 	public ValidateCode(){}

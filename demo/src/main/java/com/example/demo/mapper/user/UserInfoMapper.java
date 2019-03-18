@@ -12,4 +12,11 @@ import com.example.demo.entity.user.UserInfo;
 public interface UserInfoMapper extends tk.mybatis.mapper.common.Mapper<UserInfo> {
 
     int insertSelectiveCustom(UserInfo userInfo);
+
+	/**
+	 * 根据主键查询用户及角色、权限列表
+	 * @param id
+	 * @return
+	 */
+	UserInfo selectByUserInfoAndRolesAndMenus(Integer id);
 }

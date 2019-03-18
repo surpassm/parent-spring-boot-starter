@@ -17,6 +17,8 @@ import org.springframework.web.context.request.ServletWebRequest;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import java.util.concurrent.TimeUnit;
+
 import static com.github.surpassm.common.jackson.Result.fail;
 import static com.github.surpassm.common.jackson.Result.ok;
 
@@ -50,7 +52,7 @@ public class MobileServiceImpl implements MobileService {
 		//生成6位短信码并设定过期时间
 		String code = RandomStringUtils.randomNumeric(securityProperties.getSms().getLength());
 		ValidateCode validateCode = new ValidateCode(code, securityProperties.getSms().getExpireIn());
-		redisTemplate.opsForValue().set(phone,code,securityProperties.getSms().getExpireIn());
+		redisTemplate.opsForValue().set(phone,code,securityProperties.getSms().getExpireIn(),TimeUnit.SECONDS);
 		smsCodeSender.send(new ServletWebRequest(request),phone,code);
 		return ok(validateCode);
 	}

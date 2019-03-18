@@ -43,4 +43,39 @@ public interface UserInfoService {
 	 * @return 前端返回格式
 	 */
     Result pageQuery(String accessToken, Integer page, Integer size, String sort, UserInfo userInfo);
+
+	/**
+	 * 根据主键查询用户及角色、权限列表
+	 * @param accessToken
+	 * @param id
+	 * @return
+	 */
+	Result findRolesAndMenus(String accessToken, Integer id);
+
+	/**
+	 * 设置用户、组
+	 * @param accessToken
+	 * @param id
+	 * @param groupIds
+	 * @return
+	 */
+	Result setUserByGroup(String accessToken, Integer id, String groupIds);
+
+	/**
+	 * 设置用户权限
+	 * @param accessToken
+	 * @param id
+	 * @param menuIds
+	 * @return
+	 */
+	Result setUserByMenu(String accessToken, Integer id, String menuIds);
+
+	/**
+	 * 设置用户、角色
+	 * @param accessToken
+	 * @param id
+	 * @param roleIds
+	 * @return
+	 */
+	Result setUserByRoles(String accessToken, Integer id, String roleIds);
 }

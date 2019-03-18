@@ -70,6 +70,7 @@ surpassm:
     no-verify[6]: /websocket/socketServer.ws**
     no-verify[7]: /sockjs/socketServer.ws**
     no-verify[8]: /login/refreshToken**
+    no-verify[9]: /mobile/getPhone**
 #    用户名密码登录请求处理url
     default-login-processing-url-from: /authentication/form
 #    default-property-inclusion: NON_NULL

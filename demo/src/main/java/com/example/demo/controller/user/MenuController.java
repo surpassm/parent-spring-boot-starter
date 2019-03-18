@@ -119,4 +119,6 @@ public class MenuController {
 										@ApiParam(value = "主键",required = true)@RequestParam(value = "id")@NotNull Integer id) {
 		return menuService.findByOnlyAndChildren(accessToken,id);
 	}
+
+
 }

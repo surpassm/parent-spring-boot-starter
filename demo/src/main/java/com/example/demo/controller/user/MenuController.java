@@ -120,5 +120,9 @@ public class MenuController {
 		return menuService.findByOnlyAndChildren(accessToken,id);
 	}
 
-
+	@GetMapping("resourcesUpdate")
+	@ApiOperation(value = "后台所有接口更新")
+	public Result resourcesUpdate() {
+		return menuService.resourcesUpdate();
+	}
 }

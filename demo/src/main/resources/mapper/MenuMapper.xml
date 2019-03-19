@@ -129,10 +129,10 @@
         <collection property="children"  ofType="NewsLabel"  select="selectChildByParentId" column="id"/>
     </resultMap>
     <select id="selectChildByParentId" resultMap="BaseResultMap">
-      select id,`name`,parent_id from t_menu where parent_id=#{parentId} and is_delete = 0
+      select id,`name`,describes,menu_url,menu_icon,parent_id from t_menu where parent_id=#{parentId} and is_delete = 0
     </select>
     <select id="selectSelfAndChildByParentId" resultMap="BaseResultMap">
-        select id,`name`,parent_id from t_menu
+        select id,`name`,describes,menu_url,menu_icon,parent_id from t_menu
         <where>
             <if test="id != null">
                 and id=#{id}

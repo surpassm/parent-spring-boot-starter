@@ -1,7 +1,7 @@
 package com.example.demo.mapper.user;
 
-import com.example.demo.entity.user.Department;
 import com.example.demo.entity.user.Menu;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -13,17 +13,17 @@ import java.util.List;
   */
 public interface MenuMapper extends tk.mybatis.mapper.common.Mapper<Menu> {
 
-    int insertSelectiveCustom(Menu menu);
+    int insertSelectiveCustom(@Param("menu")Menu menu);
 	/**
 	 * 根据父级Id查询
 	 * @param parentId
 	 * @return
 	 */
-	List<Menu> selectChildByParentId(Integer parentId);
+	List<Menu> selectChildByParentId(@Param("parentId")Integer parentId);
 	/**
 	 * 根据主键查询自己和所有子级
 	 * @param id
 	 * @return
 	 */
-	List<Menu> selectSelfAndChildByParentId(Integer id);
+	List<Menu> selectSelfAndChildByParentId(@Param("id") Integer id);
 }

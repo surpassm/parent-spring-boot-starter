@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,12 +55,12 @@ public class FileUtils {
         return null;
     }
 
-    /**
-     * 获取当前系统日期
-     */
-    public static String nowDate() {
-        return DateUtil.stampToDateEndD(System.currentTimeMillis() + "");
-    }
+	/**
+	 * 获取当前系统日期
+	 */
+	public static String nowDate() {
+		return DateUtil.getDateTimeAsString(LocalDateTime.now(),"yyyy-MM-dd");
+	}
 
     /**
      * 获取项目根路径

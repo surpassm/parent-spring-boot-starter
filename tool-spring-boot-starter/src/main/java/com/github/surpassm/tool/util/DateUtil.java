@@ -2,6 +2,9 @@ package com.github.surpassm.tool.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -11,101 +14,176 @@ import java.util.GregorianCalendar;
  */
 public class DateUtil {
 
-	/*
-	 * 将时间转换为时间戳
+	public static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HHmmss");
+	public static final DateTimeFormatter YEAR_MONTH_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM");
+	public static final DateTimeFormatter SHORT_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyMMdd");
+	public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	public static final DateTimeFormatter SHORT_DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyMMddHHmmss");
+	public static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	public static final DateTimeFormatter DATETIME_FORMATTER_MINUTE = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+	public static final DateTimeFormatter LONG_DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss SSS");
+
+	/**
+	 * 返回当前的日期
 	 */
-	public static String dateToStamp(String s) throws ParseException {
-		String res;
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date date = simpleDateFormat.parse(s);
-		long ts = date.getTime();
-		res = String.valueOf(ts);
-		return res;
+	public static LocalDate getCurrentLocalDate() {
+		return LocalDate.now();
 	}
-
-	public static String dateToStampEndM(String s) throws ParseException {
-		String res;
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		Date date = simpleDateFormat.parse(s);
-		long ts = date.getTime();
-		res = String.valueOf(ts);
-		return res;
-	}
-
-	public static String dateToStampEndD(String s) throws ParseException {
-		String res;
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
-		Date date = simpleDateFormat.parse(s);
-		long ts = date.getTime();
-		res = String.valueOf(ts);
-		return res;
-	}
-
-	public static String dateToStampD(String s) throws ParseException {
-		String res;
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = simpleDateFormat.parse(s);
-		long ts = date.getTime();
-		res = String.valueOf(ts);
-		return res;
-	}
-
-	/*
-	 * 将时间戳转换为时间
+	/**
+	 * 返回当前时间
 	 */
-	public static String stampToDate(String s) {
-		String res;
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		long lt = new Long(s);
-		Date date = new Date(lt);
-		res = simpleDateFormat.format(date);
-		return res;
+	public static LocalTime getCurrentLocalTime() {
+		return LocalTime.now();
+	}
+	/**
+	 * 返回当前日期时间
+	 */
+	public static LocalDateTime getCurrentLocalDateTime() {
+		return LocalDateTime.now();
+	}
+	/**
+	 * 日期相隔秒
+	 */
+	public static long periodHours(LocalDateTime startDateTime,LocalDateTime endDateTime){
+		return Duration.between(startDateTime, endDateTime).get(ChronoUnit.SECONDS);
+	}
+	/**
+	 * 日期相隔天数
+	 */
+	public static long periodDays(LocalDate startDate, LocalDate endDate) {
+		return startDate.until(endDate, ChronoUnit.DAYS);
 	}
 
-	public static String stampToDateEndM(String s) {
-		String res;
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		long lt = new Long(s);
-		Date date = new Date(lt);
-		res = simpleDateFormat.format(date);
-		return res;
+	/**
+	 * 日期相隔周数
+	 */
+	public static long periodWeeks(LocalDate startDate, LocalDate endDate) {
+		return startDate.until(endDate, ChronoUnit.WEEKS);
 	}
 
-	public static String stampToDateEndD(String s) {
-		String res;
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		long lt = new Long(s);
-		Date date = new Date(lt);
-		res = simpleDateFormat.format(date);
-		return res;
+	/**
+	 * 日期相隔月数
+	 */
+	public static long periodMonths(LocalDate startDate, LocalDate endDate) {
+		return startDate.until(endDate, ChronoUnit.MONTHS);
 	}
 
-	public static String stampToDateEndMM(String s) {
-		String res;
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM");
-		long lt = new Long(s);
-		Date date = new Date(lt);
-		res = simpleDateFormat.format(date);
-		return res;
+	/**
+	 * 日期相隔年数
+	 */
+	public static long periodYears(LocalDate startDate, LocalDate endDate) {
+		return startDate.until(endDate, ChronoUnit.YEARS);
 	}
 
-	public static String stampToDateEndY(String s) {
-		String res;
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
-		long lt = new Long(s);
-		Date date = new Date(lt);
-		res = simpleDateFormat.format(date);
-		return res;
+	/**
+	 * 是否当天
+	 */
+	public static boolean isToday(LocalDate date) {
+		return getCurrentLocalDate().equals(date);
+	}
+	/**
+	 * 获取当前毫秒数
+	 */
+	public static Long toEpochMilli(LocalDateTime dateTime) {
+		return dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
 	}
 
-	public static String stampToDateEnddd(String s) {
-		String res;
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd");
-		long lt = new Long(s);
-		Date date = new Date(lt);
-		res = simpleDateFormat.format(date);
-		return res;
+	/**
+	 * 判断是否为闰年
+	 */
+	public static boolean isLeapYear(LocalDate localDate){
+		return localDate.isLeapYear();
 	}
+
+	/**
+	 * 将时间yyyy-MM-dd转换为时间戳
+	 */
+	public static Long dateToStamp(String s){
+		return LocalDate.parse(s,DATE_FORMATTER).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
+	}
+	/**
+	 * 将时间yyyy-MM-dd HH:mm转换为时间戳
+	 */
+	public static Long dateToStampEndM(String s){
+		return LocalDateTime.parse(s,DATETIME_FORMATTER_MINUTE).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+	}
+	/**
+	 * 将时间戳转化为时间
+	 */
+	public static LocalDateTime getDateTimeOfTimestamp(long timestamp) {
+		Instant instant = Instant.ofEpochMilli(timestamp);
+		ZoneId zone = ZoneId.systemDefault();
+		return LocalDateTime.ofInstant(instant, zone);
+	}
+	/**
+	 * 将某时间字符串转为自定义时间格式的LocalDateTime
+	 */
+	public static LocalDateTime parseStringToDateTime(String time, String format) {
+		DateTimeFormatter df = DateTimeFormatter.ofPattern(format);
+		return LocalDateTime.parse(time, df);
+	}
+
+	/**
+	 * 将LocalDateTime转为自定义的时间格式的字符串
+	 */
+
+	public static String getDateTimeAsString(LocalDateTime localDateTime, String format) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
+		return localDateTime.format(formatter);
+	}
+	/**
+	 * 计算两个日期之间相差
+	 */
+	public static Duration getLocalDateTimeBetween(LocalDateTime start,LocalDateTime end) {
+		return Duration.between(start,end);
+	}
+	/**
+	 * 计算两个日期之间相差的天数
+	 */
+	public static Long daysBetween(LocalDateTime start,LocalDateTime end){
+		Duration duration = getLocalDateTimeBetween(start, end);
+		return duration.toDays();
+	}
+	/**
+	 * 获取当天开始时间
+	 */
+	public static LocalDateTime getStartTime() {
+		return LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
+	}
+	/**
+	 * 获取当天结束时间
+	 */
+	public static LocalDateTime getEndTime() {
+		return LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
+	}
+	/**
+	 * 获取指定时间开始时间
+	 */
+	public static LocalDateTime getStartTime(LocalDate date) {
+		return LocalDateTime.of(date, LocalTime.MIN);
+	}
+	/**
+	 * 获取指定时间结束时间
+	 */
+	public static LocalDateTime getEndTime(LocalDate date) {
+		return LocalDateTime.of(date, LocalTime.MAX);
+	}
+	/**
+	 * 字符串转时间yyyy-MM-dd
+	 */
+	public static LocalDate toLocalDate(String s){
+		return LocalDate.parse(s,DATE_FORMATTER);
+	}
+	/**
+	 * 字符串转时间yyyy-MM-dd HH:mm:ss
+	 */
+	public static LocalDateTime toLocalDateTime(String s){
+		return LocalDateTime.parse(s,DATETIME_FORMATTER);
+	}
+
+	/*------------------------------------------------------*/
+
+
 
 	/**
 	 * 计算两个日期之间相差的天数

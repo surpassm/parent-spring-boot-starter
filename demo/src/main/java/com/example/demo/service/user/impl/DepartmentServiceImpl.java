@@ -18,6 +18,7 @@ import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.weekend.WeekendSqls;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static com.github.surpassm.common.jackson.Result.fail;
@@ -55,7 +56,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 		}
 		if (isEnableParent(department)){ return fail(Tips.parentError.msg);}
 		department.setCreateUserId(loginUserInfo.getId());
-		department.setCreateTime(new Date());
+		department.setCreateTime(LocalDateTime.now());
 		department.setIsDelete(0);
 		departmentMapper.insertSelectiveCustom(department);
 		return ok();
@@ -83,7 +84,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 		if (isEnableParent(department)){ return fail(Tips.parentError.msg);}
 
 		department.setUpdateUserId(loginUserInfo.getId());
-		department.setUpdateTime(new Date());
+		department.setUpdateTime(LocalDateTime.now());
 		departmentMapper.updateByPrimaryKeySelective(department);
 		return ok();
 	}
@@ -123,7 +124,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 			return fail("存在关联用户，无法删除");
 		}
 		department.setDeleteUserId(loginUserInfo.getId());
-		department.setDeleteTime(new Date());
+		department.setDeleteTime(LocalDateTime.now());
 		department.setIsDelete(1);
 		departmentMapper.updateByPrimaryKeySelective(department);
 		return ok();

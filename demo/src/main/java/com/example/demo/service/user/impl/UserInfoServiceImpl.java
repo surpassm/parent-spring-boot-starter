@@ -19,6 +19,7 @@ import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.weekend.WeekendSqls;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,7 +56,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 		}
 		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
 		userInfo.setCreateUserId(loginUserInfo.getId());
-		userInfo.setCreateTime(new Date());
+		userInfo.setCreateTime(LocalDateTime.now());
 		userInfo.setIsDelete(0);
 		userInfoMapper.insertSelectiveCustom(userInfo);
 		return ok();
@@ -68,7 +69,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 		}
 		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
 		userInfo.setUpdateUserId(loginUserInfo.getId());
-		userInfo.setUpdateTime(new Date());
+		userInfo.setUpdateTime(LocalDateTime.now());
 		userInfoMapper.updateByPrimaryKeySelective(userInfo);
 		return ok();
 	}
@@ -84,7 +85,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 		}
 		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
 		userInfo.setDeleteUserId(loginUserInfo.getId());
-		userInfo.setDeleteTime(new Date());
+		userInfo.setDeleteTime(LocalDateTime.now());
 		userInfo.setIsDelete(1);
 		userInfoMapper.updateByPrimaryKeySelective(userInfo);
 		return ok();
@@ -219,7 +220,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 			UserGroup build = UserGroup.builder().userId(id).groupId(Integer.valueOf(split)).build();
 			build.setIsDelete(0);
 			build.setCreateUserId(loginUser.getId());
-			build.setCreateTime(new Date());
+			build.setCreateTime(LocalDateTime.now());
 			userGroupMapper.insert(build);
 		}
 		return ok();
@@ -256,7 +257,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 			UserMenu build = UserMenu.builder().userId(id).menuId(Integer.valueOf(split)).build();
 			build.setIsDelete(0);
 			build.setCreateUserId(loginUser.getId());
-			build.setCreateTime(new Date());
+			build.setCreateTime(LocalDateTime.now());
 			userMenuMapper.insert(build);
 		}
 		return ok();
@@ -293,7 +294,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 			UserRole build = UserRole.builder().userId(id).roleId(Integer.valueOf(split)).build();
 			build.setIsDelete(0);
 			build.setCreateUserId(loginUser.getId());
-			build.setCreateTime(new Date());
+			build.setCreateTime(LocalDateTime.now());
 			userRoleMapper.insert(build);
 		}
 		return ok();

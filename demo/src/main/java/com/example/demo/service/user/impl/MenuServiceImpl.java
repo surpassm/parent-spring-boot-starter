@@ -23,6 +23,7 @@ import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.weekend.WeekendSqls;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static com.example.demo.service.user.impl.CommonImpl.groupMenuDeleteUpdata;
@@ -76,7 +77,7 @@ public class MenuServiceImpl implements MenuService {
 		}
 
 		menu.setCreateUserId(loginUserInfo.getId());
-		menu.setCreateTime(new Date());
+		menu.setCreateTime(LocalDateTime.now());
 		menu.setIsDelete(0);
 		menuMapper.insertSelectiveCustom(menu);
 		return ok();
@@ -107,7 +108,7 @@ public class MenuServiceImpl implements MenuService {
 
 
 		menu.setUpdateUserId(loginUserInfo.getId());
-		menu.setUpdateTime(new Date());
+		menu.setUpdateTime(LocalDateTime.now());
 		menuMapper.updateByPrimaryKeySelective(menu);
 		return ok();
 	}
@@ -149,7 +150,7 @@ public class MenuServiceImpl implements MenuService {
 		CommonImpl.userMenuDeleteUpdata(loginUserInfo, userMenu, userMenuCount, userMenuMapper);
 
 		menu.setDeleteUserId(loginUserInfo.getId());
-		menu.setDeleteTime(new Date());
+		menu.setDeleteTime(LocalDateTime.now());
 		menu.setIsDelete(1);
 		menuMapper.updateByPrimaryKeySelective(menu);
 		return ok();
@@ -295,7 +296,7 @@ public class MenuServiceImpl implements MenuService {
 					.name(description)
 					.type(1)
 					.build();
-			parentMenu.setCreateTime(new Date());
+			parentMenu.setCreateTime(LocalDateTime.now());
 			parentMenu.setIsDelete(0);
 			menuMapper.insertSelectiveCustom(parentMenu);
 			//在添加当前url为子级
@@ -305,7 +306,7 @@ public class MenuServiceImpl implements MenuService {
 					.describes(name)
 					.type(1)
 					.build();
-			menuBuild.setCreateTime(new Date());
+			menuBuild.setCreateTime(LocalDateTime.now());
 			menuBuild.setIsDelete(0);
 			menuMapper.insertSelectiveCustom(menuBuild);
 		}else {
@@ -320,7 +321,7 @@ public class MenuServiceImpl implements MenuService {
 						.parentId(menu.getId())
 						.describes(name)
 						.build();
-				menuBuild.setCreateTime(new Date());
+				menuBuild.setCreateTime(LocalDateTime.now());
 				menuBuild.setIsDelete(0);
 				menuMapper.insertSelectiveCustom(menuBuild);
 			}

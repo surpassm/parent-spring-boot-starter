@@ -20,6 +20,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -186,7 +187,7 @@ public class UserInfo extends BasicEntity implements UserDetails,CredentialsCont
 	@Column(columnDefinition="datetime COMMENT '最后登陆时间'")
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
-	private Date landingTime;
+	private LocalDateTime landingTime;
 
 
 

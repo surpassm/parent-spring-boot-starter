@@ -19,6 +19,7 @@ import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.weekend.WeekendSqls;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static com.example.demo.service.user.impl.CommonImpl.userInfoDeleteUpdata;
@@ -62,7 +63,7 @@ public class RegionServiceImpl implements RegionService {
 		}
 
 		region.setCreateUserId(loginUserInfo.getId());
-		region.setCreateTime(new Date());
+		region.setCreateTime(LocalDateTime.now());
 		region.setIsDelete(0);
 		regionMapper.insertSelectiveCustom(region);
 		return ok();
@@ -93,7 +94,7 @@ public class RegionServiceImpl implements RegionService {
 
 
 		region.setUpdateUserId(loginUserInfo.getId());
-		region.setUpdateTime(new Date());
+		region.setUpdateTime(LocalDateTime.now());
 		regionMapper.updateByPrimaryKeySelective(region);
 		return ok();
 	}
@@ -127,7 +128,7 @@ public class RegionServiceImpl implements RegionService {
 		userInfoDeleteUpdata(loginUserInfo,userinfo,userCount,userInfoMapper);
 
 		region.setDeleteUserId(loginUserInfo.getId());
-		region.setDeleteTime(new Date());
+		region.setDeleteTime(LocalDateTime.now());
 		region.setIsDelete(1);
 		regionMapper.updateByPrimaryKeySelective(region);
 		return ok();

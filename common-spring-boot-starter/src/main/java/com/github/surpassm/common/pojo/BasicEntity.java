@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -33,19 +34,19 @@ public class BasicEntity implements Serializable {
 	@Column(columnDefinition="datetime COMMENT '创建时间'")
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
-	private Date createTime;
+	private LocalDateTime createTime;
 
 	@ApiModelProperty(hidden = true)
 	@Column(columnDefinition="datetime COMMENT '更新时间'")
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
-	private Date updateTime;
+	private LocalDateTime updateTime;
 
 	@ApiModelProperty(hidden = true)
 	@Column(columnDefinition="datetime COMMENT '删除时间'")
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
-	private Date deleteTime;
+	private LocalDateTime deleteTime;
 
 	@ApiModelProperty(hidden = true)
 	@Column(columnDefinition="int(11) COMMENT '创建用户编号'")

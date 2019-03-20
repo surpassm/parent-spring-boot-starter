@@ -19,6 +19,7 @@ import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.weekend.WeekendSqls;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static com.github.surpassm.common.jackson.Result.fail;
@@ -64,7 +65,7 @@ public class GroupServiceImpl implements GroupService {
 			return fail(Tips.parentError.msg);
 		}
 		group.setCreateUserId(loginUserInfo.getId());
-		group.setCreateTime(new Date());
+		group.setCreateTime(LocalDateTime.now());
 		group.setIsDelete(0);
 		groupMapper.insertSelectiveCustom(group);
 		return ok();
@@ -95,7 +96,7 @@ public class GroupServiceImpl implements GroupService {
 
 
 		group.setUpdateUserId(loginUserInfo.getId());
-		group.setUpdateTime(new Date());
+		group.setUpdateTime(LocalDateTime.now());
 		groupMapper.updateByPrimaryKeySelective(group);
 		return ok();
 	}
@@ -137,7 +138,7 @@ public class GroupServiceImpl implements GroupService {
 		int userGroupCount = userGroupMapper.selectCount(userGroup);
 		CommonImpl.userGroupDeleteUpdata(loginUserInfo,userGroup,userGroupCount,userGroupMapper);
 		group.setDeleteUserId(loginUserInfo.getId());
-		group.setDeleteTime(new Date());
+		group.setDeleteTime(LocalDateTime.now());
 		group.setIsDelete(1);
 		groupMapper.updateByPrimaryKeySelective(group);
 		return ok();
@@ -245,7 +246,7 @@ public class GroupServiceImpl implements GroupService {
 			GroupMenu build = GroupMenu.builder().groupId(id).menuId(Integer.valueOf(split)).build();
 			build.setIsDelete(0);
 			build.setCreateUserId(loginUser.getId());
-			build.setCreateTime(new Date());
+			build.setCreateTime(LocalDateTime.now());
 			build.setMenuType(1);
 			groupMenuMapper.insert(build);
 		}
@@ -275,7 +276,7 @@ public class GroupServiceImpl implements GroupService {
 			GroupRole build = GroupRole.builder().groupId(id).roleId(Integer.valueOf(split)).build();
 			build.setIsDelete(0);
 			build.setCreateUserId(loginUser.getId());
-			build.setCreateTime(new Date());
+			build.setCreateTime(LocalDateTime.now());
 			groupRoleMapper.insert(build);
 		}
 		return ok();

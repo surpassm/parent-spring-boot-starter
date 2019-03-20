@@ -20,6 +20,7 @@ import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.weekend.WeekendSqls;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static com.example.demo.service.user.impl.CommonImpl.roleMenuDeleteUpdata;
@@ -59,7 +60,7 @@ public class RoleServiceImpl implements RoleService {
 		}
 
 		role.setCreateUserId(loginUserInfo.getId());
-		role.setCreateTime(new Date());
+		role.setCreateTime(LocalDateTime.now());
 		role.setIsDelete(0);
 		roleMapper.insertSelectiveCustom(role);
 		return ok();
@@ -86,7 +87,7 @@ public class RoleServiceImpl implements RoleService {
 		}
 
 		role.setUpdateUserId(loginUserInfo.getId());
-		role.setUpdateTime(new Date());
+		role.setUpdateTime(LocalDateTime.now());
 		roleMapper.updateByPrimaryKeySelective(role);
 		return ok();
 	}
@@ -109,7 +110,7 @@ public class RoleServiceImpl implements RoleService {
 		roleMenuDeleteUpdata(loginUserInfo, build, roleMenuCount, roleMenuMapper);
 
 		role.setDeleteUserId(loginUserInfo.getId());
-		role.setDeleteTime(new Date());
+		role.setDeleteTime(LocalDateTime.now());
 		role.setIsDelete(1);
 		roleMapper.updateByPrimaryKeySelective(role);
 		return ok();
@@ -216,7 +217,7 @@ public class RoleServiceImpl implements RoleService {
 			RoleMenu build = RoleMenu.builder().roleId(id).menuId(Integer.valueOf(menui)).build();
 			build.setIsDelete(0);
 			build.setCreateUserId(loginUser.getId());
-			build.setCreateTime(new Date());
+			build.setCreateTime(LocalDateTime.now());
 			build.setMenuType(1);
 			roleMenuMapper.insert(build);
 		}

@@ -1,4 +1,8 @@
-# 项目开发常用工具集
+# 项目敏捷开发组合框架
+介绍：着重demo里面写业务逻辑，方便于快速进入业务代码编写。。。
+      - demo模块里面包含通用权限管理用户体系。具体用户、角色、权限、组均可按自己业务需求进行修改。登陆示例：
+      - POST请求：localhost:8182/authentication/form?username=admin&password=123456 
+        - head：Authorization：Basic dXNlcl8xOjEyMzQ1Ng==（user_1:123456） 的basic64加密
 
 - 用户角色关联表sql
 ```

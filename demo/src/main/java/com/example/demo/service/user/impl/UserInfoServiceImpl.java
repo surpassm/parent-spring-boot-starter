@@ -116,6 +116,51 @@ public class UserInfoServiceImpl implements UserInfoService {
 			return fail(Tips.PARAMETER_ERROR.msg);
 		}
 		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
+
+		if (userInfo.getMobile() != null){
+			if (!ValidateUtil.isMobilePhone(userInfo.getMobile())){
+				return fail(Tips.phoneFormatError.msg);
+			}
+		}
+		//效验手姓名
+		if (!ValidateUtil.isRealName(userInfo.getName())){
+			return fail("姓名格式错误");
+		}
+		if (userInfo.getUsername() == null || "".equals(userInfo.getUsername().trim())){
+			return fail(Tips.PARAMETER_ERROR.msg);
+		}
+		if (userInfo.getPassword() == null || "".equals(userInfo.getPassword().trim())){
+			return fail(Tips.PARAMETER_ERROR.msg);
+		}
+		if (!ValidateUtil.isPassword(userInfo.getPassword())){
+			return fail(Tips.passwordFormatError.msg);
+		}
+
+		Department queryDepartment = Department.builder().id(userInfo.getDepartmentId()).build();
+		queryDepartment.setIsDelete(0);
+		Department department = departmentMapper.selectOne(queryDepartment);
+		if (department == null) {
+			return fail(Tips.departmentDataNull.msg);
+		}
+
+		Region queryRegion = Region.builder().id(userInfo.getRegionId()).build();
+		Region region = regionMapper.selectOne(queryRegion);
+		if (region == null) {
+			return fail(Tips.regionDataNull.msg);
+		}
+		UserInfo user = userInfoMapper.selectByPrimaryKey(userInfo.getId());
+		String password = userInfo.getPassword();
+		//密码效验
+		if (userInfo.getPassword() != null && !"".equals(userInfo.getPassword())) {
+			if (!ValidateUtil.isPassword(userInfo.getPassword())) {
+				return fail(Tips.passwordFormatError.msg);
+			}
+			if (!bCryptPasswordEncoder.matches(password,user.getPassword())){
+				String passwordNew = bCryptPasswordEncoder.encode(password);
+				userInfo.setPassword(passwordNew);
+			}
+		}
+
 		userInfo.setUpdateUserId(loginUserInfo.getId());
 		userInfo.setUpdateTime(LocalDateTime.now());
 		userInfoMapper.updateByPrimaryKeySelective(userInfo);

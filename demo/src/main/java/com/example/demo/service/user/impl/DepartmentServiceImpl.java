@@ -67,7 +67,8 @@ public class DepartmentServiceImpl implements DepartmentService {
 		if (department == null) {
 			return fail(Tips.PARAMETER_ERROR.msg);
 		}
-		if (department.getIsDelete() == 1){
+		Department department1 = departmentMapper.selectByPrimaryKey(department.getId());
+		if (department1.getIsDelete() == 1){
 			return fail(Tips.PARAMETER_ERROR.msg);
 		}
 		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);

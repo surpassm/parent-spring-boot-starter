@@ -48,13 +48,61 @@ public class UserInfoServiceImpl implements UserInfoService {
 	private UserMenuMapper userMenuMapper;
 	@Resource
 	private UserRoleMapper userRoleMapper;
+	@Resource
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Resource
+	private DepartmentMapper departmentMapper;
+	@Resource
+	private RegionMapper regionMapper;
 
 	@Override
 	public Result insert(String accessToken, UserInfo userInfo) {
 		if (userInfo == null) {
 			return fail(Tips.PARAMETER_ERROR.msg);
 		}
+		if (userInfo.getMobile() != null){
+			if (!ValidateUtil.isMobilePhone(userInfo.getMobile())){
+				return fail(Tips.phoneFormatError.msg);
+			}
+		}
+		//效验手姓名
+		if (!ValidateUtil.isRealName(userInfo.getName())){
+			return fail("姓名格式错误");
+		}
+		if (userInfo.getUsername() == null || "".equals(userInfo.getUsername().trim())){
+			return fail(Tips.PARAMETER_ERROR.msg);
+		}
+		if (userInfo.getPassword() == null || "".equals(userInfo.getPassword().trim())){
+			return fail(Tips.PARAMETER_ERROR.msg);
+		}
+		if (!ValidateUtil.isPassword(userInfo.getPassword())){
+			return fail(Tips.passwordFormatError.msg);
+		}
+
+		Department queryDepartment = Department.builder().id(userInfo.getDepartmentId()).build();
+		queryDepartment.setIsDelete(0);
+
+		Department department = departmentMapper.selectOne(queryDepartment);
+		if (department == null) {
+			return fail(Tips.departmentDataNull.msg);
+		}
+
+		Region queryRegion = Region.builder().id(userInfo.getRegionId()).build();
+		Region region = regionMapper.selectOne(queryRegion);
+		if (region == null) {
+			return fail(Tips.regionDataNull.msg);
+		}
+		
+		UserInfo user = new UserInfo();
+		user.setUsername(userInfo.getUsername().trim());
+		user.setIsDelete(0);
+		int count = userInfoMapper.selectCount(user);
+		if (count != 0){
+			return fail("账号已存在");
+		}
+		userInfo.setPassword(bCryptPasswordEncoder.encode(userInfo.getPassword().trim()));
 		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
+		userInfo.setUsername(userInfo.getUsername().trim());
 		userInfo.setCreateUserId(loginUserInfo.getId());
 		userInfo.setCreateTime(LocalDateTime.now());
 		userInfo.setIsDelete(0);
@@ -68,6 +116,51 @@ public class UserInfoServiceImpl implements UserInfoService {
 			return fail(Tips.PARAMETER_ERROR.msg);
 		}
 		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
+
+		if (userInfo.getMobile() != null){
+			if (!ValidateUtil.isMobilePhone(userInfo.getMobile())){
+				return fail(Tips.phoneFormatError.msg);
+			}
+		}
+		//效验手姓名
+		if (!ValidateUtil.isRealName(userInfo.getName())){
+			return fail("姓名格式错误");
+		}
+		if (userInfo.getUsername() == null || "".equals(userInfo.getUsername().trim())){
+			return fail(Tips.PARAMETER_ERROR.msg);
+		}
+		if (userInfo.getPassword() == null || "".equals(userInfo.getPassword().trim())){
+			return fail(Tips.PARAMETER_ERROR.msg);
+		}
+		if (!ValidateUtil.isPassword(userInfo.getPassword())){
+			return fail(Tips.passwordFormatError.msg);
+		}
+
+		Department queryDepartment = Department.builder().id(userInfo.getDepartmentId()).build();
+		queryDepartment.setIsDelete(0);
+		Department department = departmentMapper.selectOne(queryDepartment);
+		if (department == null) {
+			return fail(Tips.departmentDataNull.msg);
+		}
+
+		Region queryRegion = Region.builder().id(userInfo.getRegionId()).build();
+		Region region = regionMapper.selectOne(queryRegion);
+		if (region == null) {
+			return fail(Tips.regionDataNull.msg);
+		}
+		UserInfo user = userInfoMapper.selectByPrimaryKey(userInfo.getId());
+		String password = userInfo.getPassword();
+		//密码效验
+		if (userInfo.getPassword() != null && !"".equals(userInfo.getPassword())) {
+			if (!ValidateUtil.isPassword(userInfo.getPassword())) {
+				return fail(Tips.passwordFormatError.msg);
+			}
+			if (!bCryptPasswordEncoder.matches(password,user.getPassword())){
+				String passwordNew = bCryptPasswordEncoder.encode(password);
+				userInfo.setPassword(passwordNew);
+			}
+		}
+
 		userInfo.setUpdateUserId(loginUserInfo.getId());
 		userInfo.setUpdateTime(LocalDateTime.now());
 		userInfoMapper.updateByPrimaryKeySelective(userInfo);

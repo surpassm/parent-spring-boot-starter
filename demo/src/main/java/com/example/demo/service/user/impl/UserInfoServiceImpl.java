@@ -50,6 +50,10 @@ public class UserInfoServiceImpl implements UserInfoService {
 	private UserRoleMapper userRoleMapper;
 	@Resource
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Resource
+	private DepartmentMapper departmentMapper;
+	@Resource
+	private RegionMapper regionMapper;
 
 	@Override
 	public Result insert(String accessToken, UserInfo userInfo) {
@@ -61,6 +65,10 @@ public class UserInfoServiceImpl implements UserInfoService {
 				return fail(Tips.phoneFormatError.msg);
 			}
 		}
+		//效验手姓名
+		if (!ValidateUtil.isRealName(userInfo.getName())){
+			return fail("姓名格式错误");
+		}
 		if (userInfo.getUsername() == null || "".equals(userInfo.getUsername().trim())){
 			return fail(Tips.PARAMETER_ERROR.msg);
 		}
@@ -70,8 +78,19 @@ public class UserInfoServiceImpl implements UserInfoService {
 		if (!ValidateUtil.isPassword(userInfo.getPassword())){
 			return fail(Tips.passwordFormatError.msg);
 		}
-		if (!ValidateUtil.isRealName(userInfo.getName())){
-			return fail(Tips.passwordFormatError.msg);
+
+		Department queryDepartment = Department.builder().id(userInfo.getDepartmentId()).build();
+		queryDepartment.setIsDelete(0);
+
+		Department department = departmentMapper.selectOne(queryDepartment);
+		if (department == null) {
+			return fail(Tips.departmentDataNull.msg);
+		}
+
+		Region queryRegion = Region.builder().id(userInfo.getRegionId()).build();
+		Region region = regionMapper.selectOne(queryRegion);
+		if (region == null) {
+			return fail(Tips.regionDataNull.msg);
 		}
 		
 		UserInfo user = new UserInfo();
@@ -88,6 +107,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 		userInfo.setCreateTime(LocalDateTime.now());
 		userInfo.setIsDelete(0);
 		userInfoMapper.insertSelectiveCustom(userInfo);
+		return ok();
 	}
 
 	@Override

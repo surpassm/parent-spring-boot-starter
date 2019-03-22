@@ -18,6 +18,13 @@ ALTER TABLE `库名`.`t_department`
 权限：
 ALTER TABLE `库名`.`t_menu`  
   ADD CONSTRAINT `menu_parent_id` FOREIGN KEY (`parent_id`) REFERENCES `库名`.`t_menu`(`id`);
+  
+用户：
+ALTER TABLE `bridge`.`t_user_info`  
+  ADD CONSTRAINT `t_user_info_region_id` FOREIGN KEY (`region_id`) REFERENCES `bridge`.`t_region`(`id`),
+  ADD CONSTRAINT `t_user_info_department_id` FOREIGN KEY (`department_id`) REFERENCES `bridge`.`t_department`(`id`);
+
+
 ```
 关系表外键sql
 ```
@@ -45,5 +52,7 @@ ALTER TABLE `库名`.`m_user_menu`
 ALTER TABLE `库名`.`m_user_role`  
   ADD CONSTRAINT `m_user_role_role_id` FOREIGN KEY (`role_id`) REFERENCES `库名`.`t_role`(`id`),
   ADD CONSTRAINT `m_user_role_user_id` FOREIGN KEY (`user_id`) REFERENCES `库名`.`t_user_info`(`id`);
+
+
 
 ```

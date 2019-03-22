@@ -48,18 +48,46 @@ public class UserInfoServiceImpl implements UserInfoService {
 	private UserMenuMapper userMenuMapper;
 	@Resource
 	private UserRoleMapper userRoleMapper;
+	@Resource
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Override
 	public Result insert(String accessToken, UserInfo userInfo) {
 		if (userInfo == null) {
 			return fail(Tips.PARAMETER_ERROR.msg);
 		}
+		if (userInfo.getMobile() != null){
+			if (!ValidateUtil.isMobilePhone(userInfo.getMobile())){
+				return fail(Tips.phoneFormatError.msg);
+			}
+		}
+		if (userInfo.getUsername() == null || "".equals(userInfo.getUsername().trim())){
+			return fail(Tips.PARAMETER_ERROR.msg);
+		}
+		if (userInfo.getPassword() == null || "".equals(userInfo.getPassword().trim())){
+			return fail(Tips.PARAMETER_ERROR.msg);
+		}
+		if (!ValidateUtil.isPassword(userInfo.getPassword())){
+			return fail(Tips.passwordFormatError.msg);
+		}
+		if (!ValidateUtil.isRealName(userInfo.getName())){
+			return fail(Tips.passwordFormatError.msg);
+		}
+		
+		UserInfo user = new UserInfo();
+		user.setUsername(userInfo.getUsername().trim());
+		user.setIsDelete(0);
+		int count = userInfoMapper.selectCount(user);
+		if (count != 0){
+			return fail("账号已存在");
+		}
+		userInfo.setPassword(bCryptPasswordEncoder.encode(userInfo.getPassword().trim()));
 		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
+		userInfo.setUsername(userInfo.getUsername().trim());
 		userInfo.setCreateUserId(loginUserInfo.getId());
 		userInfo.setCreateTime(LocalDateTime.now());
 		userInfo.setIsDelete(0);
 		userInfoMapper.insertSelectiveCustom(userInfo);
-		return ok();
 	}
 
 	@Override

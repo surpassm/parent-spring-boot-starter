@@ -259,6 +259,7 @@ public class MenuServiceImpl implements MenuService {
 
 	@Override
 	public Result resourcesUpdate() {
+		UserInfo loginUser = beanConfig.getAccessToken(token);
 		String[] groupName = new String[]{"user","common","mobile"};
 		for (String group:groupName ){
 			Documentation documentation = documentationCache.documentationByGroup(group);
@@ -279,7 +280,7 @@ public class MenuServiceImpl implements MenuService {
 					Menu build = Menu.builder().name(description).build();
 					build.setIsDelete(0);
 					Menu menu = menuMapper.selectOne(build);
-					menuInsertAndUpdata(url, name, description, menu);
+					menuInsertAndUpdata(url, name, description, menu,loginUser.getId());
 				}
 				if (value.getGet() != null){
 					String name = value.getGet().getSummary();
@@ -289,14 +290,14 @@ public class MenuServiceImpl implements MenuService {
 					Menu build = Menu.builder().name(description).build();
 					build.setIsDelete(0);
 					Menu menu = menuMapper.selectOne(build);
-					menuInsertAndUpdata(url, name, description, menu);
+					menuInsertAndUpdata(url, name, description, menu,loginUser.getId());
 				}
 			});
 		}
 		return Result.ok();
 	}
 
-	private void menuInsertAndUpdata(String url, String name, String description, Menu menu) {
+	private void menuInsertAndUpdata(String url, String name, String description, Menu menu,Integer loginUserId) {
 		if (menu == null){
 			//新增父级
 			Menu parentMenu = Menu.builder()
@@ -315,6 +316,8 @@ public class MenuServiceImpl implements MenuService {
 					.build();
 			menuBuild.setCreateTime(LocalDateTime.now());
 			menuBuild.setIsDelete(0);
+			menuBuild.setCreateTime(LocalDateTime.now());
+			menuBuild.setCreateUserId(loginUserId);
 			menuMapper.insertSelectiveCustom(menuBuild);
 		}else {
 			Menu build = Menu.builder().menuUrl(url).build();
@@ -330,6 +333,8 @@ public class MenuServiceImpl implements MenuService {
 						.build();
 				menuBuild.setCreateTime(LocalDateTime.now());
 				menuBuild.setIsDelete(0);
+				menuBuild.setCreateTime(LocalDateTime.now());
+				menuBuild.setCreateUserId(loginUserId);
 				menuMapper.insertSelectiveCustom(menuBuild);
 			}
 		}

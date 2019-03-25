@@ -121,7 +121,12 @@ public class GroupServiceImpl implements GroupService {
 			return fail(Tips.MSG_NOT.msg);
 		}
 		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
-
+		Group groupBuild = Group.builder().parentId(id).build();
+		groupBuild.setIsDelete(0);
+		int groupCount = groupMapper.selectCount(groupBuild);
+		if (groupCount != 0){
+			return fail("存在下级关联数据无法删除");
+		}
 		//组权限查询
 		GroupMenu groupMenu = GroupMenu.builder().groupId(id).build();
 		groupMenu.setIsDelete(0);

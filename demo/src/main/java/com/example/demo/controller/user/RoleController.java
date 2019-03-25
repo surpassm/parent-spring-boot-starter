@@ -109,7 +109,7 @@ public class RoleController {
 	}
 
 	@PostMapping("setRoleByMenu")
-	@ApiOperation(value = "设置用户权限",notes = "每次均需传全部权限ID，会把角色原有的所有权限做物理删除")
+	@ApiOperation(value = "设置角色权限",notes = "每次均需传全部权限ID，会把角色原有的所有权限做物理删除")
 	@ApiResponses({@ApiResponse(code=Constant.FAIL_SESSION_CODE,message=Constant.FAIL_SESSION_MSG),
 			@ApiResponse(code=Constant.SUCCESS_CODE,message=Constant.SUCCESS_MSG),
 			@ApiResponse(code=Constant.FAIL_CODE,message=Constant.FAIL_MSG,response=Result.class)})

@@ -119,14 +119,20 @@ public class RegionServiceImpl implements RegionService {
 			return fail(Tips.MSG_NOT.msg);
 		}
 		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
-
+		//子级查询
+		Region regionBuild = Region.builder().parentId(id).build();
+		regionBuild.setIsDelete(0);
+		int regionCount = regionMapper.selectCount(regionBuild);
+		if (regionCount != 0){
+			return fail("存在下级关联，无法删除");
+		}
 		UserInfo userinfo = new UserInfo();
 		userinfo.setRegionId(id);
 		userinfo.setIsDelete(0);
 		int userCount = userInfoMapper.selectCount(userinfo);
-		//用户查询并删除
-		userInfoDeleteUpdata(loginUserInfo,userinfo,userCount,userInfoMapper);
-
+		if (userCount !=0){
+			return fail("存在关联用户，无法删除");
+		}
 		region.setDeleteUserId(loginUserInfo.getId());
 		region.setDeleteTime(LocalDateTime.now());
 		region.setIsDelete(1);

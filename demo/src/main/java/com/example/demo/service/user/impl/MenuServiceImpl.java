@@ -128,11 +128,18 @@ public class MenuServiceImpl implements MenuService {
 		if (id == null) {
 			return fail(Tips.PARAMETER_ERROR.msg);
 		}
+		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
 		Menu menu = menuMapper.selectByPrimaryKey(id);
 		if (menu == null) {
 			return fail(Tips.MSG_NOT.msg);
 		}
-		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
+		Menu menuBuild = Menu.builder().parentId(id).build();
+		menuBuild.setIsDelete(0);
+		int menuCount = menuMapper.selectCount(menuBuild);
+		if (menuCount != 0){
+			return fail("存在下级关联数据无法删除");
+		}
+		
 		//组权限查询
 		GroupMenu groupMenu = GroupMenu.builder().menuId(id).build();
 		groupMenu.setIsDelete(0);

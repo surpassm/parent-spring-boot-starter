@@ -84,8 +84,6 @@ public class MobileServiceImpl implements MobileService {
 		//生成6位短信码并设定过期时间
 		String code = RandomStringUtils.randomNumeric(securityProperties.getSms().getLength());
 		ValidateCode validateCode = new ValidateCode(code, securityProperties.getSms().getExpireIn());
-		stringRedisTemplate.opsForValue().set(phone,code,securityProperties.getSms().getExpireIn(),TimeUnit.SECONDS);
-
 		String key;
 		try {
 			key= getKey(new ServletWebRequest(request));
@@ -110,6 +108,7 @@ public class MobileServiceImpl implements MobileService {
 		}else {
 			stringRedisTemplate.opsForValue().set(key + ":" + phone,Objects.requireNonNull(JsonUtils.objectToJson(validateCode, objectMapper)),securityProperties.getSms().getLimitDuration(),TimeUnit.MINUTES);
 		}
+		stringRedisTemplate.opsForValue().set(phone,code,securityProperties.getSms().getExpireIn(),TimeUnit.SECONDS);
 		//发送具体业务逻辑
 		smsCodeSender.send(new ServletWebRequest(request),phone,code);
 		return ok(validateCode);

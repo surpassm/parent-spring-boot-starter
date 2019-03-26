@@ -4,20 +4,20 @@ import com.example.demo.exception.StorageException;
 import com.example.demo.service.common.StorageService;
 import com.github.surpassm.common.pojo.File;
 import com.github.surpassm.tool.util.FileUtils;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.stream.Stream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author mc
@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 @Service
 public class StorageServiceImpl implements StorageService {
 
-	private final Path rootLocation= Paths.get("upload-dir");
+	private final Path rootLocation= Paths.get("upload");
 
 	@Override
 	public File store(MultipartFile file) {
@@ -53,30 +53,27 @@ public class StorageServiceImpl implements StorageService {
 	}
 
 	@Override
-	public Stream<Path> loadAll() {
-		java.io.File fileOld = this.rootLocation.toFile();
-		try {
-//			return Files.walk(this.rootLocation, 1)
-//					.filter(path -> !path.equals(this.rootLocation))
-//					.map(this.rootLocation::relativize);
-
-			return Files.list(this.rootLocation);
-		} catch (IOException e) {
-			throw new StorageException("Failed to read stored files", e);
-		}
+	public List<Path> loadAll() {
+		FilePaths filePaths = new FilePaths();
+		filePaths.func(this.rootLocation.toFile());
+		return filePaths.getPaths();
 	}
-
-	private void func(java.io.File fileNow){
-		java.io.File[] fileOld = fileNow.listFiles();
-		assert fileOld != null;
-		for(java.io.File file:fileOld){
-			//若是目录，则递归打印该目录下的文件
-			if(file.isDirectory()) {
-				func(file);
-			}
-			//若是文件，直接打印
-			if(file.isFile()) {
-				Path path = file.toPath();
+	@Data
+	public class FilePaths{
+		List<Path> paths = new ArrayList<>();
+		private void func(java.io.File fileNow){
+			java.io.File[] fileOld = fileNow.listFiles();
+			assert fileOld != null;
+			for(java.io.File file:fileOld){
+				//若是目录，则递归打印该目录下的文件
+				if(file.isDirectory()) {
+					func(file);
+				}
+				//若是文件，直接打印
+				if(file.isFile()) {
+					Path path = file.toPath();
+					paths.add(path);
+				}
 			}
 		}
 	}
@@ -102,18 +99,13 @@ public class StorageServiceImpl implements StorageService {
 		FileSystemUtils.deleteRecursively(rootLocation.toFile());
 	}
 	@Override
-	public Resource serveFile(String filename) {
-		try {
-			Path file = load(filename);
-			Resource resource = new UrlResource(file.toUri());
-			if(resource.exists() || resource.isReadable()) {
-				return resource;
-			}
-			else {
-				throw new StorageException("Could not read file: " + filename);
-			}
-		} catch (MalformedURLException e) {
-			throw new StorageException("Could not read file: " + filename, e);
+	public Resource serveFile(String fileUrl) {
+		FileSystemResource resource = new FileSystemResource(fileUrl);
+		if(resource.exists() || resource.isReadable()) {
+			return resource;
+		}
+		else {
+			throw new StorageException("Could not read file: " + fileUrl);
 		}
 	}
 }

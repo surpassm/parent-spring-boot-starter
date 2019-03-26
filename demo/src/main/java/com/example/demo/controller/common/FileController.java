@@ -45,7 +45,7 @@ public class FileController {
 	@PostMapping("uploads")
 	@ApiOperation("批量文件上传")
 	@ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
-	public Result uploads(@ApiParam(hidden = true) @AuthorizationToken String accessToken, HttpServletRequest request, MultipartFile[] files) {
+	public Result uploads(@ApiParam(hidden = true) @AuthorizationToken String accessToken,HttpServletRequest request, @RequestParam MultipartFile[] files) {
 		List<File> result = new ArrayList<>();
 		if (files != null && files.length != 0) {
 			for (MultipartFile file : files) {
@@ -92,18 +92,19 @@ public class FileController {
 	public Result listUploadedFiles() {
 		List<String> serveFile = storageService
 				.loadAll()
+				.stream()
 				.map(path ->
 						MvcUriComponentsBuilder
-								.fromMethodName(FileController.class, "serveFile", path.getFileName().toString())
+								.fromMethodName(FileController.class, "serveFile", path.toFile().getPath().replace("\\","/"))
 								.build().toString())
 				.collect(Collectors.toList());
 		return Result.ok(serveFile);
 	}
 
-	@GetMapping("/files/{filename:.+}")
+	@GetMapping("getPath")
 	@ApiOperation(value = "后端专用",hidden = true)
-	public ResponseEntity<Resource> serveFile(@PathVariable String filename) throws IOException {
-		Resource file = storageService.serveFile(filename);
+	public ResponseEntity<Resource> serveFile(@RequestParam String path) throws IOException {
+		Resource file = storageService.serveFile(path);
 		return ResponseEntity
 				.ok()
 				.contentLength(file.getFile().length())

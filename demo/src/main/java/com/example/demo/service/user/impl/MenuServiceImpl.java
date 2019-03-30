@@ -258,8 +258,8 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	@Override
-	public Result resourcesUpdate() {
-		UserInfo loginUser = beanConfig.getAccessToken(token);
+	public Result resourcesUpdate(String accessToken) {
+		UserInfo loginUser = beanConfig.getAccessToken(accessToken);
 		String[] groupName = new String[]{"user","common","mobile"};
 		for (String group:groupName ){
 			Documentation documentation = documentationCache.documentationByGroup(group);

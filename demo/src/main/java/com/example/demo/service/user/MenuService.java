@@ -64,5 +64,5 @@ public interface MenuService {
 	 * 后台所有接口更新
 	 * @return
 	 */
-	Result resourcesUpdate();
+	Result resourcesUpdate(String accessToken);
 }

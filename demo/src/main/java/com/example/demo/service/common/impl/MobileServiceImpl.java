@@ -1,20 +1,17 @@
 package com.example.demo.service.common.impl;
 
+import com.example.demo.mapper.user.UserInfoMapper;
+import com.example.demo.security.BeanConfig;
+import com.example.demo.service.common.MobileService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.surpassm.common.jackson.Result;
 import com.github.surpassm.common.jackson.Tips;
-import com.github.surpassm.common.pojo.File;
 import com.github.surpassm.common.pojo.ValidateCode;
 import com.github.surpassm.security.code.sms.SmsCodeSender;
 import com.github.surpassm.security.exception.SurpassmAuthenticationException;
 import com.github.surpassm.security.properties.SecurityProperties;
 import com.github.surpassm.tool.util.JsonUtils;
-import com.github.surpassm.tool.util.OrderUtil;
 import com.github.surpassm.tool.util.ValidateUtil;
-import com.liaoin.bridge.entity.*;
-import com.liaoin.bridge.mapper.*;
-import com.liaoin.bridge.security.BeanConfig;
-import com.liaoin.bridge.service.MobileService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -28,9 +25,6 @@ import org.springframework.web.context.request.WebRequest;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -49,25 +43,11 @@ import static com.github.surpassm.common.jackson.Result.ok;
 public class MobileServiceImpl implements MobileService {
 
 	@Resource
-	private BeanConfig beanConfig;
-	@Resource
 	private StringRedisTemplate stringRedisTemplate;
 	@Resource
 	private SecurityProperties securityProperties;
 	@Resource
 	private SmsCodeSender smsCodeSender;
-	@Resource
-	private UserInfoMapper userInfoMapper;
-	@Resource
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	@Resource
-	private BridgeMapper bridgeMapper;
-	@Resource
-	private RiskSourcesMapper riskSourcesMapper;
-	@Resource
-	private RiskSourcesFileMapper riskSourcesFileMapper;
-	@Resource
-	private RiskHandleProcessMapper riskHandleProcessMapper;
 	@Resource
 	private ObjectMapper objectMapper;
 

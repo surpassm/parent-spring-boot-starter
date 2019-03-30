@@ -1,18 +1,17 @@
 package com.example.demo.service.user.impl;
 
 import com.example.demo.entity.user.*;
-import com.example.demo.mapper.user.UserGroupMapper;
-import com.example.demo.mapper.user.UserInfoMapper;
-import com.example.demo.mapper.user.UserMenuMapper;
-import com.example.demo.mapper.user.UserRoleMapper;
+import com.example.demo.mapper.user.*;
 import com.example.demo.security.BeanConfig;
 import com.example.demo.service.user.UserInfoService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.surpassm.common.jackson.Result;
 import com.github.surpassm.common.jackson.Tips;
+import com.github.surpassm.tool.util.ValidateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;

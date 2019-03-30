@@ -4,7 +4,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/test?serverTimezone=Hongkong&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/test?serverTimezone=Hongkong&useSSL=false&useUnicode=true&characterEncoding=UTF-8&nullCatalogMeansCurrent=true
     hikari:
       username: root
       password: 123456
@@ -49,6 +49,14 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+# 参考配置https://www.cnblogs.com/liaojie970/p/8857710.html
+  activiti:
+    # 自动建表
+    database-schema: TEST
+    database-schema-update: true
+    history-level: full
+    db-history-used: true
+
 
 surpassm:
   security:

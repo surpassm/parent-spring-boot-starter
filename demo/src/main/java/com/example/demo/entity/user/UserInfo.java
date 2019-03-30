@@ -140,18 +140,13 @@ public class UserInfo extends BasicEntity implements UserDetails,CredentialsCont
 	@ApiModelProperty(value="系统标识")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(columnDefinition="int(11) COMMENT '系统标识'")
-	@NotNull(groups = UserInfoUpdatePcSimpleView.class,message = "参数不能为空")
+	@NotNull(groups = UserInfoInsertPcSimpleView.class,message = "参数不能为空")
 	private Integer id;
 
 	@ApiModelProperty("所属组织Id")
 	@Column(columnDefinition="int(11) COMMENT '所属组织Id'")
 	@NotNull(groups = {UserInfoUpdatePcSimpleView.class,UserInfoInsertPcSimpleView.class},message = "参数不能为为空")
 	private Integer departmentId ;
-	@ApiModelProperty("所属区域Id")
-	@Column(columnDefinition="int(11) COMMENT '所属区域Id'")
-	@NotNull(groups = {UserInfoUpdatePcSimpleView.class,UserInfoInsertPcSimpleView.class},message = "参数不能为为空")
-	private Integer regionId ;
-
 
 	@ApiModelProperty(value="姓名")
 	@Column(columnDefinition="varchar(255) COMMENT '姓名'")
@@ -193,7 +188,6 @@ public class UserInfo extends BasicEntity implements UserDetails,CredentialsCont
 
 	@Transient
 	@ApiModelProperty(value = "拥有角色",hidden = true)
-	@NotNull(groups = {UserInfoUpdatePcSimpleView.class,UserInfoInsertPcSimpleView.class},message = "参数不能为为空")
 	private List<Role> roles ;
 
 

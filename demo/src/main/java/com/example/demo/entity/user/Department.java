@@ -51,6 +51,11 @@ public class Department extends BasicEntity implements Serializable {
 	@ApiModelProperty(value = "名称",example = "研发部")
 	private String name ;
 
+	@ApiModelProperty("所属区域Id")
+	@Column(columnDefinition="int(11) COMMENT '所属区域Id'")
+	@NotNull(groups = {DepartmentInsertPcSimpleView.class,DepartmentUpdatePcSimpleView.class},message = "参数不能为为空")
+	private Integer regionId ;
+
 	@ApiModelProperty("父级Id")
 	private Integer parentId ;
 

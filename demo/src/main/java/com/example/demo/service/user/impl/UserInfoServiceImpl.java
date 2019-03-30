@@ -51,8 +51,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Resource
 	private DepartmentMapper departmentMapper;
-	@Resource
-	private RegionMapper regionMapper;
+
 
 	@Override
 	public Result insert(String accessToken, UserInfo userInfo) {
@@ -86,11 +85,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 			return fail(Tips.departmentDataNull.msg);
 		}
 
-		Region queryRegion = Region.builder().id(userInfo.getRegionId()).build();
-		Region region = regionMapper.selectOne(queryRegion);
-		if (region == null) {
-			return fail(Tips.regionDataNull.msg);
-		}
+
 		
 		UserInfo user = new UserInfo();
 		user.setUsername(userInfo.getUsername().trim());
@@ -142,11 +137,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 			return fail(Tips.departmentDataNull.msg);
 		}
 
-		Region queryRegion = Region.builder().id(userInfo.getRegionId()).build();
-		Region region = regionMapper.selectOne(queryRegion);
-		if (region == null) {
-			return fail(Tips.regionDataNull.msg);
-		}
+
 		UserInfo user = userInfoMapper.selectByPrimaryKey(userInfo.getId());
 		String password = userInfo.getPassword();
 		//密码效验
@@ -246,9 +237,6 @@ public class UserInfoServiceImpl implements UserInfoService {
 			}
 			if (userInfo.getPassword() != null && !"".equals(userInfo.getPassword().trim())) {
 				builder.where(WeekendSqls.<UserInfo>custom().andLike(UserInfo::getPassword, "%" + userInfo.getPassword() + "%"));
-			}
-			if (userInfo.getRegionId() != null) {
-				builder.where(WeekendSqls.<UserInfo>custom().andEqualTo(UserInfo::getRegionId, userInfo.getRegionId()));
 			}
 			if (userInfo.getUserInfoIndex() != null) {
 				builder.where(WeekendSqls.<UserInfo>custom().andEqualTo(UserInfo::getUserInfoIndex, userInfo.getUserInfoIndex()));

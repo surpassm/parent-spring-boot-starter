@@ -2,8 +2,10 @@ package com.example.demo.service.user.impl;
 
 import com.example.demo.entity.user.Department;
 import com.example.demo.entity.user.Group;
+import com.example.demo.entity.user.Region;
 import com.example.demo.entity.user.UserInfo;
 import com.example.demo.mapper.user.DepartmentMapper;
+import com.example.demo.mapper.user.RegionMapper;
 import com.example.demo.mapper.user.UserInfoMapper;
 import com.example.demo.security.BeanConfig;
 import com.example.demo.service.user.DepartmentService;
@@ -41,12 +43,19 @@ public class DepartmentServiceImpl implements DepartmentService {
 	private BeanConfig beanConfig;
 	@Resource
 	private UserInfoMapper userInfoMapper;
-
+	@Resource
+	private RegionMapper regionMapper;
 	@Override
 	public Result insert(String accessToken, Department department) {
 		if (department == null) {
 			return fail(Tips.PARAMETER_ERROR.msg);
 		}
+		Region queryRegion = Region.builder().id(department.getRegionId()).build();
+		Region region = regionMapper.selectOne(queryRegion);
+		if (region == null) {
+			return fail(Tips.regionDataNull.msg);
+		}
+
 		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
 		Department build = Department.builder().name(department.getName()).build();
 		build.setIsDelete(0);
@@ -71,6 +80,12 @@ public class DepartmentServiceImpl implements DepartmentService {
 		if (department1.getIsDelete() == 1){
 			return fail(Tips.PARAMETER_ERROR.msg);
 		}
+		Region queryRegion = Region.builder().id(department.getRegionId()).build();
+		Region region = regionMapper.selectOne(queryRegion);
+		if (region == null) {
+			return fail(Tips.regionDataNull.msg);
+		}
+
 		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
 
 		Example.Builder builder = new Example.Builder(Department.class);

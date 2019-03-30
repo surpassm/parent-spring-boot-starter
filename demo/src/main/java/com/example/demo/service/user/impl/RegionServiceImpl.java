@@ -4,6 +4,7 @@ import com.example.demo.entity.user.Department;
 import com.example.demo.entity.user.Menu;
 import com.example.demo.entity.user.Region;
 import com.example.demo.entity.user.UserInfo;
+import com.example.demo.mapper.user.DepartmentMapper;
 import com.example.demo.mapper.user.RegionMapper;
 import com.example.demo.mapper.user.UserInfoMapper;
 import com.example.demo.security.BeanConfig;
@@ -42,7 +43,7 @@ public class RegionServiceImpl implements RegionService {
 	@Resource
 	private BeanConfig beanConfig;
 	@Resource
-	private UserInfoMapper userInfoMapper;
+	private DepartmentMapper departmentMapper;
 
 	@Override
 	public Result insert(String accessToken, Region region) {
@@ -126,11 +127,11 @@ public class RegionServiceImpl implements RegionService {
 		if (regionCount != 0){
 			return fail("存在下级关联，无法删除");
 		}
-		UserInfo userinfo = new UserInfo();
-		userinfo.setRegionId(id);
-		userinfo.setIsDelete(0);
-		int userCount = userInfoMapper.selectCount(userinfo);
-		if (userCount !=0){
+		Department department = new Department();
+		department.setRegionId(id);
+		department.setIsDelete(0);
+		int departmentCount = departmentMapper.selectCount(department);
+		if (departmentCount !=0){
 			return fail("存在关联用户，无法删除");
 		}
 		region.setDeleteUserId(loginUserInfo.getId());

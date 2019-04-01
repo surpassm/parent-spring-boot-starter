@@ -48,14 +48,18 @@ public class Region extends BasicEntity implements Serializable {
 	@NotNull(groups = RegionUpdatePcSimpleView.class,message = "参数不能为空")
 	private Integer id;
 
-	@NotBlank(groups = {RegionInsertPcSimpleView.class,RegionUpdatePcSimpleView.class},message = "参数不能为为空或空串")
+
     @ApiModelProperty("名称")
+	@Column(columnDefinition="varchar(255) COMMENT '名称'")
+	@NotBlank(groups = {RegionInsertPcSimpleView.class,RegionUpdatePcSimpleView.class},message = "参数不能为为空或空串")
     private String name ;
 
 	@ApiModelProperty("父级Id")
+	@Column(columnDefinition="int(11) COMMENT '父级Id'")
 	private Integer parentId ;
 
 	@ApiModelProperty("排序字段")
+	@Column(columnDefinition="int(11) COMMENT '排序字段'")
 	private Integer departmentIndex ;
 
 	@Transient

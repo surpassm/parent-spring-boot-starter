@@ -30,7 +30,7 @@ import static com.github.surpassm.common.jackson.Result.ok;
 @CrossOrigin
 @RestController
 @RequestMapping("/login/")
-@Api(tags  =  "6、TokenAPI")
+@Api(tags  =  "TokenAPI")
 public class LoginController {
 
 	@Resource

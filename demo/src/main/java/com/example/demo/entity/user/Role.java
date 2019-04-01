@@ -46,20 +46,28 @@ public class Role extends BasicEntity implements Serializable {
 	@NotNull(groups = RoleUpdatePcSimpleView.class,message = "参数不能为空")
 	public Integer id;
 
-	@NotBlank(groups = {RoleInsertPcSimpleView.class,RoleUpdatePcSimpleView.class},message = "参数不能为为空或空串")
+
 	@ApiModelProperty(value = "security标识")
-	private String securityRoles;
+	@Column(columnDefinition="varchar(255) COMMENT 'security标识'")
 	@NotBlank(groups = {RoleInsertPcSimpleView.class,RoleUpdatePcSimpleView.class},message = "参数不能为为空或空串")
+	private String securityRoles;
+
 	@ApiModelProperty(value = "名称")
+	@Column(columnDefinition="varchar(255) COMMENT '名称'")
+	@NotBlank(groups = {RoleInsertPcSimpleView.class,RoleUpdatePcSimpleView.class},message = "参数不能为为空或空串")
 	private String name;
+
 	@ApiModelProperty(value = "描述")
+	@Column(columnDefinition="varchar(255) COMMENT '描述'")
 	private String describes;
+
+	@ApiModelProperty("排序字段")
+	@Column(columnDefinition="int(11) COMMENT '排序字段'")
+	private Integer roleIndex ;
 
 	@Transient
 	@NotBlank(groups = {RoleInsertPcSimpleView.class,RoleUpdatePcSimpleView.class},message = "参数不能为为空或空串")
 	@ApiModelProperty(value = "权限列表",hidden = true)
 	private List<Menu> menus ;
 
-	@ApiModelProperty("排序字段")
-	private Integer roleIndex ;
 }

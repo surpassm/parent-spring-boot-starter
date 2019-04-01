@@ -49,6 +49,7 @@ public class Department extends BasicEntity implements Serializable {
 
 	@NotBlank(groups = {DepartmentInsertPcSimpleView.class,DepartmentUpdatePcSimpleView.class},message = "参数不能为为空或空串")
 	@ApiModelProperty(value = "名称",example = "研发部")
+	@Column(columnDefinition="varchar(255) COMMENT '名称'")
 	private String name ;
 
 	@ApiModelProperty("所属区域Id")
@@ -57,9 +58,11 @@ public class Department extends BasicEntity implements Serializable {
 	private Integer regionId ;
 
 	@ApiModelProperty("父级Id")
+	@Column(columnDefinition="int(11) COMMENT '父级Id'")
 	private Integer parentId ;
 
 	@ApiModelProperty("排序字段")
+	@Column(columnDefinition="int(11) COMMENT '排序字段'")
 	private Integer departmentIndex ;
 
 	@Transient

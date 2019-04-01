@@ -48,27 +48,38 @@ public class Menu extends BasicEntity implements Serializable {
     private Integer id;
 
     @ApiModelProperty(value = "父级菜单ID")
+	@Column(columnDefinition="int(11) COMMENT '父级菜单ID'")
     private Integer parentId;
+
     @ApiModelProperty(value = "菜单排序")
+	@Column(columnDefinition="int(11) COMMENT '菜单排序'")
     private Integer menuIndex;
 
     @ApiModelProperty(value = "权限分类（0 菜单；1 功能）",allowableValues = "0,1")
+	@Column(columnDefinition="int(11) COMMENT '权限分类（0 菜单；1 功能）'")
     private Integer type;
 
-	@NotBlank(groups = {MenuInsertPcSimpleView.class,MenuUpdatePcSimpleView.class},message = "参数不能为为空或空串")
+
     @ApiModelProperty(value = "名称")
+	@Column(columnDefinition="varchar(255) COMMENT '名称'")
+	@NotBlank(groups = {MenuInsertPcSimpleView.class,MenuUpdatePcSimpleView.class},message = "参数不能为为空或空串")
     private String name;
 
     @ApiModelProperty(value = "描述")
 	@NotBlank(message = "参数不能为为空或空串")
+	@Column(columnDefinition="varchar(255) COMMENT '描述'")
     private String describes;
 
     @ApiModelProperty(value = "路由路径 前端使用")
+	@Column(columnDefinition="varchar(255) COMMENT '路由路径 前端使用'")
     private String path;
+
     @ApiModelProperty(value = "菜单图标名称")
+	@Column(columnDefinition="varchar(255) COMMENT '菜单图标名称'")
     private String menuIcon;
 
     @ApiModelProperty(value = "菜单url后台权限控制")
+	@Column(columnDefinition="varchar(255) COMMENT '菜单url后台权限控制'")
     private String menuUrl;
 
 

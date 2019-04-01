@@ -1,5 +1,6 @@
 package com.github.surpassm.tool.util;
 
+import com.github.surpassm.common.pojo.SurpassmFile;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,7 +21,7 @@ public class FileUtils {
 
     static String FILE_UPLOAD_PATH = "/upload/";
 
-    public static com.github.surpassm.common.pojo.File upload(MultipartFile file, HttpServletRequest request, String path) throws Exception {
+    public static SurpassmFile upload(MultipartFile file, HttpServletRequest request, String path) throws Exception {
         String fileName = System.currentTimeMillis() + "." + getFileType(file);
         int size = (int) file.getSize();
         String filePath = "/" + path + "/" + nowDate() + "/";
@@ -32,7 +33,7 @@ public class FileUtils {
         try {
             //保存文件
             file.transferTo(dest);
-            return com.github.surpassm.common.pojo.File.builder()
+            return SurpassmFile.builder()
                     .fileName(getFileName(file))
                     .fileSuffix("." + getFileType(file))
                     .url(filePath + fileName)

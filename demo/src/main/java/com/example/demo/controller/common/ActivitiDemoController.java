@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RestController
 @RequestMapping("/activiti/demo/")
-@Api(tags  =  "2、部门Api")
+@Api(tags  =  "工作流Api")
 public class ActivitiDemoController {
 
 //    /** 流程定义和部署相关的存储服务 */

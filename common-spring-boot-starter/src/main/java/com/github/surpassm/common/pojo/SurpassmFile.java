@@ -17,7 +17,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(value = "文件类")
-public class File {
+public class SurpassmFile {
 
 	/**
 	 * 文件名称

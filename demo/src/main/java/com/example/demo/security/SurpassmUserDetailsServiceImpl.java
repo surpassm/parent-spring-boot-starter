@@ -51,19 +51,17 @@ public class SurpassmUserDetailsServiceImpl implements UserDetailsService {
 //		if (StringUtils.isEmpty(username)) {
 //			throw new SurpassmAuthenticationException(Tips.PARAMETER_ERROR.msg);
 //		}
-//		UserInfo userInfo = userInfoMapper.selectOneByUserName(username);
-//		if (userInfo == null) {
+//		UserInfo build = new UserInfo();
+//		build.setUsername(username);
+//		build.setIsDelete(0);
+//		UserInfo loginUser = userInfoMapper.selectOne(build);
+//		if (loginUser == null) {
 //			throw new SurpassmAuthenticationException(Tips.USER_INFO_ERROR.msg);
 //		}
-//		List<GrantedAuthority> securityRoles = new ArrayList<>();
-//		roleMapper.findByUserId(0, 0, userInfo.getId())
-//				.forEach(i -> securityRoles.add(new SimpleGrantedAuthority(i.getName())));
-//		//更新操作时间
-//		userInfo.setLandingTime(new Date());
+//		UserInfo userInfo = userInfoMapper.selectByUserInfoAndRolesAndMenus(loginUser.getId());
+//		userInfo.setLandingTime(LocalDateTime.now());
 //		userInfoMapper.updateByPrimaryKeySelective(userInfo);
-//		return new UserInfo(userInfo.getId(),username, userInfo.getPassword(),
-//				true, true, true, true,
-//				securityRoles);
+//		return userInfo;
 		String password = bCryptPasswordEncoder.encode("123456");
 		log.info("数据库密码是:"+password);
 		return new UserInfo(1,username, password,

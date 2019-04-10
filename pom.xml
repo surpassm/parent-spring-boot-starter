@@ -17,6 +17,7 @@
 
     <modules>
         <module>demo-mybatis</module>
+        <module>demo-jpa</module>
         <module>security-spring-boot-starter</module>
         <module>common-spring-boot-starter</module>
         <module>tool-spring-boot-starter</module>

@@ -8,10 +8,10 @@
         <version>2.1.3.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.example</groupId>
-    <artifactId>demo-mybatis</artifactId>
+    <groupId>com.liaoin</groupId>
+    <artifactId>demo-jpa</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>demo-mybatis</name>
+    <name>demo-jpa</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -21,22 +21,9 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jdbc</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
 
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <scope>runtime</scope>
-        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -48,22 +35,24 @@
             <scope>test</scope>
         </dependency>
 
-
         <dependency>
-            <groupId>com.github.surpassm</groupId>
-            <artifactId>security-spring-boot-starter</artifactId>
-            <version>0.0.1</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>com.github.surpassm</groupId>
             <artifactId>config-spring-boot-starter</artifactId>
             <version>0.0.1</version>
         </dependency>
-        <!--<dependency>
-            <groupId>com.github.surpassm</groupId>
-            <artifactId>activiti-spring-boot-starter</artifactId>
-            <version>0.0.1</version>
-        </dependency>-->
 
         <dependency>
             <groupId>com.spring4all</groupId>
@@ -89,17 +78,6 @@
             <groupId>io.swagger</groupId>
             <artifactId>swagger-models</artifactId>
             <version>1.5.21</version>
-        </dependency>
-        <!-- mybatis -->
-        <dependency>
-            <groupId>tk.mybatis</groupId>
-            <artifactId>mapper-spring-boot-starter</artifactId>
-            <version>2.1.4</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper-spring-boot-starter</artifactId>
-            <version>1.2.10</version>
         </dependency>
     </dependencies>
 

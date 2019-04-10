@@ -16,7 +16,7 @@
     <name>parent-spring-boot-starter</name>
 
     <modules>
-        <module>demo</module>
+        <module>demo-mybatis</module>
         <module>security-spring-boot-starter</module>
         <module>common-spring-boot-starter</module>
         <module>tool-spring-boot-starter</module>

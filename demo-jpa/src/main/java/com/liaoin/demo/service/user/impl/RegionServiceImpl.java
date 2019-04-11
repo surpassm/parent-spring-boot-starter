@@ -94,7 +94,7 @@ public class RegionServiceImpl implements RegionService {
 		}
 		Region region = optional.get();
 		if (region.getChildren() != null && region.getChildren().size() != 0) {
-			return fail("存在下级关联，无法删除");
+			return fail(Tips.childrenError.msg);
 		}
 		region.setIsDelete(1);
 		region.setDeleteTime(LocalDateTime.now());

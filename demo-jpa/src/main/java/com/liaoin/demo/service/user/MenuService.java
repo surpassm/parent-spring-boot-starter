@@ -43,4 +43,11 @@ public interface MenuService {
 	 * @return 前端返回格式
 	 */
     Result pageQuery(String accessToken, Integer page, Integer size, String sort, Menu menu);
+
+	/**
+	 * 后台所有接口更新
+	 * @param accessToken
+	 * @return
+	 */
+	Result resourcesUpdate(String accessToken);
 }

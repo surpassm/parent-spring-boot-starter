@@ -23,7 +23,7 @@ import javax.annotation.Resource;
 @CrossOrigin
 @RestController
 @RequestMapping("/group/")
-@Api(tags  =  "权限API")
+@Api(tags  =  "组API")
 public class GroupController {
 
     @Resource

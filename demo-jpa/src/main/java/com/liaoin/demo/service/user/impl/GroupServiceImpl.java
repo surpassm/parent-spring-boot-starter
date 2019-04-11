@@ -3,11 +3,14 @@ package com.liaoin.demo.service.user.impl;
 import com.github.surpassm.common.jackson.Result;
 import com.github.surpassm.common.jackson.Tips;
 import com.liaoin.demo.entity.user.Group;
+import com.liaoin.demo.entity.user.Menu;
 import com.liaoin.demo.entity.user.UserInfo;
 import com.liaoin.demo.repository.user.GroupRepository;
+import com.liaoin.demo.repository.user.MenuRepository;
 import com.liaoin.demo.security.BeanConfig;
 import com.liaoin.demo.service.user.GroupService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -36,6 +39,8 @@ public class GroupServiceImpl implements GroupService {
     private GroupRepository groupRepository;
     @Resource
 	private BeanConfig beanConfig;
+    @Resource
+	private MenuRepository menuRepository;
 
     @Override
     public Result insert(String accessToken, Group group) {
@@ -44,6 +49,16 @@ public class GroupServiceImpl implements GroupService {
             return fail(Tips.PARAMETER_ERROR.msg);
         }
         UserInfo loginUser = beanConfig.getAccessToken(accessToken);
+        //效验父级是否存在
+        if (group.getParentId() != null){
+			Optional<Group> byId = groupRepository.findById(group.getParentId());
+			byId.ifPresent(group::setParent);
+		}
+		//效验名称是否存在
+		List<Group> groups = groupRepository.findByNameLike(group.getName());
+        if (groups.size() != 0){
+        	return fail(Tips.nameRepeat.msg);
+		}
         group.setCreateTime(LocalDateTime.now());
         group.setCreateUserId(loginUser.getId());
         group.setIsDelete(0);
@@ -57,6 +72,16 @@ public class GroupServiceImpl implements GroupService {
             return fail(Tips.PARAMETER_ERROR.msg);
         }
         UserInfo loginUser = beanConfig.getAccessToken(accessToken);
+		//效验父级是否存在
+		if (group.getParentId() != null){
+			Optional<Group> byId = groupRepository.findById(group.getParentId());
+			byId.ifPresent(group::setParent);
+		}
+		//效验名称是否存在
+		List<Group> groups = groupRepository.findByIdNotAndNameLike(group.getId(),group.getName());
+		if (groups.size() != 0){
+			return fail(Tips.nameRepeat.msg);
+		}
         group.setUpdateTime(LocalDateTime.now());
         group.setUpdateUserId(loginUser.getId());
         groupRepository.save(group);
@@ -119,9 +144,6 @@ public class GroupServiceImpl implements GroupService {
                 if (group.getDeleteUserId() != null) {
                     list.add(criteriaBuilder.equal(root.get("deleteUserId").as(Integer.class), group.getDeleteUserId()));
                 }
-                if (group.getIsDelete() != null) {
-                    list.add(criteriaBuilder.equal(root.get("isDelete").as(Integer.class), group.getIsDelete()));
-                }
                 if (group.getUpdateTime() != null) {
                     list.add(criteriaBuilder.equal(root.get("updateTime").as(Date.class), group.getUpdateTime()));
                 }
@@ -138,6 +160,7 @@ public class GroupServiceImpl implements GroupService {
                     list.add(criteriaBuilder.equal(root.get("parent").get("id").as(Integer.class), group.getParent().getId()));
                 }
             }
+			list.add(criteriaBuilder.equal(root.get("isDelete").as(Integer.class), 0));
             return criteriaBuilder.and(list.toArray(new Predicate[list.size()]));
         }, pageable);
         Map<String, Object> map = new HashMap<>(16);

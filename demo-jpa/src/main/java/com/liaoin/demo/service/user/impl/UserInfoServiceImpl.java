@@ -2,7 +2,10 @@ package com.liaoin.demo.service.user.impl;
 
 import com.github.surpassm.common.jackson.Result;
 import com.github.surpassm.common.jackson.Tips;
+import com.github.surpassm.tool.util.ValidateUtil;
+import com.liaoin.demo.entity.user.Department;
 import com.liaoin.demo.entity.user.UserInfo;
+import com.liaoin.demo.repository.user.DepartmentRepository;
 import com.liaoin.demo.repository.user.UserInfoRepository;
 import com.liaoin.demo.security.BeanConfig;
 import com.liaoin.demo.service.user.UserInfoService;
@@ -10,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,14 +39,45 @@ public class UserInfoServiceImpl implements UserInfoService {
     private UserInfoRepository userInfoRepository;
     @Resource
 	private BeanConfig beanConfig;
+    @Resource
+	private DepartmentRepository departmentRepository;
+	@Resource
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public Result insert(String accessToken, UserInfo userInfo) {
-
         if (!Optional.ofNullable(userInfo).isPresent()){
             return fail(Tips.PARAMETER_ERROR.msg);
         }
-        UserInfo loginUser = beanConfig.getAccessToken(accessToken);
+		if (userInfo.getMobile() != null){
+			if (!ValidateUtil.isMobilePhone(userInfo.getMobile())){
+				return fail(Tips.phoneFormatError.msg);
+			}
+		}
+		//效验手姓名
+		if (!ValidateUtil.isRealName(userInfo.getName())){
+			return fail("姓名格式错误");
+		}
+		if (userInfo.getUsername() == null || "".equals(userInfo.getUsername().trim())){
+			return fail(Tips.PARAMETER_ERROR.msg);
+		}
+		if (userInfo.getPassword() == null || "".equals(userInfo.getPassword().trim())){
+			return fail(Tips.PARAMETER_ERROR.msg);
+		}
+		if (!ValidateUtil.isPassword(userInfo.getPassword())){
+			return fail(Tips.passwordFormatError.msg);
+		}
+		UserInfo loginUser = beanConfig.getAccessToken(accessToken);
+		if (userInfo.getDepartmentId() != null){
+			Optional<Department> byId = departmentRepository.findById(userInfo.getDepartmentId());
+			byId.ifPresent(userInfo::setDepartment);
+		}
+		userInfo.setUsername(userInfo.getUsername().trim());
+		UserInfo userInfos = userInfoRepository.findByUsername(userInfo.getUsername());
+		if (userInfos != null){
+			return fail("账号已存在");
+		}
+		userInfo.setPassword(bCryptPasswordEncoder.encode(userInfo.getPassword().trim()));
         userInfo.setCreateTime(LocalDateTime.now());
         userInfo.setCreateUserId(loginUser.getId());
         userInfo.setIsDelete(0);
@@ -56,7 +91,44 @@ public class UserInfoServiceImpl implements UserInfoService {
             return fail(Tips.PARAMETER_ERROR.msg);
         }
         UserInfo loginUser = beanConfig.getAccessToken(accessToken);
-        userInfo.setUpdateTime(LocalDateTime.now());
+		if (userInfo.getMobile() != null){
+			if (!ValidateUtil.isMobilePhone(userInfo.getMobile())){
+				return fail(Tips.phoneFormatError.msg);
+			}
+		}
+		//效验手姓名
+		if (!ValidateUtil.isRealName(userInfo.getName())){
+			return fail("姓名格式错误");
+		}
+		if (userInfo.getUsername() == null || "".equals(userInfo.getUsername().trim())){
+			return fail(Tips.PARAMETER_ERROR.msg);
+		}
+		if (userInfo.getPassword() == null || "".equals(userInfo.getPassword().trim())){
+			return fail(Tips.PARAMETER_ERROR.msg);
+		}
+		if (!ValidateUtil.isPassword(userInfo.getPassword())){
+			return fail(Tips.passwordFormatError.msg);
+		}
+		if (userInfo.getDepartmentId() != null){
+			Optional<Department> byId = departmentRepository.findById(userInfo.getDepartmentId());
+			byId.ifPresent(userInfo::setDepartment);
+		}
+		Optional<UserInfo> byId = userInfoRepository.findById(userInfo.getId());
+		if (!byId.isPresent()){
+			return fail(Tips.MSG_NOT.msg);
+		}
+		String password = userInfo.getPassword();
+		//密码效验
+		if (userInfo.getPassword() != null && !"".equals(userInfo.getPassword())) {
+			if (!ValidateUtil.isPassword(userInfo.getPassword())) {
+				return fail(Tips.passwordFormatError.msg);
+			}
+			if (!bCryptPasswordEncoder.matches(password,byId.get().getPassword())){
+				String passwordNew = bCryptPasswordEncoder.encode(password);
+				userInfo.setPassword(passwordNew);
+			}
+		}
+		userInfo.setUpdateTime(LocalDateTime.now());
         userInfo.setUpdateUserId(loginUser.getId());
         userInfoRepository.save(userInfo);
         return ok();
@@ -86,7 +158,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (id == null){
             return fail(Tips.PARAMETER_ERROR.msg);
         }
-        UserInfo loginUser = beanConfig.getAccessToken(accessToken);
+        beanConfig.getAccessToken(accessToken);
 		Optional<UserInfo> optional = userInfoRepository.findById(id);
         return optional.map(Result::ok).orElseGet(() -> fail(Tips.MSG_NOT.msg));
     }
@@ -117,9 +189,6 @@ public class UserInfoServiceImpl implements UserInfoService {
                 }
                 if (userInfo.getDeleteUserId() != null) {
                     list.add(criteriaBuilder.equal(root.get("deleteUserId").as(Integer.class), userInfo.getDeleteUserId()));
-                }
-                if (userInfo.getIsDelete() != null) {
-                    list.add(criteriaBuilder.equal(root.get("isDelete").as(Integer.class), userInfo.getIsDelete()));
                 }
                 if (userInfo.getUpdateTime() != null) {
                     list.add(criteriaBuilder.equal(root.get("updateTime").as(Date.class), userInfo.getUpdateTime()));
@@ -152,6 +221,7 @@ public class UserInfoServiceImpl implements UserInfoService {
                     list.add(criteriaBuilder.equal(root.get("department").get("id").as(Integer.class), userInfo.getDepartment().getId()));
                 }
             }
+			list.add(criteriaBuilder.equal(root.get("isDelete").as(Integer.class), 0));
             return criteriaBuilder.and(list.toArray(new Predicate[list.size()]));
         }, pageable);
         Map<String, Object> map = new HashMap<>(16);

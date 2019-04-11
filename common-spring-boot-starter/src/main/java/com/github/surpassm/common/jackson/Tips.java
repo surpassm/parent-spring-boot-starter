@@ -35,6 +35,7 @@ public enum Tips {
 	AssociatedDataExistsAndCannotBeDeleted("存在关联数据，无法删除"),
 	phoneFormatError("手机号码格式错误"),
 	parentError("父级不存在"),
+	childrenError("存在下级关联，无法删除"),
 
 
 

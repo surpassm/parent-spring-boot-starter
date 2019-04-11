@@ -1,5 +1,6 @@
 package com.liaoin.demo.entity.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.github.surpassm.common.pojo.BasicEntity;
 import com.github.surpassm.common.service.InsertPcSimpleView;
@@ -60,12 +61,14 @@ public class Role extends BasicEntity implements Serializable {
 	@Column(columnDefinition="int(11) COMMENT '排序字段'")
 	private Integer roleIndex ;
 
+	@JsonIgnore
 	@ManyToMany(mappedBy = "roles")
-	@ApiModelProperty(value = "组权限")
+	@ApiModelProperty(value = "组权限",hidden = true)
 	@JsonIgnoreProperties({"parent","children","menus","roles"})
 	private Set<Group> groups = new HashSet<>(16);
 
-	@ApiModelProperty(value = "角色权限")
+	@JsonIgnore
+	@ApiModelProperty(value = "角色权限",hidden = true)
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "m_role_menu", joinColumns = {
 			@JoinColumn(name = "role_id", referencedColumnName = "id")},
@@ -73,8 +76,9 @@ public class Role extends BasicEntity implements Serializable {
 	@JsonIgnoreProperties({"parent","children","groups","roles"})
 	private Set<Menu> menus = new HashSet<>(16);
 
+	@JsonIgnore
 	@ManyToMany(mappedBy = "roles")
-	@ApiModelProperty(value = "用户角色")
+	@ApiModelProperty(value = "用户角色",hidden = true)
 	@JsonIgnoreProperties({"department","groups","menus","roles"})
 	private Set<UserInfo> userInfos = new HashSet<>(16);
 

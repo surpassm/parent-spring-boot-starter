@@ -1,5 +1,6 @@
 package com.liaoin.demo.entity.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.github.surpassm.common.pojo.BasicEntity;
 import com.github.surpassm.common.service.InsertPcSimpleView;
@@ -9,6 +10,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -44,8 +47,10 @@ public class Menu extends BasicEntity implements Serializable {
 	@Column(columnDefinition="int(11) COMMENT '菜单排序'")
     private Integer menuIndex;
 
+    @Max(value = 1)
+	@Min(value = 0)
     @ApiModelProperty(value = "权限分类（0 菜单；1 功能）",allowableValues = "0,1")
-	@Column(columnDefinition="int(11) COMMENT '权限分类（0 菜单；1 功能）'")
+	@Column(columnDefinition="int(1) COMMENT '权限分类（0 菜单；1 功能）'")
     private Integer type;
 
 
@@ -71,27 +76,34 @@ public class Menu extends BasicEntity implements Serializable {
 	@Column(columnDefinition="varchar(255) COMMENT '菜单url后台权限控制'")
     private String menuUrl;
 
+    @JsonIgnore
 	@ManyToOne
-	@ApiModelProperty("父级Id")
+	@ApiModelProperty(value = "父级Id",hidden = true)
 	@JsonIgnoreProperties({"children","groups","roles"})
 	private Menu parent ;
-	@ApiModelProperty(value = "下级列表")
+	@Transient
+	@ApiModelProperty(value ="父级Id")
+	private Integer parentId;
+	@ApiModelProperty(value = "下级列表",hidden = true)
 	@JsonIgnoreProperties({"parent","groups","roles"})
 	@OneToMany(mappedBy = "parent", fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
 	private Set<Menu> children = new HashSet<>(16);
 
+	@JsonIgnore
 	@ManyToMany(mappedBy = "menus")
-	@ApiModelProperty(value = "组权限")
+	@ApiModelProperty(value = "组权限",hidden = true)
 	@JsonIgnoreProperties({"menus","roles"})
 	private Set<Group> groups = new HashSet<>(16);
 
+	@JsonIgnore
 	@ManyToMany(mappedBy = "menus")
-	@ApiModelProperty(value = "角色权限")
+	@ApiModelProperty(value = "角色权限",hidden = true)
 	@JsonIgnoreProperties({"groups","menus"})
 	private Set<Role> roles = new HashSet<>(16);
 
+	@JsonIgnore
 	@ManyToMany(mappedBy = "menus")
-	@ApiModelProperty(value = "用户权限")
+	@ApiModelProperty(value = "用户权限",hidden = true)
 	@JsonIgnoreProperties({"department","groups","menus","roles"})
 	private Set<UserInfo> userInfos = new HashSet<>(16);
 

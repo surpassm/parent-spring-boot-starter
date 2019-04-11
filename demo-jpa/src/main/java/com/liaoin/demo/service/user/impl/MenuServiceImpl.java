@@ -7,12 +7,18 @@ import com.liaoin.demo.entity.user.UserInfo;
 import com.liaoin.demo.repository.user.MenuRepository;
 import com.liaoin.demo.security.BeanConfig;
 import com.liaoin.demo.service.user.MenuService;
+import io.swagger.models.Path;
+import io.swagger.models.Swagger;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import springfox.documentation.service.Documentation;
+import springfox.documentation.spring.web.DocumentationCache;
+import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 
 import javax.annotation.Resource;
 import javax.persistence.criteria.Predicate;
@@ -36,6 +42,10 @@ public class MenuServiceImpl implements MenuService {
     private MenuRepository menuRepository;
     @Resource
 	private BeanConfig beanConfig;
+	@Resource
+	private ServiceModelToSwagger2Mapper mapper;
+	@Resource
+	private DocumentationCache documentationCache;
 
     @Override
     public Result insert(String accessToken, Menu menu) {
@@ -44,6 +54,10 @@ public class MenuServiceImpl implements MenuService {
             return fail(Tips.PARAMETER_ERROR.msg);
         }
         UserInfo loginUser = beanConfig.getAccessToken(accessToken);
+        if (menu.getParentId() != null){
+			Optional<Menu> byId = menuRepository.findById(menu.getParentId());
+			byId.ifPresent(menu::setParent);
+		}
         menu.setCreateTime(LocalDateTime.now());
         menu.setCreateUserId(loginUser.getId());
         menu.setIsDelete(0);
@@ -57,6 +71,10 @@ public class MenuServiceImpl implements MenuService {
             return fail(Tips.PARAMETER_ERROR.msg);
         }
         UserInfo loginUser = beanConfig.getAccessToken(accessToken);
+		if (menu.getParentId() != null){
+			Optional<Menu> byId = menuRepository.findById(menu.getParentId());
+			byId.ifPresent(menu::setParent);
+		}
         menu.setUpdateTime(LocalDateTime.now());
         menu.setUpdateUserId(loginUser.getId());
         menuRepository.save(menu);
@@ -87,9 +105,17 @@ public class MenuServiceImpl implements MenuService {
         if (id == null){
             return fail(Tips.PARAMETER_ERROR.msg);
         }
-        UserInfo loginUser = beanConfig.getAccessToken(accessToken);
+        beanConfig.getAccessToken(accessToken);
 		Optional<Menu> optional = menuRepository.findById(id);
-        return optional.map(Result::ok).orElseGet(() -> fail(Tips.MSG_NOT.msg));
+		if (optional.isPresent()){
+			Menu menu = optional.get();
+			if (menu.getParent()!= null){
+				menu.setParentId(menu.getParent().getId());
+			}
+			return ok(menu);
+		}else {
+			return fail(Tips.MSG_NOT.msg);
+		}
     }
 
     @Override
@@ -118,9 +144,6 @@ public class MenuServiceImpl implements MenuService {
                 }
                 if (menu.getDeleteUserId() != null) {
                     list.add(criteriaBuilder.equal(root.get("deleteUserId").as(Integer.class), menu.getDeleteUserId()));
-                }
-                if (menu.getIsDelete() != null) {
-                    list.add(criteriaBuilder.equal(root.get("isDelete").as(Integer.class), menu.getIsDelete()));
                 }
                 if (menu.getUpdateTime() != null) {
                     list.add(criteriaBuilder.equal(root.get("updateTime").as(Date.class), menu.getUpdateTime()));
@@ -153,6 +176,7 @@ public class MenuServiceImpl implements MenuService {
                     list.add(criteriaBuilder.equal(root.get("parent").get("id").as(Integer.class), menu.getParent().getId()));
                 }
             }
+			list.add(criteriaBuilder.equal(root.get("isDelete").as(Integer.class), 0));
             return criteriaBuilder.and(list.toArray(new Predicate[list.size()]));
         }, pageable);
         Map<String, Object> map = new HashMap<>(16);
@@ -160,5 +184,84 @@ public class MenuServiceImpl implements MenuService {
         map.put("rows",all.getContent());
         return Result.ok(map);
     }
+
+	@Override
+	public Result resourcesUpdate(String accessToken) {
+		UserInfo loginUser = beanConfig.getAccessToken(accessToken);
+		String[] groupName = new String[]{"user","common","mobile"};
+		for (String group:groupName ){
+			Documentation documentation = documentationCache.documentationByGroup(group);
+			if (documentation == null) {
+				return Result.fail("导入失败");
+			}
+			Swagger swagger = mapper.mapDocumentation(documentation);
+			Map<String, Path> paths = swagger.getPaths();
+			paths.forEach((key, value) -> {
+				// 链接
+				String url = key + "**";
+				// 名称
+				if (value.getPost() != null){
+					String name = value.getPost().getSummary();
+					// 描述
+					String description = value.getPost().getTags().get(0);
+					// 权限
+					Menu menu = menuRepository.findByNameAndIsDelete(description,0);
+					menuInsertAndUpdata(url, name, description, menu,loginUser.getId());
+				}
+				if (value.getGet() != null){
+					String name = value.getGet().getSummary();
+					// 描述
+					String description = value.getGet().getTags().get(0);
+					// 权限
+					Menu menu = menuRepository.findByNameAndIsDelete(description,0);
+					menuInsertAndUpdata(url, name, description, menu,loginUser.getId());
+				}
+			});
+		}
+		return Result.ok();
+	}
+
+	private void menuInsertAndUpdata(String url, String name, String description, Menu menu,Integer loginUserId) {
+		if (menu == null){
+			//新增父级
+			Menu parentMenu = Menu.builder()
+					.name(description)
+					.type(1)
+					.build();
+			parentMenu.setCreateTime(LocalDateTime.now());
+			parentMenu.setIsDelete(0);
+			menuRepository.save(parentMenu);
+			//在添加当前url为子级
+			Menu menuBuild = Menu.builder()
+					.menuUrl(url)
+					.parentId(parentMenu.getId())
+					.describes(name)
+					.type(1)
+					.build();
+			menuBuild.setCreateTime(LocalDateTime.now());
+			menuBuild.setIsDelete(0);
+			menuBuild.setCreateTime(LocalDateTime.now());
+			menuBuild.setCreateUserId(loginUserId);
+			menuRepository.save(menuBuild);
+		}else {
+			Menu build = Menu.builder().menuUrl(url).build();
+			build.setIsDelete(0);
+			List<Menu> selectCount = menuRepository.findByMenuUrlAndIsDelete(url,0);
+			if (selectCount.size() == 0){
+				//去除重复数据
+				Menu menuBuild = Menu.builder()
+						.menuUrl(url)
+						.type(1)
+						.parentId(menu.getId())
+						.describes(name)
+						.build();
+				menuBuild.setCreateTime(LocalDateTime.now());
+				menuBuild.setIsDelete(0);
+				menuBuild.setCreateTime(LocalDateTime.now());
+				menuBuild.setCreateUserId(loginUserId);
+				menuRepository.save(menuBuild);
+			}
+		}
+	}
 }
 

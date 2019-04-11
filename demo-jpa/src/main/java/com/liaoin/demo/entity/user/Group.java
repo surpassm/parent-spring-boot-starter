@@ -1,5 +1,6 @@
 package com.liaoin.demo.entity.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.github.surpassm.common.pojo.BasicEntity;
 import com.github.surpassm.common.service.InsertPcSimpleView;
@@ -27,7 +28,7 @@ import java.util.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuppressWarnings("serial")
-@ApiModel(value = "权限")
+@ApiModel(value = "组")
 @Table(name = "t_group")
 @org.hibernate.annotations.Table(appliesTo = "t_group", comment = "权限")
 public class Group extends BasicEntity implements Serializable {
@@ -50,17 +51,22 @@ public class Group extends BasicEntity implements Serializable {
 	@Column(columnDefinition="varchar(255) COMMENT '描述'")
 	private String describes;
 
+	@JsonIgnore
 	@ManyToOne
-	@ApiModelProperty("父级Id")
+	@ApiModelProperty(value = "父级Id",hidden = true)
 	@JsonIgnoreProperties({"children","menus","roles"})
 	private Group parent ;
-	@ApiModelProperty(value = "下级列表")
+	@Transient
+	@ApiModelProperty(value ="父级Id")
+	private Integer parentId;
+	@ApiModelProperty(value = "下级列表",hidden = true)
 	@JsonIgnoreProperties({"parent","menus","roles"})
 	@OneToMany(mappedBy = "parent", fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
 	private Set<Group> children = new HashSet<>(16);
 
 
-	@ApiModelProperty(value = "组权限")
+	@JsonIgnore
+	@ApiModelProperty(value = "组权限",hidden = true)
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "m_group_menu", joinColumns = {
 			@JoinColumn(name = "group_id", referencedColumnName = "id")},
@@ -68,8 +74,8 @@ public class Group extends BasicEntity implements Serializable {
 	@JsonIgnoreProperties({"parent","children","groups","roles"})
 	private Set<Menu> menus = new HashSet<>(16);
 
-
-	@ApiModelProperty(value = "组角色")
+	@JsonIgnore
+	@ApiModelProperty(value = "组角色",hidden = true)
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "m_group_role", joinColumns = {
 			@JoinColumn(name = "group_id", referencedColumnName = "id")},
@@ -77,9 +83,9 @@ public class Group extends BasicEntity implements Serializable {
 	@JsonIgnoreProperties({"groups"})
 	private Set<Role> roles = new HashSet<>(16);
 
-
+	@JsonIgnore
 	@ManyToMany(mappedBy = "groups")
-	@ApiModelProperty(value = "用户组")
+	@ApiModelProperty(value = "用户组",hidden = true)
 	@JsonIgnoreProperties({"department","groups","menus","roles"})
 	private Set<UserInfo> userInfos = new HashSet<>(16);
 

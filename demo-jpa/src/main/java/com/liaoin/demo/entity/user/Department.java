@@ -1,5 +1,6 @@
 package com.liaoin.demo.entity.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.github.surpassm.common.pojo.BasicEntity;
 import com.github.surpassm.common.service.InsertPcSimpleView;
@@ -46,15 +47,15 @@ public class Department extends BasicEntity implements Serializable {
 	@Column(columnDefinition="varchar(255) COMMENT '名称'")
 	private String name ;
 
-
+	@JsonIgnore
 	@ManyToOne
 	@ApiModelProperty(value = "所属区域Id",hidden = true)
-	@JsonIgnoreProperties({"parent","children","departments"})
-	@NotNull(groups = {InsertPcSimpleView.class,UpdatePcSimpleView.class},message = "参数不能为为空")
 	private Region region;
 
+	@JsonIgnore
 	@Transient
 	@ApiModelProperty(value ="所属区域Id")
+	@NotNull(groups = {InsertPcSimpleView.class,UpdatePcSimpleView.class},message = "参数不能为为空")
 	private Integer regionId;
 
 
@@ -62,24 +63,24 @@ public class Department extends BasicEntity implements Serializable {
 	@Column(columnDefinition="int(11) COMMENT '排序字段'")
 	private Integer departmentIndex ;
 
-	@Transient
-	@ApiModelProperty(value ="父级Id")
-	private Integer parentId;
-
 
 	@ApiModelProperty(value = "下级列表",hidden = true)
 	@OneToMany(mappedBy = "parent", fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
 	@JsonIgnoreProperties({"region","parent"})
 	private Set<Department> children = new HashSet<>(16);
 
+	@JsonIgnore
 	@ApiModelProperty(value ="父级",hidden = true)
 	@ManyToOne
 	@JoinColumn
 	@JsonIgnoreProperties({"region","children"})
 	private Department parent;
+	@Transient
+	@ApiModelProperty(value ="父级Id")
+	private Integer parentId;
 
 
-
+	@JsonIgnore
 	@OneToMany(cascade = CascadeType.REMOVE,fetch = FetchType.EAGER,mappedBy = "department")
 	@ApiModelProperty(value = "用户列表",hidden = true)
 	@JsonIgnoreProperties({"department","groups","menus","roles"})

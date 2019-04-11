@@ -4,6 +4,8 @@ import com.liaoin.demo.entity.user.Department;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+import java.util.List;
+
 /**
   * @author mc
   * Create date 2019-04-10 12:38:08
@@ -11,5 +13,18 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
   * Description
   */
 public interface DepartmentRepository extends JpaRepository<Department, Integer>, JpaSpecificationExecutor<Department> {
+	/**
+	 * 根据名称模糊查询列表
+	 * @param name 名称
+	 * @return 列表
+	 */
+	List<Department> findByNameLike(String name);
 
+	/**
+	 * 根据主键和模糊名称查询列表
+	 * @param id 主键
+	 * @param name 名称
+	 * @return 列表
+	 */
+	List<Department> findByIdNotAndNameLike(Integer id, String name);
 }

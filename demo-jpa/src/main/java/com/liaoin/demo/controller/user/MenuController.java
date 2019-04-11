@@ -95,4 +95,11 @@ public class MenuController {
 							@RequestBody Menu menu) {
         return menuService.pageQuery(accessToken,page, size, sort, menu);
     }
+
+	@PostMapping("resourcesUpdate")
+	@ApiOperation(value = "后台所有接口更新")
+	@ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
+	public Result resourcesUpdate(@ApiParam(hidden = true)@AuthorizationToken String accessToken) {
+		return menuService.resourcesUpdate(accessToken);
+	}
 }

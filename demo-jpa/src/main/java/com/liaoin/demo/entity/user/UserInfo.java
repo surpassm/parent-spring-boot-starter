@@ -1,6 +1,7 @@
 package com.liaoin.demo.entity.user;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.github.surpassm.common.pojo.BasicEntity;
 import com.github.surpassm.common.service.InsertPcSimpleView;
@@ -175,12 +176,18 @@ public class UserInfo extends BasicEntity implements UserDetails,CredentialsCont
 	private LocalDateTime landingTime;
 
 
+	@JsonIgnore
 	@ManyToOne
-	@ApiModelProperty(value = "组织")
+	@ApiModelProperty(value = "组织",hidden = true)
 	@JsonIgnoreProperties({"region","children","parent","userInfos"})
 	private Department department;
+	@Transient
+	@ApiModelProperty("组织ID")
+	@NotBlank(groups = {UpdatePcSimpleView.class,InsertPcSimpleView.class},message = "参数不能为为空或空串")
+	private Integer departmentId;
 
-	@ApiModelProperty(value = "用户组")
+	@JsonIgnore
+	@ApiModelProperty(value = "用户组",hidden = true)
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "m_user_group", joinColumns = {
 			@JoinColumn(name = "user_id", referencedColumnName = "id")},
@@ -188,7 +195,8 @@ public class UserInfo extends BasicEntity implements UserDetails,CredentialsCont
 	@JsonIgnoreProperties({"parent","children","menus","roles","userInfos"})
 	private Set<Group> groups = new HashSet<>(16);
 
-	@ApiModelProperty(value = "用户权限")
+	@JsonIgnore
+	@ApiModelProperty(value = "用户权限",hidden = true)
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "m_user_menu", joinColumns = {
 			@JoinColumn(name = "user_id", referencedColumnName = "id")},
@@ -196,7 +204,8 @@ public class UserInfo extends BasicEntity implements UserDetails,CredentialsCont
 	@JsonIgnoreProperties({"parent","children","groups","roles","userInfos"})
 	private Set<Menu> menus = new HashSet<>(16);
 
-	@ApiModelProperty(value = "用户角色")
+	@JsonIgnore
+	@ApiModelProperty(value = "用户角色",hidden = true)
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "m_user_role", joinColumns = {
 			@JoinColumn(name = "user_id", referencedColumnName = "id")},

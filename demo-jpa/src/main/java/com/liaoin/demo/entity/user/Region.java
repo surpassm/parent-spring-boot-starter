@@ -1,15 +1,13 @@
 package com.liaoin.demo.entity.user;
 
-import com.fasterxml.classmate.Filter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.github.surpassm.common.pojo.BasicEntity;
 import com.github.surpassm.common.service.InsertPcSimpleView;
 import com.github.surpassm.common.service.UpdatePcSimpleView;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -54,6 +52,7 @@ public class Region extends BasicEntity implements Serializable {
 	@Column(columnDefinition="int(11) COMMENT '排序字段'")
 	private Integer departmentIndex ;
 
+	@JsonIgnore
 	@ManyToOne
 	@ApiModelProperty(value = "父级Id",hidden = true)
 	@JsonIgnoreProperties({"departments","children"})

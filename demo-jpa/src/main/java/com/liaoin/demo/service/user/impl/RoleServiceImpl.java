@@ -87,7 +87,7 @@ public class RoleServiceImpl implements RoleService {
         if (id == null){
             return fail(Tips.PARAMETER_ERROR.msg);
         }
-        UserInfo loginUser = beanConfig.getAccessToken(accessToken);
+        beanConfig.getAccessToken(accessToken);
 		Optional<Role> optional = roleRepository.findById(id);
         return optional.map(Result::ok).orElseGet(() -> fail(Tips.MSG_NOT.msg));
     }
@@ -119,9 +119,6 @@ public class RoleServiceImpl implements RoleService {
                 if (role.getDeleteUserId() != null) {
                     list.add(criteriaBuilder.equal(root.get("deleteUserId").as(Integer.class), role.getDeleteUserId()));
                 }
-                if (role.getIsDelete() != null) {
-                    list.add(criteriaBuilder.equal(root.get("isDelete").as(Integer.class), role.getIsDelete()));
-                }
                 if (role.getUpdateTime() != null) {
                     list.add(criteriaBuilder.equal(root.get("updateTime").as(Date.class), role.getUpdateTime()));
                 }
@@ -141,6 +138,7 @@ public class RoleServiceImpl implements RoleService {
                     list.add(criteriaBuilder.like(root.get("securityRoles").as(String.class), "%" + role.getSecurityRoles() + "%"));
                 }
             }
+			list.add(criteriaBuilder.equal(root.get("isDelete").as(Integer.class), 0));
             return criteriaBuilder.and(list.toArray(new Predicate[list.size()]));
         }, pageable);
         Map<String, Object> map = new HashMap<>(16);

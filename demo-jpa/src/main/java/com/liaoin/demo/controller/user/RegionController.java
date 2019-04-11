@@ -85,7 +85,7 @@ public class RegionController {
     }
 
     @PostMapping("pageQuery")
-    @ApiOperation(value = "条件分页查询")
+    @ApiOperation(value = "条件分页查询,返回所有父级")
     @ApiResponses({@ApiResponse(code=Constant.SUCCESS_CODE,message=Constant.SUCCESS_MSG,response=Region.class),
                    @ApiResponse(code=Constant.FAIL_SESSION_CODE,message=Constant.FAIL_SESSION_MSG)})
     @ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")

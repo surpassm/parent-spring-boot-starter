@@ -162,10 +162,8 @@ public class RegionServiceImpl implements RegionService {
 				if ((region.getName() != null) && !"".equals(region.getName().trim())) {
 					list.add(criteriaBuilder.like(root.get("name").as(String.class), "%" + region.getName() + "%"));
 				}
-				if (region.getParent() != null) {
-					list.add(criteriaBuilder.equal(root.get("parent").get("id").as(Integer.class), region.getParent().getId()));
-				}
 			}
+			list.add(criteriaBuilder.isNull(root.get("parent").get("id").as(Integer.class)));
 			list.add(criteriaBuilder.equal(root.get("isDelete").as(Integer.class), 0));
 			return criteriaBuilder.and(list.toArray(new Predicate[list.size()]));
 		}, pageable);

@@ -1,6 +1,7 @@
 package com.liaoin.demo.repository.user;
 
 import com.liaoin.demo.entity.user.Department;
+import com.liaoin.demo.entity.user.Region;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
@@ -27,4 +28,12 @@ public interface DepartmentRepository extends JpaRepository<Department, Integer>
 	 * @return 列表
 	 */
 	List<Department> findByIdNotAndNameLike(Integer id, String name);
+
+	/**
+	 * 根据区域和删除状态查询
+	 * @param region 区域
+	 * @param i 0
+	 * @return 列表
+	 */
+	List<Department> findByRegionAndIsDelete(Region region, int i);
 }

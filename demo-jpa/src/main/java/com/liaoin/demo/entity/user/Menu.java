@@ -1,7 +1,9 @@
 package com.liaoin.demo.entity.user;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.github.surpassm.common.pojo.BasicEntity;
 import com.github.surpassm.common.service.InsertPcSimpleView;
 import com.github.surpassm.common.service.UpdatePcSimpleView;
@@ -76,7 +78,7 @@ public class Menu extends BasicEntity implements Serializable {
 	@Column(columnDefinition="varchar(255) COMMENT '菜单url后台权限控制'")
     private String menuUrl;
 
-    @JsonIgnore
+	@JsonManagedReference
 	@ManyToOne
 	@ApiModelProperty(value = "父级Id",hidden = true)
 	@JsonIgnoreProperties({"children","groups","roles"})
@@ -84,6 +86,7 @@ public class Menu extends BasicEntity implements Serializable {
 	@Transient
 	@ApiModelProperty(value ="父级Id")
 	private Integer parentId;
+	@JsonBackReference
 	@ApiModelProperty(value = "下级列表",hidden = true)
 	@JsonIgnoreProperties({"parent","groups","roles"})
 	@OneToMany(mappedBy = "parent", fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)

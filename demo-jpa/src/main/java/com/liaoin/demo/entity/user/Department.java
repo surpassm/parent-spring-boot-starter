@@ -1,7 +1,9 @@
 package com.liaoin.demo.entity.user;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.github.surpassm.common.pojo.BasicEntity;
 import com.github.surpassm.common.service.InsertPcSimpleView;
 import com.github.surpassm.common.service.UpdatePcSimpleView;
@@ -37,55 +39,54 @@ public class Department extends BasicEntity implements Serializable {
 
 	@Id
 	@ApiModelProperty(value = "系统标识")
-	@Column(columnDefinition="int(11) COMMENT '系统标识'")
+	@Column(columnDefinition = "int(11) COMMENT '系统标识'")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@NotNull(groups = UpdatePcSimpleView.class,message = "参数不能为空")
+	@NotNull(groups = UpdatePcSimpleView.class, message = "参数不能为空")
 	private Integer id;
 
-	@NotBlank(groups = {InsertPcSimpleView.class,UpdatePcSimpleView.class},message = "参数不能为为空或空串")
-	@ApiModelProperty(value = "名称",example = "研发部")
-	@Column(columnDefinition="varchar(255) COMMENT '名称'")
-	private String name ;
+	@NotBlank(groups = {InsertPcSimpleView.class, UpdatePcSimpleView.class}, message = "参数不能为为空或空串")
+	@ApiModelProperty(value = "名称", example = "研发部")
+	@Column(columnDefinition = "varchar(255) COMMENT '名称'")
+	private String name;
 
 	@JsonIgnore
-	@ManyToOne
-	@ApiModelProperty(value = "所属区域Id",hidden = true)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@ApiModelProperty(value = "所属区域Id", hidden = true)
 	private Region region;
 
-	@JsonIgnore
 	@Transient
-	@ApiModelProperty(value ="所属区域Id")
-	@NotNull(groups = {InsertPcSimpleView.class,UpdatePcSimpleView.class},message = "参数不能为为空")
+	@ApiModelProperty(value = "所属区域Id")
+	@NotNull(groups = {InsertPcSimpleView.class, UpdatePcSimpleView.class}, message = "参数不能为为空")
 	private Integer regionId;
 
 
 	@ApiModelProperty("排序字段")
-	@Column(columnDefinition="int(11) COMMENT '排序字段'")
-	private Integer departmentIndex ;
+	@Column(columnDefinition = "int(11) COMMENT '排序字段'")
+	private Integer departmentIndex;
 
 
-	@ApiModelProperty(value = "下级列表",hidden = true)
-	@OneToMany(mappedBy = "parent", fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
-	@JsonIgnoreProperties({"region","parent"})
+	@JsonIgnore
+	@ApiModelProperty(value = "下级列表", hidden = true)
+	@OneToMany(mappedBy = "parent", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+	@JsonIgnoreProperties({"region", "parent"})
 	private Set<Department> children = new HashSet<>(16);
 
 	@JsonIgnore
-	@ApiModelProperty(value ="父级",hidden = true)
+	@ApiModelProperty(value = "父级", hidden = true)
 	@ManyToOne
 	@JoinColumn
-	@JsonIgnoreProperties({"region","children"})
+	@JsonIgnoreProperties({"region", "children"})
 	private Department parent;
 	@Transient
-	@ApiModelProperty(value ="父级Id")
+	@ApiModelProperty(value = "父级Id")
 	private Integer parentId;
 
 
 	@JsonIgnore
-	@OneToMany(cascade = CascadeType.REMOVE,fetch = FetchType.EAGER,mappedBy = "department")
-	@ApiModelProperty(value = "用户列表",hidden = true)
-	@JsonIgnoreProperties({"department","groups","menus","roles"})
+	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, mappedBy = "department")
+	@ApiModelProperty(value = "用户列表", hidden = true)
+	@JsonIgnoreProperties({"department", "groups", "menus", "roles"})
 	private Set<UserInfo> userInfos = new HashSet<>(16);
-
 
 
 	@Override

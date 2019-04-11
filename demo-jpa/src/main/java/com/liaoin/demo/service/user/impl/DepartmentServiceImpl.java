@@ -171,13 +171,11 @@ public class DepartmentServiceImpl implements DepartmentService {
 				if ((department.getName() != null) && !"".equals(department.getName().trim())) {
 					list.add(criteriaBuilder.like(root.get("name").as(String.class), "%" + department.getName() + "%"));
 				}
-				if (department.getParent() != null) {
-					list.add(criteriaBuilder.equal(root.get("parent").get("id").as(Integer.class), department.getParent().getId()));
-				}
 				if (department.getRegion() != null) {
 					list.add(criteriaBuilder.equal(root.get("region").get("id").as(Integer.class), department.getRegion().getId()));
 				}
 			}
+			list.add(criteriaBuilder.isNull(root.get("parent").as(Department.class)));
 			list.add(criteriaBuilder.equal(root.get("isDelete").as(Integer.class), 0));
 			return criteriaBuilder.and(list.toArray(new Predicate[list.size()]));
 		}, pageable);
@@ -185,6 +183,16 @@ public class DepartmentServiceImpl implements DepartmentService {
 		map.put("total", all.getTotalElements());
 		map.put("rows", all.getContent());
 		return Result.ok(map);
+	}
+
+	@Override
+	public Result findByRegionId(String accessToken, Integer regionId) {
+		Optional<Region> byId = regionRepository.findByIdAndIsDelete(regionId,0);
+		if (!byId.isPresent()){
+			return fail(Tips.MSG_NOT.msg);
+		}
+		List<Department> departments = departmentRepository.findByRegionAndIsDelete(byId.get(),0);
+		return ok(departments);
 	}
 }
 

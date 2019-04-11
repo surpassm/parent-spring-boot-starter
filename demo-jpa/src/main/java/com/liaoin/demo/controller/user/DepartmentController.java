@@ -13,6 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
 
 /**
   * @author mc
@@ -84,7 +85,7 @@ public class DepartmentController {
     }
 
     @PostMapping("pageQuery")
-    @ApiOperation(value = "条件分页查询")
+    @ApiOperation(value = "条件分页查询,返回所有父级")
     @ApiResponses({@ApiResponse(code=Constant.SUCCESS_CODE,message=Constant.SUCCESS_MSG,response=Department.class),
                    @ApiResponse(code=Constant.FAIL_SESSION_CODE,message=Constant.FAIL_SESSION_MSG)})
     @ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
@@ -95,4 +96,16 @@ public class DepartmentController {
 							@RequestBody Department department) {
         return departmentService.pageQuery(accessToken,page, size, sort, department);
     }
+
+	@PostMapping("findByRegionId")
+	@ApiOperation(value = "根据区域主键查询部门详情")
+	@ApiResponses({
+			@ApiResponse(code=Constant.FAIL_SESSION_CODE,message=Constant.FAIL_SESSION_MSG),
+			@ApiResponse(code=Constant.SUCCESS_CODE,message=Constant.SUCCESS_MSG,response=Department.class),
+			@ApiResponse(code=Constant.FAIL_CODE,message=Constant.FAIL_MSG,response=Result.class)})
+	@ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
+	public Result findByRegionId(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
+						   		 @ApiParam(value = "区域系统标识",required = true)@RequestParam(value = "regionId")@NotNull Integer regionId) {
+		return departmentService.findByRegionId(accessToken,regionId);
+	}
 }

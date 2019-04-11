@@ -156,10 +156,8 @@ public class GroupServiceImpl implements GroupService {
                 if ((group.getName() != null) && !"".equals(group.getName().trim())) {
                     list.add(criteriaBuilder.like(root.get("name").as(String.class), "%" + group.getName() + "%"));
                 }
-                if (group.getParent() != null) {
-                    list.add(criteriaBuilder.equal(root.get("parent").get("id").as(Integer.class), group.getParent().getId()));
-                }
             }
+			list.add(criteriaBuilder.isNull(root.get("parent").get("id").as(Integer.class)));
 			list.add(criteriaBuilder.equal(root.get("isDelete").as(Integer.class), 0));
             return criteriaBuilder.and(list.toArray(new Predicate[list.size()]));
         }, pageable);

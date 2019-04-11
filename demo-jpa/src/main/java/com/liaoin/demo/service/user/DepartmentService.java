@@ -43,4 +43,12 @@ public interface DepartmentService {
 	 * @return 前端返回格式
 	 */
     Result pageQuery(String accessToken, Integer page, Integer size, String sort, Department department);
+
+	/**
+	 * 根据区域主键查询部门详情
+	 * @param accessToken
+	 * @param regionId
+	 * @return
+	 */
+	Result findByRegionId(String accessToken, Integer regionId);
 }

@@ -172,10 +172,8 @@ public class MenuServiceImpl implements MenuService {
                 if (menu.getType() != null) {
                     list.add(criteriaBuilder.equal(root.get("type").as(Integer.class), menu.getType()));
                 }
-                if (menu.getParent() != null) {
-                    list.add(criteriaBuilder.equal(root.get("parent").get("id").as(Integer.class), menu.getParent().getId()));
-                }
             }
+			list.add(criteriaBuilder.isNull(root.get("parent").get("id").as(Integer.class)));
 			list.add(criteriaBuilder.equal(root.get("isDelete").as(Integer.class), 0));
             return criteriaBuilder.and(list.toArray(new Predicate[list.size()]));
         }, pageable);

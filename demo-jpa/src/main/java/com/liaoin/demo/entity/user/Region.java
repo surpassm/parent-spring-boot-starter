@@ -1,7 +1,9 @@
 package com.liaoin.demo.entity.user;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.github.surpassm.common.pojo.BasicEntity;
 import com.github.surpassm.common.service.InsertPcSimpleView;
 import com.github.surpassm.common.service.UpdatePcSimpleView;
@@ -52,7 +54,7 @@ public class Region extends BasicEntity implements Serializable {
 	@Column(columnDefinition="int(11) COMMENT '排序字段'")
 	private Integer departmentIndex ;
 
-	@JsonIgnore
+	@JsonManagedReference
 	@ManyToOne
 	@ApiModelProperty(value = "父级Id",hidden = true)
 	@JsonIgnoreProperties({"departments","children"})
@@ -61,7 +63,7 @@ public class Region extends BasicEntity implements Serializable {
 	@ApiModelProperty(value ="父级Id")
 	private Integer parentId;
 
-
+	@JsonBackReference
 	@ApiModelProperty(value = "下级列表",hidden = true)
 	@JsonIgnoreProperties({"parent","departments"})
 	@OneToMany(mappedBy = "parent", fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)

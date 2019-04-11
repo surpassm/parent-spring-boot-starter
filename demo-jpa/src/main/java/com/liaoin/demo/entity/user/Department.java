@@ -48,31 +48,40 @@ public class Department extends BasicEntity implements Serializable {
 
 
 	@ManyToOne
-	@ApiModelProperty("所属区域Id")
+	@ApiModelProperty(value = "所属区域Id",hidden = true)
 	@JsonIgnoreProperties({"parent","children","departments"})
 	@NotNull(groups = {InsertPcSimpleView.class,UpdatePcSimpleView.class},message = "参数不能为为空")
 	private Region region;
+
+	@Transient
+	@ApiModelProperty(value ="所属区域Id")
+	private Integer regionId;
 
 
 	@ApiModelProperty("排序字段")
 	@Column(columnDefinition="int(11) COMMENT '排序字段'")
 	private Integer departmentIndex ;
 
+	@Transient
+	@ApiModelProperty(value ="父级Id")
+	private Integer parentId;
+
 
 	@ApiModelProperty(value = "下级列表",hidden = true)
-	@Column(columnDefinition="int(11) COMMENT '下级列表'")
 	@OneToMany(mappedBy = "parent", fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
 	@JsonIgnoreProperties({"region","parent"})
 	private Set<Department> children = new HashSet<>(16);
 
+	@ApiModelProperty(value ="父级",hidden = true)
 	@ManyToOne
 	@JoinColumn
-	@ApiModelProperty("父级")
 	@JsonIgnoreProperties({"region","children"})
 	private Department parent;
 
+
+
 	@OneToMany(cascade = CascadeType.REMOVE,fetch = FetchType.EAGER,mappedBy = "department")
-	@ApiModelProperty("用户列表")
+	@ApiModelProperty(value = "用户列表",hidden = true)
 	@JsonIgnoreProperties({"department","groups","menus","roles"})
 	private Set<UserInfo> userInfos = new HashSet<>(16);
 

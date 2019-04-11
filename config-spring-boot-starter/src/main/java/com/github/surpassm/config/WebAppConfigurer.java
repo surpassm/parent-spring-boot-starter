@@ -2,9 +2,13 @@ package com.github.surpassm.config;
 
 import com.github.surpassm.security.properties.SecurityProperties;
 import com.github.surpassm.tool.util.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
@@ -24,6 +28,7 @@ public class WebAppConfigurer implements WebMvcConfigurer {
 	private TokenInterceptor tokenInterceptor;
     @Resource
 	private SecurityProperties securityProperties;
+
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(tokenMethodArgumentResolver);
@@ -55,4 +60,5 @@ public class WebAppConfigurer implements WebMvcConfigurer {
 				.exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
 				.allowCredentials(true).maxAge(36000);
 	}
+
 }

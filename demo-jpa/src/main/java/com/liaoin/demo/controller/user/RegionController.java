@@ -5,6 +5,7 @@ import com.github.surpassm.common.jackson.Result;
 import com.github.surpassm.common.service.InsertPcSimpleView;
 import com.github.surpassm.common.service.UpdatePcSimpleView;
 import com.github.surpassm.config.annotation.AuthorizationToken;
+import com.github.surpassm.config.annotation.JsonFieldFilter;
 import com.liaoin.demo.entity.user.Region;
 import com.liaoin.demo.service.user.RegionService;
 import io.swagger.annotations.*;
@@ -37,7 +38,7 @@ public class RegionController {
             @ApiResponse(code=Constant.FAIL_CODE,message=Constant.FAIL_MSG,response=Result.class)})
     @ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
     public Result save(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
-					   @Validated(InsertPcSimpleView.class) Region region, BindingResult errors) {
+					   @Validated(InsertPcSimpleView.class)@RequestBody Region region, BindingResult errors) {
         if (errors.hasErrors()){
 			return Result.fail(errors.getAllErrors());
 		}
@@ -52,7 +53,7 @@ public class RegionController {
             @ApiResponse(code=Constant.FAIL_CODE,message=Constant.FAIL_MSG,response=Result.class)})
     @ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
     public Result update(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
-                         @Validated(UpdatePcSimpleView.class) Region region,BindingResult errors) {
+                         @Validated(UpdatePcSimpleView.class)@RequestBody Region region,BindingResult errors) {
         if (errors.hasErrors()){
 			return Result.fail(errors.getAllErrors());
 		}
@@ -92,7 +93,7 @@ public class RegionController {
                             @ApiParam(value = "第几页", required = true,example = "1") @RequestParam(value = "page") Integer page,
                             @ApiParam(value = "多少条",required = true,example = "10")@RequestParam(value = "size") Integer size,
                             @ApiParam(value = "排序字段",example = "create_time desc")@RequestParam(value = "sort",required = false) String sort,
-                            Region region) {
+							@RequestBody Region region) {
         return regionService.pageQuery(accessToken,page, size, sort, region);
     }
 }

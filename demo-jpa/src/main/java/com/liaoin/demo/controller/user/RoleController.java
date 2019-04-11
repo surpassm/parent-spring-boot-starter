@@ -37,7 +37,7 @@ public class RoleController {
             @ApiResponse(code=Constant.FAIL_CODE,message=Constant.FAIL_MSG,response=Result.class)})
     @ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
     public Result save(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
-					   @Validated(InsertPcSimpleView.class) Role role, BindingResult errors) {
+					   @Validated(InsertPcSimpleView.class)@RequestBody Role role, BindingResult errors) {
         if (errors.hasErrors()){
 			return Result.fail(errors.getAllErrors());
 		}
@@ -52,7 +52,7 @@ public class RoleController {
             @ApiResponse(code=Constant.FAIL_CODE,message=Constant.FAIL_MSG,response=Result.class)})
     @ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
     public Result update(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
-                         @Validated(UpdatePcSimpleView.class) Role role,BindingResult errors) {
+                         @Validated(UpdatePcSimpleView.class)@RequestBody Role role,BindingResult errors) {
         if (errors.hasErrors()){
 			return Result.fail(errors.getAllErrors());
 		}
@@ -92,7 +92,7 @@ public class RoleController {
                             @ApiParam(value = "第几页", required = true,example = "1") @RequestParam(value = "page") Integer page,
                             @ApiParam(value = "多少条",required = true,example = "10")@RequestParam(value = "size") Integer size,
                             @ApiParam(value = "排序字段",example = "create_time desc")@RequestParam(value = "sort",required = false) String sort,
-                            Role role) {
+							@RequestBody Role role) {
         return roleService.pageQuery(accessToken,page, size, sort, role);
     }
 }

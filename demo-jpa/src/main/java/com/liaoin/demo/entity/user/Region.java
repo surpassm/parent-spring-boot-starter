@@ -1,12 +1,15 @@
 package com.liaoin.demo.entity.user;
 
+import com.fasterxml.classmate.Filter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.github.surpassm.common.pojo.BasicEntity;
 import com.github.surpassm.common.service.InsertPcSimpleView;
 import com.github.surpassm.common.service.UpdatePcSimpleView;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -41,7 +44,7 @@ public class Region extends BasicEntity implements Serializable {
 	private Integer id;
 
 
-    @ApiModelProperty("名称")
+    @ApiModelProperty(value = "名称",example = "重庆市")
 	@Column(columnDefinition="varchar(255) COMMENT '名称'")
 	@NotBlank(groups = {InsertPcSimpleView.class,UpdatePcSimpleView.class},message = "参数不能为为空或空串")
     private String name ;
@@ -52,17 +55,21 @@ public class Region extends BasicEntity implements Serializable {
 	private Integer departmentIndex ;
 
 	@ManyToOne
-	@ApiModelProperty("父级Id")
+	@ApiModelProperty(value = "父级Id",hidden = true)
 	@JsonIgnoreProperties({"departments","children"})
 	private Region parent ;
+	@Transient
+	@ApiModelProperty(value ="父级Id")
+	private Integer parentId;
+
+
 	@ApiModelProperty(value = "下级列表",hidden = true)
 	@JsonIgnoreProperties({"parent","departments"})
 	@OneToMany(mappedBy = "parent", fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
 	private Set<Region> children = new HashSet<>(16);
 
-
-	@ApiModelProperty("部门Id")
-	@JsonIgnoreProperties({"parent","children","region"})
+	@JsonIgnore
+	@ApiModelProperty(value = "部门Id",hidden = true)
 	@OneToMany(cascade = {CascadeType.REMOVE,CascadeType.MERGE},mappedBy = "region")
 	private Set<Department> departments = new HashSet<>(16);
 

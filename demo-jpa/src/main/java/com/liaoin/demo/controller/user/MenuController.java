@@ -37,7 +37,7 @@ public class MenuController {
             @ApiResponse(code=Constant.FAIL_CODE,message=Constant.FAIL_MSG,response=Result.class)})
     @ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
     public Result save(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
-					   @Validated(InsertPcSimpleView.class) Menu menu, BindingResult errors) {
+					   @Validated(InsertPcSimpleView.class)@RequestBody Menu menu, BindingResult errors) {
         if (errors.hasErrors()){
 			return Result.fail(errors.getAllErrors());
 		}
@@ -52,7 +52,7 @@ public class MenuController {
             @ApiResponse(code=Constant.FAIL_CODE,message=Constant.FAIL_MSG,response=Result.class)})
     @ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
     public Result update(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
-                         @Validated(UpdatePcSimpleView.class) Menu menu,BindingResult errors) {
+                         @Validated(UpdatePcSimpleView.class)@RequestBody Menu menu,BindingResult errors) {
         if (errors.hasErrors()){
 			return Result.fail(errors.getAllErrors());
 		}
@@ -92,7 +92,7 @@ public class MenuController {
                             @ApiParam(value = "第几页", required = true,example = "1") @RequestParam(value = "page") Integer page,
                             @ApiParam(value = "多少条",required = true,example = "10")@RequestParam(value = "size") Integer size,
                             @ApiParam(value = "排序字段",example = "create_time desc")@RequestParam(value = "sort",required = false) String sort,
-                            Menu menu) {
+							@RequestBody Menu menu) {
         return menuService.pageQuery(accessToken,page, size, sort, menu);
     }
 }

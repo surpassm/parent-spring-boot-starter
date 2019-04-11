@@ -98,7 +98,7 @@ public class UserInfoController {
         return userInfoService.pageQuery(accessToken,page, size, sort, userInfo);
     }
 	@PostMapping("findRolesAndMenus")
-	@ApiOperation(value = "根据主键查询用户及角色、权限列表")
+	@ApiOperation(value = "根据主键查询用户及角色、权限、组列表")
 	@ApiResponses({@ApiResponse(code=Constant.FAIL_SESSION_CODE,message=Constant.FAIL_SESSION_MSG),
 			@ApiResponse(code=Constant.SUCCESS_CODE,message=Constant.SUCCESS_MSG,response=UserInfo.class),
 			@ApiResponse(code=Constant.FAIL_CODE,message=Constant.FAIL_MSG,response=Result.class)})

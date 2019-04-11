@@ -9,6 +9,7 @@ import com.liaoin.demo.security.BeanConfig;
 import com.liaoin.demo.service.user.UserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -165,7 +166,17 @@ public class UserInfoServiceImpl implements UserInfoService {
         }
         beanConfig.getAccessToken(accessToken);
 		Optional<UserInfo> optional = userInfoRepository.findById(id);
-        return optional.map(Result::ok).orElseGet(() -> fail(Tips.MSG_NOT.msg));
+		if (optional.isPresent()){
+			UserInfo userInfo = optional.get();
+			UserInfo result = new UserInfo();
+			BeanUtils.copyProperties(userInfo,result);
+			result.getMenus().clear();
+			result.getRoles().clear();
+			result.getGroups().clear();
+			return ok(result);
+		}else {
+			return fail(Tips.MSG_NOT.msg);
+		}
     }
 
     @Override
@@ -245,7 +256,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 	public Result findRolesAndMenus(String accessToken, Integer id) {
 		beanConfig.getAccessToken(accessToken);
 		Optional<UserInfo> byId = userInfoRepository.findById(id);
-		return ok();
+		return byId.map(Result::ok).orElseGet(() -> fail(Tips.MSG_NOT.msg));
 	}
 
 	/**

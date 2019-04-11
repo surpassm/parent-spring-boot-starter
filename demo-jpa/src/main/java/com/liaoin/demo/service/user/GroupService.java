@@ -43,4 +43,22 @@ public interface GroupService {
 	 * @return 前端返回格式
 	 */
     Result pageQuery(String accessToken, Integer page, Integer size, String sort, Group group);
+
+	/**
+	 * 设置组的权限
+	 * @param accessToken
+	 * @param id
+	 * @param menuId
+	 * @return
+	 */
+	Result setGroupByMenu(String accessToken, Integer id, String menuId);
+
+	/**
+	 * 设置组的角色
+	 * @param accessToken
+	 * @param id
+	 * @param roleIds
+	 * @return
+	 */
+	Result setGroupByRole(String accessToken, Integer id, String roleIds);
 }

@@ -3,13 +3,12 @@ package com.liaoin.demo.service.user.impl;
 import com.github.surpassm.common.jackson.Result;
 import com.github.surpassm.common.jackson.Tips;
 import com.github.surpassm.tool.util.ValidateUtil;
-import com.liaoin.demo.entity.user.Department;
-import com.liaoin.demo.entity.user.UserInfo;
-import com.liaoin.demo.repository.user.DepartmentRepository;
-import com.liaoin.demo.repository.user.UserInfoRepository;
+import com.liaoin.demo.entity.user.*;
+import com.liaoin.demo.repository.user.*;
 import com.liaoin.demo.security.BeanConfig;
 import com.liaoin.demo.service.user.UserInfoService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -43,6 +42,12 @@ public class UserInfoServiceImpl implements UserInfoService {
 	private DepartmentRepository departmentRepository;
 	@Resource
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Resource
+	private GroupRepository groupRepository;
+	@Resource
+	private MenuRepository menuRepository;
+	@Resource
+	private RoleRepository roleRepository;
 
     @Override
     public Result insert(String accessToken, UserInfo userInfo) {
@@ -229,5 +234,114 @@ public class UserInfoServiceImpl implements UserInfoService {
         map.put("rows",all.getContent());
         return Result.ok(map);
     }
+	/**
+	 * 根据主键查询用户及角色、权限列表
+	 *
+	 * @param accessToken token
+	 * @param id 系统标识
+	 * @return 返回数据
+	 */
+	@Override
+	public Result findRolesAndMenus(String accessToken, Integer id) {
+		beanConfig.getAccessToken(accessToken);
+		Optional<UserInfo> byId = userInfoRepository.findById(id);
+		return ok();
+	}
+
+	/**
+	 * 设置用户、组
+	 * @param accessToken token
+	 * @param id 用户系统标识
+	 * @param groupIds 组系统标识
+	 * @return 返回数据
+	 */
+	@Override
+	public Result setUserByGroup(String accessToken, Integer id, String groupIds) {
+		beanConfig.getAccessToken(accessToken);
+		String[] splits = StringUtils.split(groupIds,",");
+		if (splits == null || splits.length == 0){
+			return fail(Tips.PARAMETER_ERROR.msg);
+		}
+
+		Optional<UserInfo> byId = userInfoRepository.findById(id);
+		if (!byId.isPresent()){
+			return fail(Tips.MSG_NOT.msg);
+		}
+		//删除原有用户对应的组
+		UserInfo userInfo = byId.get();
+		if (userInfo.getGroups() != null){
+			userInfo.getGroups().clear();
+		}
+		//新增现有的用户组
+		for(String split: splits){
+			Optional<Group> groupOptional = groupRepository.findById(Integer.valueOf(split));
+			groupOptional.ifPresent(group -> userInfo.getGroups().add(group));
+		}
+		return ok();
+	}
+
+	/**
+	 * 设置用户权限
+	 * @param accessToken token
+	 * @param id 用户系统标识
+	 * @param menuIds 组系统标识
+	 * @return 返回数据
+	 */
+	@Override
+	public Result setUserByMenu(String accessToken, Integer id, String menuIds) {
+		UserInfo loginUser = beanConfig.getAccessToken(accessToken);
+		String[] splits = StringUtils.split(menuIds,",");
+		if (splits == null || splits.length == 0){
+			return fail(Tips.PARAMETER_ERROR.msg);
+		}
+		Optional<UserInfo> byId = userInfoRepository.findById(id);
+		if (!byId.isPresent()){
+			return fail(Tips.MSG_NOT.msg);
+		}
+		//删除原有用户对应的权限
+		UserInfo userInfo = byId.get();
+		if (userInfo.getMenus() != null){
+			userInfo.getMenus().clear();
+		}
+		userInfo.setUpdateTime(LocalDateTime.now());
+		userInfo.setUpdateUserId(loginUser.getId());
+		//新增现有的用户权限
+		for(String split: splits){
+			Optional<Menu> menuOptional = menuRepository.findById(Integer.valueOf(split));
+			menuOptional.ifPresent(menu -> userInfo.getMenus().add(menu));
+		}
+		return ok();
+	}
+
+	/**
+	 * 设置用户、角色
+	 * @param accessToken token
+	 * @param id 用户系统标识
+	 * @param roleIds 组系统标识
+	 * @return 返回数据
+	 */
+	@Override
+	public Result setUserByRoles(String accessToken, Integer id, String roleIds) {
+		beanConfig.getAccessToken(accessToken);
+		String[] splits = StringUtils.split(roleIds,",");
+		if (splits == null || splits.length == 0){
+			return fail(Tips.PARAMETER_ERROR.msg);
+		}
+		Optional<UserInfo> byId = userInfoRepository.findById(id);
+		if (!byId.isPresent()){
+			return fail(Tips.MSG_NOT.msg);
+		}
+		//删除原有用户对应的角色
+		UserInfo userInfo = byId.get();
+		if (userInfo.getRoles() != null){
+			userInfo.getRoles().clear();
+		}
+		//新增现有的用户角色
+		for(String split: splits){
+			Optional<Role> roleOptional = roleRepository.findById(Integer.valueOf(split));
+			roleOptional.ifPresent(role -> userInfo.getRoles().add(role));
+		}
+		return ok();
+	}
 }
 

@@ -2,12 +2,15 @@ package com.liaoin.demo.service.user.impl;
 
 import com.github.surpassm.common.jackson.Result;
 import com.github.surpassm.common.jackson.Tips;
+import com.liaoin.demo.entity.user.Menu;
 import com.liaoin.demo.entity.user.Role;
 import com.liaoin.demo.entity.user.UserInfo;
+import com.liaoin.demo.repository.user.MenuRepository;
 import com.liaoin.demo.repository.user.RoleRepository;
 import com.liaoin.demo.security.BeanConfig;
 import com.liaoin.demo.service.user.RoleService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -36,6 +39,8 @@ public class RoleServiceImpl implements RoleService {
     private RoleRepository roleRepository;
     @Resource
 	private BeanConfig beanConfig;
+    @Resource
+	private MenuRepository menuRepository;
 
     @Override
     public Result insert(String accessToken, Role role) {
@@ -146,5 +151,31 @@ public class RoleServiceImpl implements RoleService {
         map.put("rows",all.getContent());
         return Result.ok(map);
     }
+
+	@Override
+	public Result setRoleByMenu(String accessToken, Integer id, String menuId) {
+		UserInfo loginUser = beanConfig.getAccessToken(accessToken);
+		String[] splits = StringUtils.split(menuId,",");
+		if (splits == null || splits.length == 0){
+			return fail(Tips.PARAMETER_ERROR.msg);
+		}
+		Optional<Role> byId = roleRepository.findById(id);
+		if (!byId.isPresent()){
+			return fail(Tips.MSG_NOT.msg);
+		}
+		//删除原有角色对应的权限
+		Role role = byId.get();
+		if (role.getMenus() != null){
+			role.getMenus().clear();
+		}
+		role.setUpdateTime(LocalDateTime.now());
+		role.setUpdateUserId(loginUser.getId());
+		//新增现有的角色权限
+		for(String split : splits){
+			Optional<Menu> menuOptional = menuRepository.findById(Integer.valueOf(split));
+			menuOptional.ifPresent(menu -> role.getMenus().add(menu));
+		}
+		return ok();
+	}
 }
 

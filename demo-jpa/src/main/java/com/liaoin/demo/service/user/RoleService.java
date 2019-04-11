@@ -43,4 +43,13 @@ public interface RoleService {
 	 * @return 前端返回格式
 	 */
     Result pageQuery(String accessToken, Integer page, Integer size, String sort, Role role);
+
+	/**
+	 * 设置角色权限
+	 * @param accessToken
+	 * @param id
+	 * @param menuId
+	 * @return
+	 */
+	Result setRoleByMenu(String accessToken, Integer id, String menuId);
 }

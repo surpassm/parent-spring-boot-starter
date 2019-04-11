@@ -4,9 +4,11 @@ import com.github.surpassm.common.jackson.Result;
 import com.github.surpassm.common.jackson.Tips;
 import com.liaoin.demo.entity.user.Group;
 import com.liaoin.demo.entity.user.Menu;
+import com.liaoin.demo.entity.user.Role;
 import com.liaoin.demo.entity.user.UserInfo;
 import com.liaoin.demo.repository.user.GroupRepository;
 import com.liaoin.demo.repository.user.MenuRepository;
+import com.liaoin.demo.repository.user.RoleRepository;
 import com.liaoin.demo.security.BeanConfig;
 import com.liaoin.demo.service.user.GroupService;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +43,8 @@ public class GroupServiceImpl implements GroupService {
 	private BeanConfig beanConfig;
     @Resource
 	private MenuRepository menuRepository;
+    @Resource
+	private RoleRepository roleRepository;
 
     @Override
     public Result insert(String accessToken, Group group) {
@@ -166,5 +170,54 @@ public class GroupServiceImpl implements GroupService {
         map.put("rows",all.getContent());
         return Result.ok(map);
     }
+
+	@Override
+	public Result setGroupByMenu(String accessToken, Integer id, String menuId) {
+
+		beanConfig.getAccessToken(accessToken);
+		String[] splits = StringUtils.split(menuId,",");
+		if (splits == null || splits.length == 0){
+			return fail(Tips.PARAMETER_ERROR.msg);
+		}
+		Optional<Group> byId = groupRepository.findById(id);
+		if (!byId.isPresent()){
+			return fail(Tips.MSG_NOT.msg);
+		}
+		//删除原有组对应的权限
+		Group group = byId.get();
+		if (group.getMenus() != null){
+			group.getMenus().clear();
+		}
+		//新增现有的角色权限
+		for(String split : splits){
+			Optional<Menu> menuOptional = menuRepository.findById(Integer.valueOf(split));
+			menuOptional.ifPresent(menu -> group.getMenus().add(menu));
+		}
+		return ok();
+	}
+
+	@Override
+	public Result setGroupByRole(String accessToken, Integer id, String roleIds) {
+		beanConfig.getAccessToken(accessToken);
+		String[] splits = StringUtils.split(roleIds,",");
+		if (splits == null || splits.length == 0){
+			return fail(Tips.PARAMETER_ERROR.msg);
+		}
+		Optional<Group> byId = groupRepository.findById(id);
+		if (!byId.isPresent()){
+			return fail(Tips.MSG_NOT.msg);
+		}
+		//删除原有组对应的角色
+		Group group = byId.get();
+		if (group.getRoles() != null){
+			group.getRoles().clear();
+		}
+		//新增现有的角色
+		for(String split : splits){
+			Optional<Role> roleOptional = roleRepository.findById(Integer.valueOf(split));
+			roleOptional.ifPresent(role -> group.getRoles().add(role));
+		}
+		return ok();
+	}
 }
 

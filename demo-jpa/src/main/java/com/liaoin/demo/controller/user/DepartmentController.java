@@ -98,7 +98,7 @@ public class DepartmentController {
     }
 
 	@PostMapping("findByRegionId")
-	@ApiOperation(value = "根据区域主键查询部门详情")
+	@ApiOperation(value = "根据区域主键查询部门列表")
 	@ApiResponses({
 			@ApiResponse(code=Constant.FAIL_SESSION_CODE,message=Constant.FAIL_SESSION_MSG),
 			@ApiResponse(code=Constant.SUCCESS_CODE,message=Constant.SUCCESS_MSG,response=Department.class),

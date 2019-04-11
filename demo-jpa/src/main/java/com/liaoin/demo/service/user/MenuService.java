@@ -50,4 +50,12 @@ public interface MenuService {
 	 * @return
 	 */
 	Result resourcesUpdate(String accessToken);
+
+	/**
+	 * 根据父级Id查询子级列表
+	 * @param accessToken
+	 * @param parentId
+	 * @return
+	 */
+	Result getParentId(String accessToken, Integer page, Integer size, String sort, Integer parentId);
 }

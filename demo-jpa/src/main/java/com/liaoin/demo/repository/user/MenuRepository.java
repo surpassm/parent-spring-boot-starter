@@ -1,6 +1,7 @@
 package com.liaoin.demo.repository.user;
 
 import com.liaoin.demo.entity.user.Menu;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
@@ -37,4 +38,11 @@ public interface MenuRepository extends JpaRepository<Menu, Integer>, JpaSpecifi
 	 * @return 列表
 	 */
 	List<Menu> findByMenuUrlAndIsDelete(String url, int i);
+
+	/**
+	 * 根据父级ID查询列表
+	 * @param parentId 父级
+	 * @return 列表
+	 */
+	Page<Menu> findByParent_Id(Integer parentId, org.springframework.data.domain.Pageable pageable);
 }

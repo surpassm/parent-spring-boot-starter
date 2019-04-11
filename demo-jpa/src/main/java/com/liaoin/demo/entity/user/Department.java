@@ -73,7 +73,7 @@ public class Department extends BasicEntity implements Serializable {
 
 	@JsonIgnore
 	@ApiModelProperty(value = "父级", hidden = true)
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn
 	@JsonIgnoreProperties({"region", "children"})
 	private Department parent;

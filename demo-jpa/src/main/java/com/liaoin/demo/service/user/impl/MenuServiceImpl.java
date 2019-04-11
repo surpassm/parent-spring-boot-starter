@@ -2,6 +2,7 @@ package com.liaoin.demo.service.user.impl;
 
 import com.github.surpassm.common.jackson.Result;
 import com.github.surpassm.common.jackson.Tips;
+import com.liaoin.demo.entity.user.Department;
 import com.liaoin.demo.entity.user.Menu;
 import com.liaoin.demo.entity.user.UserInfo;
 import com.liaoin.demo.repository.user.MenuRepository;
@@ -219,6 +220,8 @@ public class MenuServiceImpl implements MenuService {
 		return Result.ok();
 	}
 
+
+
 	private void menuInsertAndUpdata(String url, String name, String description, Menu menu,Integer loginUserId) {
 		if (menu == null){
 			//新增父级
@@ -232,7 +235,7 @@ public class MenuServiceImpl implements MenuService {
 			//在添加当前url为子级
 			Menu menuBuild = Menu.builder()
 					.menuUrl(url)
-					.parentId(parentMenu.getId())
+					.parent(parentMenu)
 					.describes(name)
 					.type(1)
 					.build();
@@ -250,7 +253,7 @@ public class MenuServiceImpl implements MenuService {
 				Menu menuBuild = Menu.builder()
 						.menuUrl(url)
 						.type(1)
-						.parentId(menu.getId())
+						.parent(menu)
 						.describes(name)
 						.build();
 				menuBuild.setCreateTime(LocalDateTime.now());
@@ -260,6 +263,25 @@ public class MenuServiceImpl implements MenuService {
 				menuRepository.save(menuBuild);
 			}
 		}
+	}
+
+	@Override
+	public Result getParentId(String accessToken, Integer page, Integer size, String sort, Integer parentId) {
+		beanConfig.getAccessToken(accessToken);
+		page = page == null ? 0 : page;
+		size = size == null ? 10 : size;
+		if (page > 0) {
+			page--;
+		}
+		PageRequest pageable = PageRequest.of(page, size);
+		if (sort != null && "".equals(sort.trim())) {
+			pageable = PageRequest.of(page, page, new Sort(Sort.Direction.DESC, sort));
+		}
+		Page<Menu> all = menuRepository.findByParent_Id(parentId, pageable);
+		Map<String, Object> map = new HashMap<>(16);
+		map.put("total", all.getTotalElements());
+		map.put("rows", all.getContent());
+		return Result.ok(map);
 	}
 }
 

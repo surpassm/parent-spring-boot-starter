@@ -28,13 +28,13 @@ spring:
         min-idle: 0
 
   jpa:
-    show-sql: false
+    show-sql: true
     hibernate:
       ddl-auto: update
     database: mysql
     properties:
       hibernate:
-        format_sql: false
+        format_sql: true
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
 
   servlet:

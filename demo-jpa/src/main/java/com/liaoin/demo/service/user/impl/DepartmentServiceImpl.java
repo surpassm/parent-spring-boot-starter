@@ -194,5 +194,24 @@ public class DepartmentServiceImpl implements DepartmentService {
 		List<Department> departments = departmentRepository.findByRegionAndIsDelete(byId.get(),0);
 		return ok(departments);
 	}
+
+	@Override
+	public Result getParentId(String accessToken, Integer page, Integer size, String sort, Integer parentId) {
+		beanConfig.getAccessToken(accessToken);
+		page = page == null ? 0 : page;
+		size = size == null ? 10 : size;
+		if (page > 0) {
+			page--;
+		}
+		PageRequest pageable = PageRequest.of(page, size);
+		if (sort != null && "".equals(sort.trim())) {
+			pageable = PageRequest.of(page, page, new Sort(Sort.Direction.DESC, sort));
+		}
+		Page<Department> all = departmentRepository.findByParent_Id(parentId, pageable);
+		Map<String, Object> map = new HashMap<>(16);
+		map.put("total", all.getTotalElements());
+		map.put("rows", all.getContent());
+		return Result.ok(map);
+	}
 }
 

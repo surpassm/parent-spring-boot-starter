@@ -53,15 +53,14 @@ public class Group extends BasicEntity implements Serializable {
 	@Column(columnDefinition="varchar(255) COMMENT '描述'")
 	private String describes;
 
-	@JsonManagedReference
-	@ManyToOne
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
 	@ApiModelProperty(value = "父级Id",hidden = true)
 	@JsonIgnoreProperties({"children","menus","roles"})
 	private Group parent ;
 	@Transient
 	@ApiModelProperty(value ="父级Id")
 	private Integer parentId;
-	@JsonBackReference
 	@ApiModelProperty(value = "下级列表",hidden = true)
 	@JsonIgnoreProperties({"parent","menus","roles"})
 	@OneToMany(mappedBy = "parent", fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)

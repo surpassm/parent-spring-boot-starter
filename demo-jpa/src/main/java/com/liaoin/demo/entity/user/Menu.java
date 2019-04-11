@@ -62,7 +62,6 @@ public class Menu extends BasicEntity implements Serializable {
     private String name;
 
     @ApiModelProperty(value = "描述")
-	@NotBlank(message = "参数不能为为空或空串")
 	@Column(columnDefinition="varchar(255) COMMENT '描述'")
     private String describes;
 
@@ -78,15 +77,14 @@ public class Menu extends BasicEntity implements Serializable {
 	@Column(columnDefinition="varchar(255) COMMENT '菜单url后台权限控制'")
     private String menuUrl;
 
-	@JsonManagedReference
-	@ManyToOne
+    @JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
 	@ApiModelProperty(value = "父级Id",hidden = true)
 	@JsonIgnoreProperties({"children","groups","roles"})
 	private Menu parent ;
 	@Transient
 	@ApiModelProperty(value ="父级Id")
 	private Integer parentId;
-	@JsonBackReference
 	@ApiModelProperty(value = "下级列表",hidden = true)
 	@JsonIgnoreProperties({"parent","groups","roles"})
 	@OneToMany(mappedBy = "parent", fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)

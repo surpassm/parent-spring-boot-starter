@@ -1,6 +1,8 @@
 package com.liaoin.demo.repository.user;
 
 import com.liaoin.demo.entity.user.Group;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
@@ -27,4 +29,12 @@ public interface GroupRepository extends JpaRepository<Group, Integer>, JpaSpeci
 	 * @return 列表
 	 */
 	List<Group> findByIdNotAndNameLike(Integer id, String name);
+
+	/**
+	 * 分页查询子级列表
+	 * @param parentId 父级ID
+	 * @param pageable 分页条件
+	 * @return 分页结果
+	 */
+	Page<Group> findByParent_Id(Integer parentId, Pageable pageable);
 }

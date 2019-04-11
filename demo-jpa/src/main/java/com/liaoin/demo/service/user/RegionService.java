@@ -43,4 +43,15 @@ public interface RegionService {
 	 * @return 前端返回格式
 	 */
     Result pageQuery(String accessToken, Integer page, Integer size, String sort, Region region);
+
+	/**
+	 * 根据父级Id查询子级列表
+	 * @param accessToken
+	 * @param page
+	 * @param size
+	 * @param sort
+	 * @param parentId
+	 * @return
+	 */
+	Result getParentId(String accessToken, Integer page, Integer size, String sort, Integer parentId);
 }

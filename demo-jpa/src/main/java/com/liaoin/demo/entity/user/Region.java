@@ -54,8 +54,8 @@ public class Region extends BasicEntity implements Serializable {
 	@Column(columnDefinition="int(11) COMMENT '排序字段'")
 	private Integer departmentIndex ;
 
-	@JsonManagedReference
-	@ManyToOne
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
 	@ApiModelProperty(value = "父级Id",hidden = true)
 	@JsonIgnoreProperties({"departments","children"})
 	private Region parent ;
@@ -63,7 +63,6 @@ public class Region extends BasicEntity implements Serializable {
 	@ApiModelProperty(value ="父级Id")
 	private Integer parentId;
 
-	@JsonBackReference
 	@ApiModelProperty(value = "下级列表",hidden = true)
 	@JsonIgnoreProperties({"parent","departments"})
 	@OneToMany(mappedBy = "parent", fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)

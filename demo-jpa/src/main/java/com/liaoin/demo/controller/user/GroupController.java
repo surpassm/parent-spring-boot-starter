@@ -122,4 +122,19 @@ public class GroupController {
 								 @ApiParam(value = "角色系统标识 多个角色请使用 ，分割",required = true)@RequestParam(value = "roleIds")@NotEmpty String roleIds) {
 		return groupService.setGroupByRole(accessToken,id,roleIds);
 	}
+
+	@PostMapping("getParentId")
+	@ApiOperation(value = "根据父级Id查询子级列表")
+	@ApiResponses({
+			@ApiResponse(code=Constant.FAIL_SESSION_CODE,message=Constant.FAIL_SESSION_MSG),
+			@ApiResponse(code=Constant.SUCCESS_CODE,message=Constant.SUCCESS_MSG),
+			@ApiResponse(code=Constant.FAIL_CODE,message=Constant.FAIL_MSG,response=Result.class)})
+	@ApiImplicitParam(name = "Authorization", value = "授权码请以(Bearer )开头", required = true, dataType = "string", paramType = "header")
+	public Result getParentId(@ApiParam(hidden = true)@AuthorizationToken String accessToken,
+							  @ApiParam(value = "第几页", required = true,example = "1") @RequestParam(value = "page") Integer page,
+							  @ApiParam(value = "多少条",required = true,example = "10")@RequestParam(value = "size") Integer size,
+							  @ApiParam(value = "排序字段",example = "createTime desc")@RequestParam(value = "sort",required = false) String sort,
+							  @ApiParam(value = "父级系统标识",required = true)@RequestParam(value = "parentId")@NotNull Integer parentId) {
+		return groupService.getParentId(accessToken,page,size,sort,parentId);
+	}
 }

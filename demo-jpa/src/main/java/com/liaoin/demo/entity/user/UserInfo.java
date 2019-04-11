@@ -3,6 +3,7 @@ package com.liaoin.demo.entity.user;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.github.surpassm.common.pojo.BasicEntity;
 import com.github.surpassm.common.service.InsertPcSimpleView;
 import com.github.surpassm.common.service.UpdatePcSimpleView;
@@ -176,7 +177,7 @@ public class UserInfo extends BasicEntity implements UserDetails,CredentialsCont
 	private LocalDateTime landingTime;
 
 
-	@JsonIgnore
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@ManyToOne
 	@ApiModelProperty(value = "组织",hidden = true)
 	@JsonIgnoreProperties({"region","children","parent","userInfos"})
@@ -186,7 +187,7 @@ public class UserInfo extends BasicEntity implements UserDetails,CredentialsCont
 	@NotBlank(groups = {UpdatePcSimpleView.class,InsertPcSimpleView.class},message = "参数不能为为空或空串")
 	private Integer departmentId;
 
-	@JsonIgnore
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@ApiModelProperty(value = "用户组",hidden = true)
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "m_user_group", joinColumns = {
@@ -195,7 +196,7 @@ public class UserInfo extends BasicEntity implements UserDetails,CredentialsCont
 	@JsonIgnoreProperties({"parent","children","menus","roles","userInfos"})
 	private Set<Group> groups = new HashSet<>(16);
 
-	@JsonIgnore
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@ApiModelProperty(value = "用户权限",hidden = true)
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "m_user_menu", joinColumns = {
@@ -204,7 +205,7 @@ public class UserInfo extends BasicEntity implements UserDetails,CredentialsCont
 	@JsonIgnoreProperties({"parent","children","groups","roles","userInfos"})
 	private Set<Menu> menus = new HashSet<>(16);
 
-	@JsonIgnore
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@ApiModelProperty(value = "用户角色",hidden = true)
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "m_user_role", joinColumns = {

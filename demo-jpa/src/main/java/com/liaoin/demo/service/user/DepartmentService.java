@@ -51,4 +51,12 @@ public interface DepartmentService {
 	 * @return
 	 */
 	Result findByRegionId(String accessToken, Integer regionId);
+
+	/**
+	 * 根据父级Id查询子级列表
+	 * @param accessToken
+	 * @param parentId
+	 * @return
+	 */
+	Result getParentId(String accessToken, Integer page, Integer size, String sort, Integer parentId);
 }

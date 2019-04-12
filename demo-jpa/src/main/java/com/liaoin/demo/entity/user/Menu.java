@@ -80,32 +80,32 @@ public class Menu extends BasicEntity implements Serializable {
     @JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@ApiModelProperty(value = "父级Id",hidden = true)
-	@JsonIgnoreProperties({"children","groups","roles"})
+//	@JsonIgnoreProperties({"children","groups","roles"})
 	private Menu parent ;
 	@Transient
 	@ApiModelProperty(value ="父级Id")
 	private Integer parentId;
 	@ApiModelProperty(value = "下级列表",hidden = true)
-	@JsonIgnoreProperties({"parent","groups","roles"})
+//	@JsonIgnoreProperties({"parent","groups","roles"})
 	@OneToMany(mappedBy = "parent", fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
 	private Set<Menu> children = new HashSet<>(16);
 
 	@JsonIgnore
 	@ManyToMany(mappedBy = "menus")
 	@ApiModelProperty(value = "组权限",hidden = true)
-	@JsonIgnoreProperties({"menus","roles"})
+//	@JsonIgnoreProperties({"menus","roles"})
 	private Set<Group> groups = new HashSet<>(16);
 
 	@JsonIgnore
 	@ManyToMany(mappedBy = "menus")
 	@ApiModelProperty(value = "角色权限",hidden = true)
-	@JsonIgnoreProperties({"groups","menus"})
+//	@JsonIgnoreProperties({"groups","menus"})
 	private Set<Role> roles = new HashSet<>(16);
 
 	@JsonIgnore
 	@ManyToMany(mappedBy = "menus")
 	@ApiModelProperty(value = "用户权限",hidden = true)
-	@JsonIgnoreProperties({"department","groups","menus","roles"})
+//	@JsonIgnoreProperties({"department","groups","menus","roles"})
 	private Set<UserInfo> userInfos = new HashSet<>(16);
 
 

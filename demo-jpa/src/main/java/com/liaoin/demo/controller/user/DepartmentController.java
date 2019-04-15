@@ -73,8 +73,9 @@ public class DepartmentController {
                                 @ApiParam(value = "主键",required = true)@RequestParam(value = "id") Integer id) {
         return departmentService.deleteGetById(accessToken,id);
     }
-	@SerializedField(excludes = {"name"})
+
     @PostMapping("findById")
+	@SerializedField(encode = true)//返回数据加密
     @ApiOperation(value = "根据主键查询")
     @ApiResponses({
             @ApiResponse(code=Constant.FAIL_SESSION_CODE,message=Constant.FAIL_SESSION_MSG),
@@ -85,7 +86,6 @@ public class DepartmentController {
                            @ApiParam(value = "主键",required = true)@RequestParam(value = "id") Integer id) {
         return departmentService.findById(accessToken,id);
     }
-	@SerializedField(includes = {"id"})
     @PostMapping("pageQuery")
     @ApiOperation(value = "条件分页查询,返回所有父级")
     @ApiResponses({@ApiResponse(code=Constant.SUCCESS_CODE,message=Constant.SUCCESS_MSG,response=Department.class),

@@ -1,5 +1,7 @@
 package com.github.surpassm.config;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.surpassm.common.jackson.Result;
 import com.github.surpassm.config.annotation.SerializedField;
 import com.github.surpassm.tool.util.Helper;
@@ -11,6 +13,7 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import javax.annotation.Resource;
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -20,8 +23,8 @@ import java.util.*;
  * Version 1.0
  * Description 自定义返回数据  实现 ResponseBodyAdvice
  */
-@Order(1)
-@ControllerAdvice(basePackages = "com.liaoin.controller")
+//@Order(1)
+//@ControllerAdvice(basePackages = "com.liaoin.demo.controller")
 public class SurpassmResponseBodyAdvice implements ResponseBodyAdvice {
 	/**
 	 * 包含项
@@ -35,7 +38,6 @@ public class SurpassmResponseBodyAdvice implements ResponseBodyAdvice {
 	 * 是否加密
 	 */
 	private boolean encode = false;
-
 
 	@Override
 	public boolean supports(MethodParameter methodParameter, Class aClass) {
@@ -63,20 +65,22 @@ public class SurpassmResponseBodyAdvice implements ResponseBodyAdvice {
 			excludes = serializedField.excludes();
 			//是否加密
 			encode = serializedField.encode();
-		}
-		if (o instanceof Result){
-			Result result = (Result) o;
-			Object data = result.getData();
-			if (data instanceof List){
-				//List
-				List list = (List)o;
-				data = handleList(list);
-			}else{
-				//Single Object
-				data = handleSingleObject(o);
+			if (o instanceof Result){
+				Result result = (Result) o;
+				Object data = result.getData();
+				if (data instanceof List){
+					//List
+					List list = (List)data;
+					data = handleList(list);
+				}/*else if (data instanceof HashMap){
+					Map  map= (Map) data;
+
+				}*/else {
+					//Single Object
+					data = handleSingleObject(data);
+				}
+				result.setData(data);
 			}
-			result.setData(data);
-			return result;
 		}
 		return o;
 	}

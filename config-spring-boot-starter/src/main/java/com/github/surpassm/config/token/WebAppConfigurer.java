@@ -1,14 +1,10 @@
-package com.github.surpassm.config;
+package com.github.surpassm.config.token;
 
 import com.github.surpassm.security.properties.SecurityProperties;
 import com.github.surpassm.tool.util.FileUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.config.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 import javax.annotation.Resource;
 import java.util.Arrays;

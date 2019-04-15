@@ -1,4 +1,4 @@
-package com.github.surpassm.config;
+package com.github.surpassm.config.token;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.surpassm.common.jackson.Result;

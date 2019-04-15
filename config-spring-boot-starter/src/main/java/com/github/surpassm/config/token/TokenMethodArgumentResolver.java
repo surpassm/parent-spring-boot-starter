@@ -1,4 +1,4 @@
-package com.github.surpassm.config;
+package com.github.surpassm.config.token;
 
 import com.github.surpassm.config.annotation.AuthorizationToken;
 import org.springframework.core.MethodParameter;

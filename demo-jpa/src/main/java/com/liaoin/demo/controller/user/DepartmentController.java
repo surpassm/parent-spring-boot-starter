@@ -75,7 +75,7 @@ public class DepartmentController {
     }
 
     @PostMapping("findById")
-	@SerializedField(encode = true)//返回数据加密
+	@SerializedField(outEncode = true)//返回数据加密
     @ApiOperation(value = "根据主键查询")
     @ApiResponses({
             @ApiResponse(code=Constant.FAIL_SESSION_CODE,message=Constant.FAIL_SESSION_MSG),

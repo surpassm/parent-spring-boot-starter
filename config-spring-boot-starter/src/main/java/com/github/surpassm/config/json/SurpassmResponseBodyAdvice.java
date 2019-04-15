@@ -37,7 +37,7 @@ public class SurpassmResponseBodyAdvice implements ResponseBodyAdvice {
 	/**
 	 * 是否加密
 	 */
-	private boolean encode = false;
+	private boolean outEncode = false;
 	@Resource
 	private ObjectMapper objectMapper;
 	@Resource
@@ -54,7 +54,7 @@ public class SurpassmResponseBodyAdvice implements ResponseBodyAdvice {
 		//重新初始化为默认值
 		includes = new String[]{};
 		excludes = new String[]{};
-		encode = false;
+		outEncode = false;
 		if(body==null){
 			return null;
 		}
@@ -67,7 +67,7 @@ public class SurpassmResponseBodyAdvice implements ResponseBodyAdvice {
 			includes = serializedField.includes();
 			excludes = serializedField.excludes();
 			//是否加密
-			encode = serializedField.encode();
+			outEncode = serializedField.outEncode();
 			if (body instanceof Result){
 				Result result = (Result) body;
 				Object data = result.getData();

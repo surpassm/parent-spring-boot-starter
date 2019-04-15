@@ -30,16 +30,6 @@ public class RSAUtils {
 	public static final String SIGNATURE_ALGORITHM = "MD5withRSA";
 
 	/**
-	 * 获取公钥的key
-	 */
-	private static final String PUBLIC_KEY = "RSAPublicKey";
-
-	/**
-	 * 获取私钥的key
-	 */
-	private static final String PRIVATE_KEY = "RSAPrivateKey";
-
-	/**
 	 * RSA最大加密明文大小
 	 */
 	private static final int MAX_ENCRYPT_BLOCK = 117;
@@ -57,15 +47,15 @@ public class RSAUtils {
 	/**
 	 * 生成密钥对(公钥和私钥)
 	 */
-	public static Map<String, Object> genKeyPair() throws Exception {
+	public static Map<String, Object> genKeyPair(String rsaPublicKey,String rsaPrivateKey) throws Exception {
 		KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance(KEY_ALGORITHM);
 		keyPairGen.initialize(INITIALIZE_LENGTH);
 		KeyPair keyPair = keyPairGen.generateKeyPair();
 		RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
 		RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
 		Map<String, Object> keyMap = new HashMap<String, Object>(2);
-		keyMap.put(PUBLIC_KEY, publicKey);
-		keyMap.put(PRIVATE_KEY, privateKey);
+		keyMap.put(rsaPublicKey, publicKey);
+		keyMap.put(rsaPrivateKey, privateKey);
 		return keyMap;
 	}
 
@@ -239,8 +229,8 @@ public class RSAUtils {
 	 * 获取私钥
 	 * @param keyMap 密钥对
 	 */
-	public static String getPrivateKey(Map<String, Object> keyMap) throws Exception {
-		Key key = (Key) keyMap.get(PRIVATE_KEY);
+	public static String getPrivateKey(Map<String, Object> keyMap,String privateKey) throws Exception {
+		Key key = (Key) keyMap.get(privateKey);
 		return Base64.encodeBase64String(key.getEncoded());
 	}
 
@@ -248,17 +238,17 @@ public class RSAUtils {
 	 * 获取公钥
 	 * @param keyMap 密钥对
 	 */
-	public static String getPublicKey(Map<String, Object> keyMap) throws Exception {
-		Key key = (Key) keyMap.get(PUBLIC_KEY);
+	public static String getPublicKey(Map<String, Object> keyMap,String publicKey) throws Exception {
+		Key key = (Key) keyMap.get(publicKey);
 		return Base64.encodeBase64String(key.getEncoded());
 	}
 
 	/**
 	 * java端公钥加密
 	 */
-	public static String encryptedDataOnJava(String data, String PUBLICKEY) {
+	public static String encryptedDataOnJava(String data, String publickey) {
 		try {
-			data = Base64.encodeBase64String(encryptByPublicKey(data.getBytes(), PUBLICKEY));
+			data = Base64.encodeBase64String(encryptByPublicKey(data.getBytes(), publickey));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -269,15 +259,16 @@ public class RSAUtils {
 	/**
 	 * java端私钥解密
 	 */
-	public static String decryptDataOnJava(String data, String PRIVATEKEY) {
+	public static String decryptDataOnJava(String data, String privatekey) {
 		String temp = "";
 		try {
 			byte[] rs = Base64.decodeBase64(data);
-			temp = new String(RSAUtils.decryptByPrivateKey(rs, PRIVATEKEY), "UTF-8");
+			temp = new String(RSAUtils.decryptByPrivateKey(rs, privatekey), "UTF-8");
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return temp;
 	}
+
 }

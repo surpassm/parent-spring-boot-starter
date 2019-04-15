@@ -23,7 +23,11 @@ public @interface SerializedField {
 	 */
 	String[] excludes() default {};
 	/**
-	 * 数据是否需要加密
+	 * 出参是否加密
 	 */
-	boolean encode() default false;
+	boolean outEncode() default false;
+	/**
+	 * 入参是否解密
+	 */
+	boolean inDecode() default false;
 }

@@ -96,5 +96,9 @@ public class SecurityProperties {
 	 * 短信验证码
 	 */
 	private SmsCodeProperties sms = new SmsCodeProperties();
+	/**
+	 * 数据加密在key 长度必须16位
+	 */
+	private String encryptKey="d7b85f6e214abcda";
 
 }

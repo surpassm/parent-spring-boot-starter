@@ -73,7 +73,7 @@ public class DepartmentController {
                                 @ApiParam(value = "主键",required = true)@RequestParam(value = "id") Integer id) {
         return departmentService.deleteGetById(accessToken,id);
     }
-
+	@SerializedField(excludes = {"name"})
     @PostMapping("findById")
     @ApiOperation(value = "根据主键查询")
     @ApiResponses({
@@ -85,7 +85,7 @@ public class DepartmentController {
                            @ApiParam(value = "主键",required = true)@RequestParam(value = "id") Integer id) {
         return departmentService.findById(accessToken,id);
     }
-
+	@SerializedField(includes = {"id"})
     @PostMapping("pageQuery")
     @ApiOperation(value = "条件分页查询,返回所有父级")
     @ApiResponses({@ApiResponse(code=Constant.SUCCESS_CODE,message=Constant.SUCCESS_MSG,response=Department.class),

@@ -1,4 +1,4 @@
-package com.github.surpassm.tool.util;
+package com.github.surpassm.tool.codec;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 

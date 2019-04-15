@@ -1,12 +1,10 @@
 package com.github.surpassm.config.json;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.surpassm.common.jackson.Result;
 import com.github.surpassm.config.annotation.SerializedField;
 import com.github.surpassm.security.properties.SecurityProperties;
-import com.github.surpassm.tool.util.AesEncryptUtils;
-import com.github.surpassm.tool.util.Helper;
+import com.github.surpassm.tool.codec.AesEncryptUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import javax.annotation.Resource;
-import java.lang.reflect.Field;
 import java.util.*;
 
 /**

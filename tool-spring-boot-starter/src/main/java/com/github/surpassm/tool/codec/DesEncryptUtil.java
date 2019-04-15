@@ -1,4 +1,4 @@
-package com.github.surpassm.tool.util;
+package com.github.surpassm.tool.codec;
 
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;

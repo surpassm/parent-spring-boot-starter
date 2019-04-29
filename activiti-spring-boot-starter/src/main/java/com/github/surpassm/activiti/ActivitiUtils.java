@@ -2,12 +2,21 @@ package com.github.surpassm.activiti;
 
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.FlowNode;
+import org.activiti.bpmn.model.Process;
 import org.activiti.bpmn.model.SequenceFlow;
+import org.activiti.engine.HistoryService;
+import org.activiti.engine.RepositoryService;
+import org.activiti.engine.RuntimeService;
+import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricActivityInstance;
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author mc
@@ -125,4 +134,54 @@ public class ActivitiUtils {
         }
         return sameActivityImpl;
     }
+	public static void reject(HistoryService historyService, RuntimeService runtimeService, RepositoryService repositoryService
+			, TaskService taskService, String taskId, Map<String, Object> parameterMap) {
+		HistoricTaskInstance historicTaskInstance = historyService.createHistoricTaskInstanceQuery().taskId(taskId).singleResult();
+		if (null == historicTaskInstance) {
+			throw new RuntimeException("无效任务ID[ " + taskId + " ]");
+		}
+		ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(historicTaskInstance.getProcessInstanceId()).singleResult();
+		if (null == processInstance) {
+			throw new RuntimeException("该流程已完成!无法回退");
+		}
+		// 获取流程定义对象
+		BpmnModel bpmnModel = repositoryService.getBpmnModel(historicTaskInstance.getProcessDefinitionId());
+		List<org.activiti.bpmn.model.Process> processes = bpmnModel.getProcesses();
+		Process process = processes.get(0);
+		List<Task> taskList = taskService.createTaskQuery().processInstanceId(processInstance.getId()).list();
+		FlowNode sourceNode = (FlowNode) process.getFlowElement(historicTaskInstance.getTaskDefinitionKey());
+		taskList.forEach(obj -> {
+			FlowNode currentNode = (FlowNode) process.getFlowElement(obj.getTaskDefinitionKey());
+			// 获取原本流程连线
+			List<SequenceFlow> outComingSequenceFlows = currentNode.getOutgoingFlows();
+			// 配置反转流程连线
+			SequenceFlow sequenceFlow = new SequenceFlow();
+			sequenceFlow.setTargetFlowElement(sourceNode);
+			sequenceFlow.setSourceFlowElement(currentNode);
+			sequenceFlow.setId("callback-flow");
+
+			List<SequenceFlow> newOutComingSequenceFlows = new ArrayList<>();
+			newOutComingSequenceFlows.add(sequenceFlow);
+			currentNode.setOutgoingFlows(newOutComingSequenceFlows);
+			// 配置任务审批人 完成任务
+			taskService.complete(obj.getId(), parameterMap);
+			// 复原流程
+			currentNode.setOutgoingFlows(outComingSequenceFlows);
+		});
+		// 更新流程状态
+		/*HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstance.getProcessInstanceId()).singleResult();
+		if (null != historicProcessInstance) {
+			// 流程已完成
+			if (null != historicProcessInstance.getEndTime()) {
+
+			} else {
+				// 流程未完成
+
+				List<HistoricTaskInstance> taskLists = historyService.createHistoricTaskInstanceQuery().processInstanceId(processInstance.getProcessInstanceId()).orderByTaskCreateTime().desc().list();
+				if (!taskLists.isEmpty()) {
+					HistoricTaskInstance historicTaskInstances = taskLists.get(0);
+				}
+			}
+		}*/
+	}
 }

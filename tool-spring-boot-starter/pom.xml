@@ -39,5 +39,11 @@
             <artifactId>core</artifactId>
             <version>3.3.0</version>
         </dependency>
+        <!--Apache Commons Compress解压缩-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>1.18</version>
+        </dependency>
     </dependencies>
 </project>

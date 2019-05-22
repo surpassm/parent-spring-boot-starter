@@ -10,7 +10,8 @@ import java.io.*;
  * Create date 2019/5/22 9:52
  * Version 1.0
  * Description BZip2解压缩工具类
- * 支持ar, cpio, Unix dump, tar, zip, gzip, XZ, Pack200, bzip2, 7z, arj, lzma, snappy, DEFLATE, lz4, Brotli and Z files格式
+ *
+ * Apache Commons Compress解压缩 支持ar, cpio, Unix dump, tar, zip, gzip, XZ, Pack200, bzip2, 7z, arj, lzma, snappy, DEFLATE, lz4, Brotli and Z files格式
  *
  * 上面为BZip2解压缩代码, 若是想用其他格式的解压缩，可以将代码中的BZip2CompressorInputStream 和BZip2CompressorOutputStream相对应的替换就可以。
  *

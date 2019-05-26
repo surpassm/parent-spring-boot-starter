@@ -45,5 +45,12 @@
             <artifactId>commons-compress</artifactId>
             <version>1.18</version>
         </dependency>
+        <!--word转PDF WINDOWS 系统-->
+        <dependency>
+            <groupId>com.artofsolving</groupId>
+            <artifactId>jodconverter</artifactId>
+            <version>2.2.1</version>
+        </dependency>
+
     </dependencies>
 </project>

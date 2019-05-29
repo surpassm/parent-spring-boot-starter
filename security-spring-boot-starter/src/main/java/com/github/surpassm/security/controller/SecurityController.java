@@ -52,7 +52,7 @@ public class SecurityController {
 	 * @throws IOException IOException
 	 */
 	@RequestMapping(SecurityConstants.DEFAULT_UNAUTHENTICATED_URL)
-	@ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+	@ResponseStatus(code = HttpStatus.OK)
 	public Result requireAuthentication(HttpServletRequest request, HttpServletResponse response)throws IOException {
 		//取出引发跳转的请求
 		SavedRequest savedRequest = requestCache.getRequest(request, response);

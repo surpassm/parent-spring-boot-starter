@@ -11,5 +11,4 @@ import org.apache.ibatis.annotations.Mapper;
   */
 public interface UserMenuMapper extends tk.mybatis.mapper.common.Mapper<UserMenu> {
 
-    int insertSelectiveCustom(UserMenu userMenu);
 }

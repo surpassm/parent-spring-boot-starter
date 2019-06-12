@@ -11,5 +11,4 @@ import com.example.demo.entity.user.UserRole;
   */
 public interface UserRoleMapper extends tk.mybatis.mapper.common.Mapper<UserRole> {
 
-    int insertSelectiveCustom(UserRole userRole);
 }

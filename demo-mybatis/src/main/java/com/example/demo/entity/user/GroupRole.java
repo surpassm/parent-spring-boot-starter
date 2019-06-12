@@ -30,7 +30,6 @@ import java.io.Serializable;
 @Table(name = "m_group_role")
 @org.hibernate.annotations.Table(appliesTo = "m_group_role", comment = "组角色")
 public class GroupRole extends BasicEntity implements Serializable {
-
 	public interface GroupRoleInsertPcSimpleView {}
 
 	public interface GroupRoleUpdatePcSimpleView {}
@@ -44,11 +43,13 @@ public class GroupRole extends BasicEntity implements Serializable {
 	public Integer id;
 
 	@ApiModelProperty(value="组系统标识",example = "1")
-	@Column(columnDefinition="int(11) COMMENT '组系统标识'",nullable = false)
+	@ManyToOne(targetEntity = Group.class)
+	@JoinColumn(name = "group_id", referencedColumnName = "id")
 	@NotNull(groups = {GroupRoleInsertPcSimpleView.class,GroupRoleUpdatePcSimpleView.class},message = "参数不能为为空")
 	private Integer groupId;
 	@ApiModelProperty(value="角色系统标识",example = "1")
-	@Column(columnDefinition="int(11) COMMENT '角色系统标识'",nullable = false)
+	@ManyToOne(targetEntity = Role.class)
+	@JoinColumn(name = "role_id", referencedColumnName = "id")
 	@NotNull(groups = {GroupRoleInsertPcSimpleView.class,GroupRoleUpdatePcSimpleView.class},message = "参数不能为为空")
 	private Integer roleId;
 }

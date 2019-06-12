@@ -49,8 +49,6 @@ public class RoleServiceImpl implements RoleService {
             return fail(Tips.PARAMETER_ERROR.msg);
         }
         UserInfo loginUser = beanConfig.getAccessToken(accessToken);
-        role.setCreateTime(LocalDateTime.now());
-        role.setCreateUserId(loginUser.getId());
         role.setIsDelete(0);
         roleRepository.save(role);
         return ok();
@@ -62,8 +60,6 @@ public class RoleServiceImpl implements RoleService {
             return fail(Tips.PARAMETER_ERROR.msg);
         }
         UserInfo loginUser = beanConfig.getAccessToken(accessToken);
-        role.setUpdateTime(LocalDateTime.now());
-        role.setUpdateUserId(loginUser.getId());
         roleRepository.save(role);
         return ok();
     }
@@ -81,8 +77,6 @@ public class RoleServiceImpl implements RoleService {
         }
         Role role = optional.get();
         role.setIsDelete(1);
-        role.setDeleteTime(LocalDateTime.now());
-        role.setDeleteUserId(loginUser.getId());
         return ok();
     }
 
@@ -111,24 +105,6 @@ public class RoleServiceImpl implements RoleService {
             if (role != null) {
                 if (role.getId() != null) {
                     list.add(criteriaBuilder.equal(root.get("id").as(Integer.class), role.getId()));
-                }
-                if (role.getCreateTime() != null) {
-                    list.add(criteriaBuilder.equal(root.get("createTime").as(Date.class), role.getCreateTime()));
-                }
-                if (role.getCreateUserId() != null) {
-                    list.add(criteriaBuilder.equal(root.get("createUserId").as(Integer.class), role.getCreateUserId()));
-                }
-                if (role.getDeleteTime() != null) {
-                    list.add(criteriaBuilder.equal(root.get("deleteTime").as(Date.class), role.getDeleteTime()));
-                }
-                if (role.getDeleteUserId() != null) {
-                    list.add(criteriaBuilder.equal(root.get("deleteUserId").as(Integer.class), role.getDeleteUserId()));
-                }
-                if (role.getUpdateTime() != null) {
-                    list.add(criteriaBuilder.equal(root.get("updateTime").as(Date.class), role.getUpdateTime()));
-                }
-                if (role.getUpdateUserId() != null) {
-                    list.add(criteriaBuilder.equal(root.get("updateUserId").as(Integer.class), role.getUpdateUserId()));
                 }
                 if ((role.getDescribes() != null) && !"".equals(role.getDescribes().trim())) {
                     list.add(criteriaBuilder.like(root.get("describes").as(String.class), "%" + role.getDescribes() + "%"));
@@ -168,8 +144,6 @@ public class RoleServiceImpl implements RoleService {
 		if (role.getMenus() != null){
 			role.getMenus().clear();
 		}
-		role.setUpdateTime(LocalDateTime.now());
-		role.setUpdateUserId(loginUser.getId());
 		//新增现有的角色权限
 		for(String split : splits){
 			Optional<Menu> menuOptional = menuRepository.findById(Integer.valueOf(split));

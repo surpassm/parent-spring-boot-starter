@@ -11,5 +11,4 @@ import com.example.demo.entity.user.UserGroup;
   */
 public interface UserGroupMapper extends tk.mybatis.mapper.common.Mapper<UserGroup> {
 
-    int insertSelectiveCustom(UserGroup userGroup);
 }

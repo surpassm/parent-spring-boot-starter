@@ -55,7 +55,8 @@ public class Region extends BasicEntity implements Serializable {
     private String name ;
 
 	@ApiModelProperty("父级Id")
-	@Column(columnDefinition="int(11) COMMENT '父级Id'")
+	@OneToOne(targetEntity = Region.class)
+	@JoinColumn(name = "region_id", referencedColumnName = "id")
 	private Integer parentId ;
 
 	@ApiModelProperty("排序字段")

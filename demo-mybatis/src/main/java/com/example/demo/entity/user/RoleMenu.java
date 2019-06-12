@@ -45,11 +45,13 @@ public class RoleMenu extends BasicEntity implements Serializable {
 	public Integer id;
 
 	@ApiModelProperty(value="角色系统标识",example = "1")
-	@Column(columnDefinition="int(11) COMMENT '角色系统标识'",nullable = false)
+	@ManyToOne(targetEntity = Role.class)
+	@JoinColumn(name = "role_id", referencedColumnName = "id")
 	@NotNull(groups = {RoleMenuInsertPcSimpleView.class,RoleMenuUpdatePcSimpleView.class},message = "参数不能为为空")
 	private Integer roleId;
 	@ApiModelProperty(value="权限系统标识",example = "1")
-	@Column(columnDefinition="int(11) COMMENT '权限系统标识'",nullable = false)
+	@ManyToOne(targetEntity = Menu.class)
+	@JoinColumn(name = "menu_id", referencedColumnName = "id")
 	@NotNull(groups = {RoleMenuInsertPcSimpleView.class,RoleMenuUpdatePcSimpleView.class},message = "参数不能为为空")
 	private Integer menuId;
 

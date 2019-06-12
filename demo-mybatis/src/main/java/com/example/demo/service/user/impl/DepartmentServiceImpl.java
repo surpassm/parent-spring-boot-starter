@@ -64,10 +64,8 @@ public class DepartmentServiceImpl implements DepartmentService {
 			return fail(Tips.nameRepeat.msg);
 		}
 		if (isEnableParent(department)){ return fail(Tips.parentError.msg);}
-		department.setCreateUserId(loginUserInfo.getId());
-		department.setCreateTime(LocalDateTime.now());
 		department.setIsDelete(0);
-		departmentMapper.insertSelectiveCustom(department);
+		departmentMapper.insert(department);
 		return ok();
 	}
 
@@ -99,8 +97,6 @@ public class DepartmentServiceImpl implements DepartmentService {
 		}
 		if (isEnableParent(department)){ return fail(Tips.parentError.msg);}
 
-		department.setUpdateUserId(loginUserInfo.getId());
-		department.setUpdateTime(LocalDateTime.now());
 		departmentMapper.updateByPrimaryKeySelective(department);
 		return ok();
 	}
@@ -139,8 +135,6 @@ public class DepartmentServiceImpl implements DepartmentService {
 		if (userCount != 0) {
 			return fail("存在关联用户，无法删除");
 		}
-		department.setDeleteUserId(loginUserInfo.getId());
-		department.setDeleteTime(LocalDateTime.now());
 		department.setIsDelete(1);
 		departmentMapper.updateByPrimaryKeySelective(department);
 		return ok();
@@ -170,27 +164,6 @@ public class DepartmentServiceImpl implements DepartmentService {
 		if (department != null) {
 			if (department.getId() != null) {
 				builder.where(WeekendSqls.<Department>custom().andEqualTo(Department::getId, department.getId()));
-			}
-			if (department.getCreateTime() != null) {
-				builder.where(WeekendSqls.<Department>custom().andEqualTo(Department::getCreateTime, department.getCreateTime()));
-			}
-			if (department.getCreateUserId() != null) {
-				builder.where(WeekendSqls.<Department>custom().andEqualTo(Department::getCreateUserId, department.getCreateUserId()));
-			}
-			if (department.getDeleteTime() != null) {
-				builder.where(WeekendSqls.<Department>custom().andEqualTo(Department::getDeleteTime, department.getDeleteTime()));
-			}
-			if (department.getDeleteUserId() != null) {
-				builder.where(WeekendSqls.<Department>custom().andEqualTo(Department::getDeleteUserId, department.getDeleteUserId()));
-			}
-			if (department.getIsDelete() != null) {
-				builder.where(WeekendSqls.<Department>custom().andEqualTo(Department::getIsDelete, department.getIsDelete()));
-			}
-			if (department.getUpdateTime() != null) {
-				builder.where(WeekendSqls.<Department>custom().andEqualTo(Department::getUpdateTime, department.getUpdateTime()));
-			}
-			if (department.getUpdateUserId() != null) {
-				builder.where(WeekendSqls.<Department>custom().andEqualTo(Department::getUpdateUserId, department.getUpdateUserId()));
 			}
 			if (department.getDepartmentIndex() != null) {
 				builder.where(WeekendSqls.<Department>custom().andEqualTo(Department::getDepartmentIndex, department.getDepartmentIndex()));

@@ -64,10 +64,8 @@ public class GroupServiceImpl implements GroupService {
 		if (isEnableParent(group)) {
 			return fail(Tips.parentError.msg);
 		}
-		group.setCreateUserId(loginUserInfo.getId());
-		group.setCreateTime(LocalDateTime.now());
 		group.setIsDelete(0);
-		groupMapper.insertSelectiveCustom(group);
+		groupMapper.insert(group);
 		return ok();
 	}
 
@@ -95,8 +93,6 @@ public class GroupServiceImpl implements GroupService {
 		}
 
 
-		group.setUpdateUserId(loginUserInfo.getId());
-		group.setUpdateTime(LocalDateTime.now());
 		groupMapper.updateByPrimaryKeySelective(group);
 		return ok();
 	}
@@ -142,8 +138,6 @@ public class GroupServiceImpl implements GroupService {
 		userGroup.setIsDelete(0);
 		int userGroupCount = userGroupMapper.selectCount(userGroup);
 		CommonImpl.userGroupDeleteUpdata(loginUserInfo,userGroup,userGroupCount,userGroupMapper);
-		group.setDeleteUserId(loginUserInfo.getId());
-		group.setDeleteTime(LocalDateTime.now());
 		group.setIsDelete(1);
 		groupMapper.updateByPrimaryKeySelective(group);
 		return ok();
@@ -173,27 +167,6 @@ public class GroupServiceImpl implements GroupService {
 		if (group != null) {
 			if (group.getId() != null) {
 				builder.where(WeekendSqls.<Group>custom().andEqualTo(Group::getId, group.getId()));
-			}
-			if (group.getCreateTime() != null) {
-				builder.where(WeekendSqls.<Group>custom().andEqualTo(Group::getCreateTime, group.getCreateTime()));
-			}
-			if (group.getCreateUserId() != null) {
-				builder.where(WeekendSqls.<Group>custom().andEqualTo(Group::getCreateUserId, group.getCreateUserId()));
-			}
-			if (group.getDeleteTime() != null) {
-				builder.where(WeekendSqls.<Group>custom().andEqualTo(Group::getDeleteTime, group.getDeleteTime()));
-			}
-			if (group.getDeleteUserId() != null) {
-				builder.where(WeekendSqls.<Group>custom().andEqualTo(Group::getDeleteUserId, group.getDeleteUserId()));
-			}
-			if (group.getIsDelete() != null) {
-				builder.where(WeekendSqls.<Group>custom().andEqualTo(Group::getIsDelete, group.getIsDelete()));
-			}
-			if (group.getUpdateTime() != null) {
-				builder.where(WeekendSqls.<Group>custom().andEqualTo(Group::getUpdateTime, group.getUpdateTime()));
-			}
-			if (group.getUpdateUserId() != null) {
-				builder.where(WeekendSqls.<Group>custom().andEqualTo(Group::getUpdateUserId, group.getUpdateUserId()));
 			}
 			if (group.getDescribes() != null && !"".equals(group.getDescribes().trim())) {
 				builder.where(WeekendSqls.<Group>custom().andLike(Group::getDescribes, "%" + group.getDescribes() + "%"));
@@ -250,8 +223,6 @@ public class GroupServiceImpl implements GroupService {
 		for(String split : splits){
 			GroupMenu build = GroupMenu.builder().groupId(id).menuId(Integer.valueOf(split)).build();
 			build.setIsDelete(0);
-			build.setCreateUserId(loginUser.getId());
-			build.setCreateTime(LocalDateTime.now());
 			build.setMenuType(1);
 			groupMenuMapper.insert(build);
 		}
@@ -280,8 +251,6 @@ public class GroupServiceImpl implements GroupService {
 		for(String split : splits){
 			GroupRole build = GroupRole.builder().groupId(id).roleId(Integer.valueOf(split)).build();
 			build.setIsDelete(0);
-			build.setCreateUserId(loginUser.getId());
-			build.setCreateTime(LocalDateTime.now());
 			groupRoleMapper.insert(build);
 		}
 		return ok();

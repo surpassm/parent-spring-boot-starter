@@ -64,8 +64,6 @@ public class DepartmentServiceImpl implements DepartmentService {
 			Optional<Region> byId = regionRepository.findById(department.getRegionId());
 			byId.ifPresent(department::setRegion);
 		}
-		department.setCreateTime(LocalDateTime.now());
-		department.setCreateUserId(loginUser.getId());
 		department.setIsDelete(0);
 		departmentRepository.save(department);
 		return ok();
@@ -93,8 +91,6 @@ public class DepartmentServiceImpl implements DepartmentService {
 			Optional<Region> byId = regionRepository.findById(department.getRegionId());
 			byId.ifPresent(department::setRegion);
 		}
-		department.setUpdateTime(LocalDateTime.now());
-		department.setUpdateUserId(loginUser.getId());
 		departmentRepository.save(department);
 		return ok();
 	}
@@ -115,8 +111,6 @@ public class DepartmentServiceImpl implements DepartmentService {
 		}
 		Department department = optional.get();
 		department.setIsDelete(1);
-		department.setDeleteTime(LocalDateTime.now());
-		department.setDeleteUserId(loginUser.getId());
 		return ok();
 	}
 
@@ -146,24 +140,6 @@ public class DepartmentServiceImpl implements DepartmentService {
 			if (department != null) {
 				if (department.getId() != null) {
 					list.add(criteriaBuilder.equal(root.get("id").as(Integer.class), department.getId()));
-				}
-				if (department.getCreateTime() != null) {
-					list.add(criteriaBuilder.equal(root.get("createTime").as(Date.class), department.getCreateTime()));
-				}
-				if (department.getCreateUserId() != null) {
-					list.add(criteriaBuilder.equal(root.get("createUserId").as(Integer.class), department.getCreateUserId()));
-				}
-				if (department.getDeleteTime() != null) {
-					list.add(criteriaBuilder.equal(root.get("deleteTime").as(Date.class), department.getDeleteTime()));
-				}
-				if (department.getDeleteUserId() != null) {
-					list.add(criteriaBuilder.equal(root.get("deleteUserId").as(Integer.class), department.getDeleteUserId()));
-				}
-				if (department.getUpdateTime() != null) {
-					list.add(criteriaBuilder.equal(root.get("updateTime").as(Date.class), department.getUpdateTime()));
-				}
-				if (department.getUpdateUserId() != null) {
-					list.add(criteriaBuilder.equal(root.get("updateUserId").as(Integer.class), department.getUpdateUserId()));
 				}
 				if (department.getDepartmentIndex() != null) {
 					list.add(criteriaBuilder.equal(root.get("departmentIndex").as(Integer.class), department.getDepartmentIndex()));

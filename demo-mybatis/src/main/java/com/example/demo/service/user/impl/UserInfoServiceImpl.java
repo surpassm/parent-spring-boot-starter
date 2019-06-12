@@ -97,10 +97,8 @@ public class UserInfoServiceImpl implements UserInfoService {
 		userInfo.setPassword(bCryptPasswordEncoder.encode(userInfo.getPassword().trim()));
 		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
 		userInfo.setUsername(userInfo.getUsername().trim());
-		userInfo.setCreateUserId(loginUserInfo.getId());
-		userInfo.setCreateTime(LocalDateTime.now());
 		userInfo.setIsDelete(0);
-		userInfoMapper.insertSelectiveCustom(userInfo);
+		userInfoMapper.insert(userInfo);
 		return ok();
 	}
 
@@ -151,8 +149,6 @@ public class UserInfoServiceImpl implements UserInfoService {
 			}
 		}
 
-		userInfo.setUpdateUserId(loginUserInfo.getId());
-		userInfo.setUpdateTime(LocalDateTime.now());
 		userInfoMapper.updateByPrimaryKeySelective(userInfo);
 		return ok();
 	}
@@ -167,8 +163,6 @@ public class UserInfoServiceImpl implements UserInfoService {
 			return fail(Tips.MSG_NOT.msg);
 		}
 		UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
-		userInfo.setDeleteUserId(loginUserInfo.getId());
-		userInfo.setDeleteTime(LocalDateTime.now());
 		userInfo.setIsDelete(1);
 		userInfoMapper.updateByPrimaryKeySelective(userInfo);
 		return ok();
@@ -198,27 +192,6 @@ public class UserInfoServiceImpl implements UserInfoService {
 		if (userInfo != null) {
 			if (userInfo.getId() != null) {
 				builder.where(WeekendSqls.<UserInfo>custom().andEqualTo(UserInfo::getId, userInfo.getId()));
-			}
-			if (userInfo.getCreateTime() != null) {
-				builder.where(WeekendSqls.<UserInfo>custom().andEqualTo(UserInfo::getCreateTime, userInfo.getCreateTime()));
-			}
-			if (userInfo.getCreateUserId() != null) {
-				builder.where(WeekendSqls.<UserInfo>custom().andEqualTo(UserInfo::getCreateUserId, userInfo.getCreateUserId()));
-			}
-			if (userInfo.getDeleteTime() != null) {
-				builder.where(WeekendSqls.<UserInfo>custom().andEqualTo(UserInfo::getDeleteTime, userInfo.getDeleteTime()));
-			}
-			if (userInfo.getDeleteUserId() != null) {
-				builder.where(WeekendSqls.<UserInfo>custom().andEqualTo(UserInfo::getDeleteUserId, userInfo.getDeleteUserId()));
-			}
-			if (userInfo.getIsDelete() != null) {
-				builder.where(WeekendSqls.<UserInfo>custom().andEqualTo(UserInfo::getIsDelete, userInfo.getIsDelete()));
-			}
-			if (userInfo.getUpdateTime() != null) {
-				builder.where(WeekendSqls.<UserInfo>custom().andEqualTo(UserInfo::getUpdateTime, userInfo.getUpdateTime()));
-			}
-			if (userInfo.getUpdateUserId() != null) {
-				builder.where(WeekendSqls.<UserInfo>custom().andEqualTo(UserInfo::getUpdateUserId, userInfo.getUpdateUserId()));
 			}
 			if (userInfo.getDepartmentId() != null) {
 				builder.where(WeekendSqls.<UserInfo>custom().andEqualTo(UserInfo::getDepartmentId, userInfo.getDepartmentId()));
@@ -299,8 +272,6 @@ public class UserInfoServiceImpl implements UserInfoService {
 		for(String split: splits){
 			UserGroup build = UserGroup.builder().userId(id).groupId(Integer.valueOf(split)).build();
 			build.setIsDelete(0);
-			build.setCreateUserId(loginUser.getId());
-			build.setCreateTime(LocalDateTime.now());
 			userGroupMapper.insert(build);
 		}
 		return ok();
@@ -336,8 +307,6 @@ public class UserInfoServiceImpl implements UserInfoService {
 		for(String split: splits){
 			UserMenu build = UserMenu.builder().userId(id).menuId(Integer.valueOf(split)).build();
 			build.setIsDelete(0);
-			build.setCreateUserId(loginUser.getId());
-			build.setCreateTime(LocalDateTime.now());
 			userMenuMapper.insert(build);
 		}
 		return ok();
@@ -373,8 +342,6 @@ public class UserInfoServiceImpl implements UserInfoService {
 		for(String split: splits){
 			UserRole build = UserRole.builder().userId(id).roleId(Integer.valueOf(split)).build();
 			build.setIsDelete(0);
-			build.setCreateUserId(loginUser.getId());
-			build.setCreateTime(LocalDateTime.now());
 			userRoleMapper.insert(build);
 		}
 		return ok();

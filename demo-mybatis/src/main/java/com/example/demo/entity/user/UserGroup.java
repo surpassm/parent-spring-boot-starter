@@ -44,11 +44,13 @@ public class UserGroup extends BasicEntity implements Serializable {
 	public Integer id;
 
 	@ApiModelProperty(value="用户系统标识",example = "1")
-	@Column(columnDefinition="int(11) COMMENT '用户系统标识'",nullable = false)
+	@ManyToOne(targetEntity = UserInfo.class)
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	@NotNull(groups = {UserGroupInsertPcSimpleView.class,UserGroupUpdatePcSimpleView.class},message = "参数不能为为空")
 	private Integer userId;
 	@ApiModelProperty(value="组系统标识",example = "1")
-	@Column(columnDefinition="int(11) COMMENT '组系统标识'",nullable = false)
+	@ManyToOne(targetEntity = Group.class)
+	@JoinColumn(name = "group_id", referencedColumnName = "id")
 	@NotNull(groups = {UserGroupInsertPcSimpleView.class,UserGroupUpdatePcSimpleView.class},message = "参数不能为为空")
 	private Integer groupId;
 }

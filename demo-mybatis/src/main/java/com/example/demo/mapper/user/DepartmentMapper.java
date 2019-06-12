@@ -12,7 +12,6 @@ import java.util.List;
   */
 public interface DepartmentMapper extends tk.mybatis.mapper.common.Mapper<Department> {
 
-    int insertSelectiveCustom(Department department);
 
 	/**
 	 * 根据父级Id查询

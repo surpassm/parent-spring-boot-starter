@@ -11,5 +11,4 @@ import com.example.demo.entity.user.RoleMenu;
   */
 public interface RoleMenuMapper extends tk.mybatis.mapper.common.Mapper<RoleMenu> {
 
-    int insertSelectiveCustom(RoleMenu roleMenu);
 }

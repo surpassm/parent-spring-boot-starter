@@ -11,5 +11,4 @@ import com.example.demo.entity.user.GroupMenu;
   */
 public interface GroupMenuMapper extends tk.mybatis.mapper.common.Mapper<GroupMenu> {
 
-    int insertSelectiveCustom(GroupMenu groupMenu);
 }

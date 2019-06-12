@@ -53,12 +53,14 @@ public class Department extends BasicEntity implements Serializable {
 	private String name ;
 
 	@ApiModelProperty("所属区域Id")
-	@Column(columnDefinition="int(11) COMMENT '所属区域Id'")
+	@ManyToOne(targetEntity = Region.class)
+	@JoinColumn(name = "region_id", referencedColumnName = "id")
 	@NotNull(groups = {DepartmentInsertPcSimpleView.class,DepartmentUpdatePcSimpleView.class},message = "参数不能为为空")
 	private Integer regionId ;
 
 	@ApiModelProperty("父级Id")
-	@Column(columnDefinition="int(11) COMMENT '父级Id'")
+	@OneToOne(targetEntity = Department.class)
+	@JoinColumn(name = "parent_id", referencedColumnName = "id")
 	private Integer parentId ;
 
 	@ApiModelProperty("排序字段")

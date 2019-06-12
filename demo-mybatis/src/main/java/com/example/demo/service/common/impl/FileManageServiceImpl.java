@@ -60,9 +60,6 @@ public class FileManageServiceImpl implements FileManageService {
             return fail(Tips.PARAMETER_ERROR.msg);
         }
         UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
-        fileManage.setCreateUserId(loginUserInfo.getId());
-        fileManage.setCreateTime(LocalDateTime.now());
-        fileManage.setIsDelete(0);
         fileManageMapper.insert(fileManage);
         return ok();
     }
@@ -73,8 +70,6 @@ public class FileManageServiceImpl implements FileManageService {
             return fail(Tips.PARAMETER_ERROR.msg);
         }
         UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
-        fileManage.setUpdateUserId(loginUserInfo.getId());
-        fileManage.setUpdateTime(LocalDateTime.now());
         fileManageMapper.updateByPrimaryKeySelective(fileManage);
         return ok();
     }
@@ -89,9 +84,6 @@ public class FileManageServiceImpl implements FileManageService {
             return fail(Tips.MSG_NOT.msg);
         }
         UserInfo loginUserInfo = beanConfig.getAccessToken(accessToken);
-        fileManage.setDeleteUserId(loginUserInfo.getId());
-        fileManage.setDeleteTime(LocalDateTime.now());
-        fileManage.setIsDelete(1);
         fileManageMapper.updateByPrimaryKeySelective(fileManage);
         return ok();
     }
@@ -116,31 +108,9 @@ public class FileManageServiceImpl implements FileManageService {
         size = null  == size ? 10 : size;
         PageHelper.startPage(page, size);
         Example.Builder builder = new Example.Builder(FileManage.class);
-        builder.where(WeekendSqls.<FileManage>custom().andEqualTo(FileManage::getIsDelete, 0));
         if(fileManage != null){
         if (fileManage.getId() != null){
             builder.where(WeekendSqls.<FileManage>custom().andEqualTo(FileManage::getId,fileManage.getId()));
-        }
-        if (fileManage.getCreateTime() != null){
-            builder.where(WeekendSqls.<FileManage>custom().andEqualTo(FileManage::getCreateTime,fileManage.getCreateTime()));
-        }
-        if (fileManage.getCreateUserId() != null){
-            builder.where(WeekendSqls.<FileManage>custom().andEqualTo(FileManage::getCreateUserId,fileManage.getCreateUserId()));
-        }
-        if (fileManage.getDeleteTime() != null){
-            builder.where(WeekendSqls.<FileManage>custom().andEqualTo(FileManage::getDeleteTime,fileManage.getDeleteTime()));
-        }
-        if (fileManage.getDeleteUserId() != null){
-            builder.where(WeekendSqls.<FileManage>custom().andEqualTo(FileManage::getDeleteUserId,fileManage.getDeleteUserId()));
-        }
-        if (fileManage.getIsDelete() != null){
-            builder.where(WeekendSqls.<FileManage>custom().andEqualTo(FileManage::getIsDelete,fileManage.getIsDelete()));
-        }
-        if (fileManage.getUpdateTime() != null){
-            builder.where(WeekendSqls.<FileManage>custom().andEqualTo(FileManage::getUpdateTime,fileManage.getUpdateTime()));
-        }
-        if (fileManage.getUpdateUserId() != null){
-            builder.where(WeekendSqls.<FileManage>custom().andEqualTo(FileManage::getUpdateUserId,fileManage.getUpdateUserId()));
         }
         if (fileManage.getFileName() != null && !"".equals(fileManage.getFileName().trim())){
             builder.where(WeekendSqls.<FileManage>custom().andLike(FileManage::getFileName,"%"+fileManage.getFileName()+"%"));

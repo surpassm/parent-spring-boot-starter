@@ -12,7 +12,6 @@ import java.util.List;
   */
 public interface RegionMapper extends tk.mybatis.mapper.common.Mapper<Region> {
 
-    int insertSelectiveCustom(Region region);
 	/**
 	 * 根据父级Id查询
 	 * @param parentId

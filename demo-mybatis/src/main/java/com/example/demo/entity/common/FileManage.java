@@ -24,12 +24,11 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@SuppressWarnings("serial")
 @ApiModel(value = "文件管理")
 @NameStyle(Style.camelhump)
 @Table(name = "f_file_manage")
 @org.hibernate.annotations.Table(appliesTo = "f_file_manage", comment = "文件管理")
-public class FileManage extends BasicEntity implements Serializable {
+public class FileManage implements Serializable {
 
 	@Id
 	@KeySql(useGeneratedKeys = true)

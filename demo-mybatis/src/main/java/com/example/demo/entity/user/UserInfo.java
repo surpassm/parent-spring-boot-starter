@@ -144,7 +144,8 @@ public class UserInfo extends BasicEntity implements UserDetails,CredentialsCont
 	private Integer id;
 
 	@ApiModelProperty("所属组织Id")
-	@Column(columnDefinition="int(11) COMMENT '所属组织Id'")
+	@ManyToOne(targetEntity = Department.class)
+	@JoinColumn(name = "department_id", referencedColumnName = "id")
 	@NotNull(groups = {UserInfoUpdatePcSimpleView.class,UserInfoInsertPcSimpleView.class},message = "参数不能为为空")
 	private Integer departmentId ;
 

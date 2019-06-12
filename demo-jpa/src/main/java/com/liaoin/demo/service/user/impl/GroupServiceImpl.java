@@ -60,8 +60,6 @@ public class GroupServiceImpl implements GroupService {
         if (groups.size() != 0){
         	return fail(Tips.nameRepeat.msg);
 		}
-        group.setCreateTime(LocalDateTime.now());
-        group.setCreateUserId(loginUser.getId());
         group.setIsDelete(0);
         groupRepository.save(group);
         return ok();
@@ -83,8 +81,6 @@ public class GroupServiceImpl implements GroupService {
 		if (groups.size() != 0){
 			return fail(Tips.nameRepeat.msg);
 		}
-        group.setUpdateTime(LocalDateTime.now());
-        group.setUpdateUserId(loginUser.getId());
         groupRepository.save(group);
         return ok();
     }
@@ -102,8 +98,6 @@ public class GroupServiceImpl implements GroupService {
         }
         Group group = optional.get();
         group.setIsDelete(1);
-        group.setDeleteTime(LocalDateTime.now());
-        group.setDeleteUserId(loginUser.getId());
         return ok();
     }
 
@@ -132,24 +126,6 @@ public class GroupServiceImpl implements GroupService {
             if (group != null) {
                 if (group.getId() != null) {
                     list.add(criteriaBuilder.equal(root.get("id").as(Integer.class), group.getId()));
-                }
-                if (group.getCreateTime() != null) {
-                    list.add(criteriaBuilder.equal(root.get("createTime").as(Date.class), group.getCreateTime()));
-                }
-                if (group.getCreateUserId() != null) {
-                    list.add(criteriaBuilder.equal(root.get("createUserId").as(Integer.class), group.getCreateUserId()));
-                }
-                if (group.getDeleteTime() != null) {
-                    list.add(criteriaBuilder.equal(root.get("deleteTime").as(Date.class), group.getDeleteTime()));
-                }
-                if (group.getDeleteUserId() != null) {
-                    list.add(criteriaBuilder.equal(root.get("deleteUserId").as(Integer.class), group.getDeleteUserId()));
-                }
-                if (group.getUpdateTime() != null) {
-                    list.add(criteriaBuilder.equal(root.get("updateTime").as(Date.class), group.getUpdateTime()));
-                }
-                if (group.getUpdateUserId() != null) {
-                    list.add(criteriaBuilder.equal(root.get("updateUserId").as(Integer.class), group.getUpdateUserId()));
                 }
                 if ((group.getDescribes() != null) && !"".equals(group.getDescribes().trim())) {
                     list.add(criteriaBuilder.like(root.get("describes").as(String.class), "%" + group.getDescribes() + "%"));

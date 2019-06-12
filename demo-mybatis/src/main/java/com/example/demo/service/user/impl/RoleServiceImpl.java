@@ -58,11 +58,8 @@ public class RoleServiceImpl implements RoleService {
 		if (selectCount != 0) {
 			return fail(Tips.nameRepeat.msg);
 		}
-
-		role.setCreateUserId(loginUserInfo.getId());
-		role.setCreateTime(LocalDateTime.now());
 		role.setIsDelete(0);
-		roleMapper.insertSelectiveCustom(role);
+		roleMapper.insert(role);
 		return ok();
 	}
 
@@ -86,8 +83,6 @@ public class RoleServiceImpl implements RoleService {
 			return fail(Tips.nameRepeat.msg);
 		}
 
-		role.setUpdateUserId(loginUserInfo.getId());
-		role.setUpdateTime(LocalDateTime.now());
 		roleMapper.updateByPrimaryKeySelective(role);
 		return ok();
 	}
@@ -109,8 +104,6 @@ public class RoleServiceImpl implements RoleService {
 		//角色权限查询
 		roleMenuDeleteUpdata(loginUserInfo, build, roleMenuCount, roleMenuMapper);
 
-		role.setDeleteUserId(loginUserInfo.getId());
-		role.setDeleteTime(LocalDateTime.now());
 		role.setIsDelete(1);
 		roleMapper.updateByPrimaryKeySelective(role);
 		return ok();
@@ -140,27 +133,6 @@ public class RoleServiceImpl implements RoleService {
 		if (role != null) {
 			if (role.getId() != null) {
 				builder.where(WeekendSqls.<Role>custom().andEqualTo(Role::getId, role.getId()));
-			}
-			if (role.getCreateTime() != null) {
-				builder.where(WeekendSqls.<Role>custom().andEqualTo(Role::getCreateTime, role.getCreateTime()));
-			}
-			if (role.getCreateUserId() != null) {
-				builder.where(WeekendSqls.<Role>custom().andEqualTo(Role::getCreateUserId, role.getCreateUserId()));
-			}
-			if (role.getDeleteTime() != null) {
-				builder.where(WeekendSqls.<Role>custom().andEqualTo(Role::getDeleteTime, role.getDeleteTime()));
-			}
-			if (role.getDeleteUserId() != null) {
-				builder.where(WeekendSqls.<Role>custom().andEqualTo(Role::getDeleteUserId, role.getDeleteUserId()));
-			}
-			if (role.getIsDelete() != null) {
-				builder.where(WeekendSqls.<Role>custom().andEqualTo(Role::getIsDelete, role.getIsDelete()));
-			}
-			if (role.getUpdateTime() != null) {
-				builder.where(WeekendSqls.<Role>custom().andEqualTo(Role::getUpdateTime, role.getUpdateTime()));
-			}
-			if (role.getUpdateUserId() != null) {
-				builder.where(WeekendSqls.<Role>custom().andEqualTo(Role::getUpdateUserId, role.getUpdateUserId()));
 			}
 			if (role.getDescribes() != null && !"".equals(role.getDescribes().trim())) {
 				builder.where(WeekendSqls.<Role>custom().andLike(Role::getDescribes, "%" + role.getDescribes() + "%"));
@@ -216,8 +188,6 @@ public class RoleServiceImpl implements RoleService {
 		for(String menui : splits){
 			RoleMenu build = RoleMenu.builder().roleId(id).menuId(Integer.valueOf(menui)).build();
 			build.setIsDelete(0);
-			build.setCreateUserId(loginUser.getId());
-			build.setCreateTime(LocalDateTime.now());
 			build.setMenuType(1);
 			roleMenuMapper.insert(build);
 		}

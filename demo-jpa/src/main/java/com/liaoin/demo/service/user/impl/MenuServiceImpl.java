@@ -59,8 +59,6 @@ public class MenuServiceImpl implements MenuService {
 			Optional<Menu> byId = menuRepository.findById(menu.getParentId());
 			byId.ifPresent(menu::setParent);
 		}
-        menu.setCreateTime(LocalDateTime.now());
-        menu.setCreateUserId(loginUser.getId());
         menu.setIsDelete(0);
         menuRepository.save(menu);
         return ok();
@@ -76,8 +74,6 @@ public class MenuServiceImpl implements MenuService {
 			Optional<Menu> byId = menuRepository.findById(menu.getParentId());
 			byId.ifPresent(menu::setParent);
 		}
-        menu.setUpdateTime(LocalDateTime.now());
-        menu.setUpdateUserId(loginUser.getId());
         menuRepository.save(menu);
         return ok();
     }
@@ -95,8 +91,6 @@ public class MenuServiceImpl implements MenuService {
         }
         Menu menu = optional.get();
         menu.setIsDelete(1);
-        menu.setDeleteTime(LocalDateTime.now());
-        menu.setDeleteUserId(loginUser.getId());
         return ok();
     }
 
@@ -133,24 +127,6 @@ public class MenuServiceImpl implements MenuService {
             if (menu != null) {
                 if (menu.getId() != null) {
                     list.add(criteriaBuilder.equal(root.get("id").as(Integer.class), menu.getId()));
-                }
-                if (menu.getCreateTime() != null) {
-                    list.add(criteriaBuilder.equal(root.get("createTime").as(Date.class), menu.getCreateTime()));
-                }
-                if (menu.getCreateUserId() != null) {
-                    list.add(criteriaBuilder.equal(root.get("createUserId").as(Integer.class), menu.getCreateUserId()));
-                }
-                if (menu.getDeleteTime() != null) {
-                    list.add(criteriaBuilder.equal(root.get("deleteTime").as(Date.class), menu.getDeleteTime()));
-                }
-                if (menu.getDeleteUserId() != null) {
-                    list.add(criteriaBuilder.equal(root.get("deleteUserId").as(Integer.class), menu.getDeleteUserId()));
-                }
-                if (menu.getUpdateTime() != null) {
-                    list.add(criteriaBuilder.equal(root.get("updateTime").as(Date.class), menu.getUpdateTime()));
-                }
-                if (menu.getUpdateUserId() != null) {
-                    list.add(criteriaBuilder.equal(root.get("updateUserId").as(Integer.class), menu.getUpdateUserId()));
                 }
                 if ((menu.getDescribes() != null) && !"".equals(menu.getDescribes().trim())) {
                     list.add(criteriaBuilder.like(root.get("describes").as(String.class), "%" + menu.getDescribes() + "%"));
@@ -229,7 +205,6 @@ public class MenuServiceImpl implements MenuService {
 					.name(description)
 					.type(1)
 					.build();
-			parentMenu.setCreateTime(LocalDateTime.now());
 			parentMenu.setIsDelete(0);
 			menuRepository.save(parentMenu);
 			//在添加当前url为子级
@@ -239,10 +214,7 @@ public class MenuServiceImpl implements MenuService {
 					.describes(name)
 					.type(1)
 					.build();
-			menuBuild.setCreateTime(LocalDateTime.now());
 			menuBuild.setIsDelete(0);
-			menuBuild.setCreateTime(LocalDateTime.now());
-			menuBuild.setCreateUserId(loginUserId);
 			menuRepository.save(menuBuild);
 		}else {
 			Menu build = Menu.builder().menuUrl(url).build();
@@ -256,10 +228,7 @@ public class MenuServiceImpl implements MenuService {
 						.parent(menu)
 						.describes(name)
 						.build();
-				menuBuild.setCreateTime(LocalDateTime.now());
 				menuBuild.setIsDelete(0);
-				menuBuild.setCreateTime(LocalDateTime.now());
-				menuBuild.setCreateUserId(loginUserId);
 				menuRepository.save(menuBuild);
 			}
 		}

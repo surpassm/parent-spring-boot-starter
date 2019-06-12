@@ -48,8 +48,6 @@ public class RegionServiceImpl implements RegionService {
 		if (getParentId(region)) {
 			return fail(Tips.MSG_NOT.msg);
 		}
-		region.setCreateTime(LocalDateTime.now());
-		region.setCreateUserId(loginUser.getId());
 		region.setIsDelete(0);
 		regionRepository.save(region);
 		return ok();
@@ -64,8 +62,6 @@ public class RegionServiceImpl implements RegionService {
 		if (getParentId(region)) {
 			return fail(Tips.MSG_NOT.msg);
 		}
-		region.setUpdateTime(LocalDateTime.now());
-		region.setUpdateUserId(loginUser.getId());
 		regionRepository.save(region);
 		return ok();
 	}
@@ -98,8 +94,6 @@ public class RegionServiceImpl implements RegionService {
 			return fail(Tips.childrenError.msg);
 		}
 		region.setIsDelete(1);
-		region.setDeleteTime(LocalDateTime.now());
-		region.setDeleteUserId(loginUser.getId());
 		return ok();
 	}
 
@@ -138,24 +132,6 @@ public class RegionServiceImpl implements RegionService {
 			if (region != null) {
 				if (region.getId() != null) {
 					list.add(criteriaBuilder.equal(root.get("id").as(Integer.class), region.getId()));
-				}
-				if (region.getCreateTime() != null) {
-					list.add(criteriaBuilder.equal(root.get("createTime").as(Date.class), region.getCreateTime()));
-				}
-				if (region.getCreateUserId() != null) {
-					list.add(criteriaBuilder.equal(root.get("createUserId").as(Integer.class), region.getCreateUserId()));
-				}
-				if (region.getDeleteTime() != null) {
-					list.add(criteriaBuilder.equal(root.get("deleteTime").as(Date.class), region.getDeleteTime()));
-				}
-				if (region.getDeleteUserId() != null) {
-					list.add(criteriaBuilder.equal(root.get("deleteUserId").as(Integer.class), region.getDeleteUserId()));
-				}
-				if (region.getUpdateTime() != null) {
-					list.add(criteriaBuilder.equal(root.get("updateTime").as(Date.class), region.getUpdateTime()));
-				}
-				if (region.getUpdateUserId() != null) {
-					list.add(criteriaBuilder.equal(root.get("updateUserId").as(Integer.class), region.getUpdateUserId()));
 				}
 				if (region.getDepartmentIndex() != null) {
 					list.add(criteriaBuilder.equal(root.get("departmentIndex").as(Integer.class), region.getDepartmentIndex()));

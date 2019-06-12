@@ -44,11 +44,13 @@ public class UserMenu extends BasicEntity implements Serializable {
 	public Integer id;
 
 	@ApiModelProperty(value="用户系统标识",example = "1")
-	@Column(columnDefinition="int(11) COMMENT '用户系统标识'",nullable = false)
+	@ManyToOne(targetEntity = UserInfo.class)
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	@NotNull(groups = {UserMenuInsertPcSimpleView.class,UserMenuUpdatePcSimpleView.class},message = "参数不能为为空")
 	private Integer userId;
 	@ApiModelProperty(value="权限系统标识",example = "1")
-	@Column(columnDefinition="int(11) COMMENT '权限系统标识'",nullable = false)
+	@ManyToOne(targetEntity = Menu.class)
+	@JoinColumn(name = "menu_id", referencedColumnName = "id")
 	@NotNull(groups = {UserMenuInsertPcSimpleView.class,UserMenuUpdatePcSimpleView.class},message = "参数不能为为空")
 	private Integer menuId;
 	@ApiModelProperty(value="权限类型0=可访问、1=可授权",example = "1",allowableValues = "range[0,1]")

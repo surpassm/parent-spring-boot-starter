@@ -12,7 +12,6 @@ import java.util.List;
   */
 public interface GroupMapper extends tk.mybatis.mapper.common.Mapper<Group> {
 
-    int insertSelectiveCustom(Group group);
 	/**
 	 * 根据父级Id查询
 	 * @param parentId

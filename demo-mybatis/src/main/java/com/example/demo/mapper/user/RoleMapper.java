@@ -11,7 +11,6 @@ import com.example.demo.entity.user.Role;
   */
 public interface RoleMapper extends tk.mybatis.mapper.common.Mapper<Role> {
 
-    int insertSelectiveCustom(Role role);
 
 	/**
 	 * 根据系统标识查询角色列表

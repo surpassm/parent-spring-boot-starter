@@ -63,10 +63,8 @@ public class RegionServiceImpl implements RegionService {
 			return fail(Tips.parentError.msg);
 		}
 
-		region.setCreateUserId(loginUserInfo.getId());
-		region.setCreateTime(LocalDateTime.now());
 		region.setIsDelete(0);
-		regionMapper.insertSelectiveCustom(region);
+		regionMapper.insert(region);
 		return ok();
 	}
 
@@ -94,8 +92,6 @@ public class RegionServiceImpl implements RegionService {
 		}
 
 
-		region.setUpdateUserId(loginUserInfo.getId());
-		region.setUpdateTime(LocalDateTime.now());
 		regionMapper.updateByPrimaryKeySelective(region);
 		return ok();
 	}
@@ -134,8 +130,6 @@ public class RegionServiceImpl implements RegionService {
 		if (departmentCount !=0){
 			return fail("存在关联用户，无法删除");
 		}
-		region.setDeleteUserId(loginUserInfo.getId());
-		region.setDeleteTime(LocalDateTime.now());
 		region.setIsDelete(1);
 		regionMapper.updateByPrimaryKeySelective(region);
 		return ok();
@@ -165,27 +159,6 @@ public class RegionServiceImpl implements RegionService {
 		if (region != null) {
 			if (region.getId() != null) {
 				builder.where(WeekendSqls.<Region>custom().andEqualTo(Region::getId, region.getId()));
-			}
-			if (region.getCreateTime() != null) {
-				builder.where(WeekendSqls.<Region>custom().andEqualTo(Region::getCreateTime, region.getCreateTime()));
-			}
-			if (region.getCreateUserId() != null) {
-				builder.where(WeekendSqls.<Region>custom().andEqualTo(Region::getCreateUserId, region.getCreateUserId()));
-			}
-			if (region.getDeleteTime() != null) {
-				builder.where(WeekendSqls.<Region>custom().andEqualTo(Region::getDeleteTime, region.getDeleteTime()));
-			}
-			if (region.getDeleteUserId() != null) {
-				builder.where(WeekendSqls.<Region>custom().andEqualTo(Region::getDeleteUserId, region.getDeleteUserId()));
-			}
-			if (region.getIsDelete() != null) {
-				builder.where(WeekendSqls.<Region>custom().andEqualTo(Region::getIsDelete, region.getIsDelete()));
-			}
-			if (region.getUpdateTime() != null) {
-				builder.where(WeekendSqls.<Region>custom().andEqualTo(Region::getUpdateTime, region.getUpdateTime()));
-			}
-			if (region.getUpdateUserId() != null) {
-				builder.where(WeekendSqls.<Region>custom().andEqualTo(Region::getUpdateUserId, region.getUpdateUserId()));
 			}
 			if (region.getDepartmentIndex() != null) {
 				builder.where(WeekendSqls.<Region>custom().andEqualTo(Region::getDepartmentIndex, region.getDepartmentIndex()));

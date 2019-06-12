@@ -76,10 +76,8 @@ public class MenuServiceImpl implements MenuService {
 			return fail(Tips.parentError.msg);
 		}
 
-		menu.setCreateUserId(loginUserInfo.getId());
-		menu.setCreateTime(LocalDateTime.now());
 		menu.setIsDelete(0);
-		menuMapper.insertSelectiveCustom(menu);
+		menuMapper.insert(menu);
 		return ok();
 	}
 
@@ -107,8 +105,6 @@ public class MenuServiceImpl implements MenuService {
 		}
 
 
-		menu.setUpdateUserId(loginUserInfo.getId());
-		menu.setUpdateTime(LocalDateTime.now());
 		menuMapper.updateByPrimaryKeySelective(menu);
 		return ok();
 	}
@@ -156,8 +152,6 @@ public class MenuServiceImpl implements MenuService {
 		int userMenuCount = userMenuMapper.selectCount(userMenu);
 		CommonImpl.userMenuDeleteUpdata(loginUserInfo, userMenu, userMenuCount, userMenuMapper);
 
-		menu.setDeleteUserId(loginUserInfo.getId());
-		menu.setDeleteTime(LocalDateTime.now());
 		menu.setIsDelete(1);
 		menuMapper.updateByPrimaryKeySelective(menu);
 		return ok();
@@ -187,27 +181,6 @@ public class MenuServiceImpl implements MenuService {
 		if (menu != null) {
 			if (menu.getId() != null) {
 				builder.where(WeekendSqls.<Menu>custom().andEqualTo(Menu::getId, menu.getId()));
-			}
-			if (menu.getCreateTime() != null) {
-				builder.where(WeekendSqls.<Menu>custom().andEqualTo(Menu::getCreateTime, menu.getCreateTime()));
-			}
-			if (menu.getCreateUserId() != null) {
-				builder.where(WeekendSqls.<Menu>custom().andEqualTo(Menu::getCreateUserId, menu.getCreateUserId()));
-			}
-			if (menu.getDeleteTime() != null) {
-				builder.where(WeekendSqls.<Menu>custom().andEqualTo(Menu::getDeleteTime, menu.getDeleteTime()));
-			}
-			if (menu.getDeleteUserId() != null) {
-				builder.where(WeekendSqls.<Menu>custom().andEqualTo(Menu::getDeleteUserId, menu.getDeleteUserId()));
-			}
-			if (menu.getIsDelete() != null) {
-				builder.where(WeekendSqls.<Menu>custom().andEqualTo(Menu::getIsDelete, menu.getIsDelete()));
-			}
-			if (menu.getUpdateTime() != null) {
-				builder.where(WeekendSqls.<Menu>custom().andEqualTo(Menu::getUpdateTime, menu.getUpdateTime()));
-			}
-			if (menu.getUpdateUserId() != null) {
-				builder.where(WeekendSqls.<Menu>custom().andEqualTo(Menu::getUpdateUserId, menu.getUpdateUserId()));
 			}
 			if (menu.getDescribes() != null && !"".equals(menu.getDescribes().trim())) {
 				builder.where(WeekendSqls.<Menu>custom().andLike(Menu::getDescribes, "%" + menu.getDescribes() + "%"));
@@ -304,9 +277,8 @@ public class MenuServiceImpl implements MenuService {
 					.name(description)
 					.type(1)
 					.build();
-			parentMenu.setCreateTime(LocalDateTime.now());
 			parentMenu.setIsDelete(0);
-			menuMapper.insertSelectiveCustom(parentMenu);
+			menuMapper.insert(parentMenu);
 			//在添加当前url为子级
 			Menu menuBuild = Menu.builder()
 					.menuUrl(url)
@@ -314,11 +286,8 @@ public class MenuServiceImpl implements MenuService {
 					.describes(name)
 					.type(1)
 					.build();
-			menuBuild.setCreateTime(LocalDateTime.now());
 			menuBuild.setIsDelete(0);
-			menuBuild.setCreateTime(LocalDateTime.now());
-			menuBuild.setCreateUserId(loginUserId);
-			menuMapper.insertSelectiveCustom(menuBuild);
+			menuMapper.insert(menuBuild);
 		}else {
 			Menu build = Menu.builder().menuUrl(url).build();
 			build.setIsDelete(0);
@@ -331,11 +300,8 @@ public class MenuServiceImpl implements MenuService {
 						.parentId(menu.getId())
 						.describes(name)
 						.build();
-				menuBuild.setCreateTime(LocalDateTime.now());
 				menuBuild.setIsDelete(0);
-				menuBuild.setCreateTime(LocalDateTime.now());
-				menuBuild.setCreateUserId(loginUserId);
-				menuMapper.insertSelectiveCustom(menuBuild);
+				menuMapper.insert(menuBuild);
 			}
 		}
 	}

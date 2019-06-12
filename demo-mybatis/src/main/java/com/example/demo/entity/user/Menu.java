@@ -47,8 +47,10 @@ public class Menu extends BasicEntity implements Serializable {
 	@NotNull(groups = MenuUpdatePcSimpleView.class,message = "参数不能为空")
     private Integer id;
 
+
     @ApiModelProperty(value = "父级菜单ID")
-	@Column(columnDefinition="int(11) COMMENT '父级菜单ID'")
+	@OneToOne(targetEntity = Menu.class)
+	@JoinColumn(name = "parent_id", referencedColumnName = "id")
     private Integer parentId;
 
     @ApiModelProperty(value = "菜单排序")

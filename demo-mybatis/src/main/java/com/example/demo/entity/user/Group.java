@@ -56,7 +56,8 @@ public class Group extends BasicEntity implements Serializable {
 	private String describes;
 
 	@ApiModelProperty(value = "父级ID")
-	@Column(columnDefinition="int(11) COMMENT '父级ID'")
+	@OneToOne(targetEntity = Group.class)
+	@JoinColumn(name = "parent_id", referencedColumnName = "id")
 	private Integer parentId;
 
 	@Transient

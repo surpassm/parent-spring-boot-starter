@@ -44,11 +44,13 @@ public class UserRole extends BasicEntity implements Serializable {
 	public Integer id;
 
 	@ApiModelProperty(value="用户系统标识",example = "1")
-	@Column(columnDefinition="int(11) COMMENT '用户系统标识'",nullable = false)
+	@ManyToOne(targetEntity = UserInfo.class)
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	@NotNull(groups = {UserRoleInsertPcSimpleView.class,UserRoleUpdatePcSimpleView.class},message = "参数不能为为空")
 	private Integer userId;
 	@ApiModelProperty(value="角色系统标识",example = "1")
-	@Column(columnDefinition="int(11) COMMENT '角色系统标识'",nullable = false)
+	@ManyToOne(targetEntity = Role.class)
+	@JoinColumn(name = "role_id", referencedColumnName = "id")
 	@NotNull(groups = {UserRoleInsertPcSimpleView.class,UserRoleUpdatePcSimpleView.class},message = "参数不能为为空")
 	private Integer roleId;
 }

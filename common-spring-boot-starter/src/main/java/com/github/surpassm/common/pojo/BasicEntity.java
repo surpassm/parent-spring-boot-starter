@@ -30,7 +30,7 @@ public class BasicEntity implements Serializable {
 	@Column(columnDefinition="int(11) COMMENT '是否删除 0=否、1=是'")
 	private Integer isDelete;
 
-	@ApiModelProperty(hidden = true)
+	/*@ApiModelProperty(hidden = true)
 	@Column(columnDefinition="datetime COMMENT '创建时间'")
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
@@ -58,5 +58,5 @@ public class BasicEntity implements Serializable {
 
 	@ApiModelProperty(hidden = true)
 	@Column(columnDefinition="int(11) COMMENT '删除用户编号'")
-	private Integer deleteUserId;
+	private Integer deleteUserId;*/
 }

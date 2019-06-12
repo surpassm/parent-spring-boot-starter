@@ -84,8 +84,6 @@ public class UserInfoServiceImpl implements UserInfoService {
 			return fail("账号已存在");
 		}
 		userInfo.setPassword(bCryptPasswordEncoder.encode(userInfo.getPassword().trim()));
-        userInfo.setCreateTime(LocalDateTime.now());
-        userInfo.setCreateUserId(loginUser.getId());
         userInfo.setIsDelete(0);
         userInfoRepository.save(userInfo);
         return ok();
@@ -134,8 +132,6 @@ public class UserInfoServiceImpl implements UserInfoService {
 				userInfo.setPassword(passwordNew);
 			}
 		}
-		userInfo.setUpdateTime(LocalDateTime.now());
-        userInfo.setUpdateUserId(loginUser.getId());
         userInfoRepository.save(userInfo);
         return ok();
     }
@@ -153,8 +149,6 @@ public class UserInfoServiceImpl implements UserInfoService {
         }
         UserInfo userInfo = optional.get();
         userInfo.setIsDelete(1);
-        userInfo.setDeleteTime(LocalDateTime.now());
-        userInfo.setDeleteUserId(loginUser.getId());
         return ok();
     }
 
@@ -193,24 +187,6 @@ public class UserInfoServiceImpl implements UserInfoService {
             if (userInfo != null) {
                 if (userInfo.getId() != null) {
                     list.add(criteriaBuilder.equal(root.get("id").as(Integer.class), userInfo.getId()));
-                }
-                if (userInfo.getCreateTime() != null) {
-                    list.add(criteriaBuilder.equal(root.get("createTime").as(Date.class), userInfo.getCreateTime()));
-                }
-                if (userInfo.getCreateUserId() != null) {
-                    list.add(criteriaBuilder.equal(root.get("createUserId").as(Integer.class), userInfo.getCreateUserId()));
-                }
-                if (userInfo.getDeleteTime() != null) {
-                    list.add(criteriaBuilder.equal(root.get("deleteTime").as(Date.class), userInfo.getDeleteTime()));
-                }
-                if (userInfo.getDeleteUserId() != null) {
-                    list.add(criteriaBuilder.equal(root.get("deleteUserId").as(Integer.class), userInfo.getDeleteUserId()));
-                }
-                if (userInfo.getUpdateTime() != null) {
-                    list.add(criteriaBuilder.equal(root.get("updateTime").as(Date.class), userInfo.getUpdateTime()));
-                }
-                if (userInfo.getUpdateUserId() != null) {
-                    list.add(criteriaBuilder.equal(root.get("updateUserId").as(Integer.class), userInfo.getUpdateUserId()));
                 }
                 if ((userInfo.getHeadUrl() != null) && !"".equals(userInfo.getHeadUrl().trim())) {
                     list.add(criteriaBuilder.like(root.get("headUrl").as(String.class), "%" + userInfo.getHeadUrl() + "%"));
@@ -314,8 +290,6 @@ public class UserInfoServiceImpl implements UserInfoService {
 		if (userInfo.getMenus() != null){
 			userInfo.getMenus().clear();
 		}
-		userInfo.setUpdateTime(LocalDateTime.now());
-		userInfo.setUpdateUserId(loginUser.getId());
 		//新增现有的用户权限
 		for(String split: splits){
 			Optional<Menu> menuOptional = menuRepository.findById(Integer.valueOf(split));

@@ -4,134 +4,16 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.mapper.user.UserInfoMapper">
 
-    <insert id="insertSelectiveCustom" useGeneratedKeys="true" keyProperty="id"
-            parameterType="com.example.demo.entity.user.UserInfo">
-        insert into t_user_info
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                id,
-            </if>
-            <if test="createTime != null">
-                create_time,
-            </if>
-            <if test="createUserId != null">
-                create_user_id,
-            </if>
-            <if test="deleteTime != null">
-                delete_time,
-            </if>
-            <if test="deleteUserId != null">
-                delete_user_id,
-            </if>
-            <if test="isDelete != null">
-                is_delete,
-            </if>
-            <if test="updateTime != null">
-                update_time,
-            </if>
-            <if test="updateUserId != null">
-                update_user_id,
-            </if>
-            <if test="departmentId != null">
-                department_id,
-            </if>
-            <if test="headUrl != null">
-                head_url,
-            </if>
-            <if test="landingTime != null">
-                landing_time,
-            </if>
-            <if test="mobile != null">
-                mobile,
-            </if>
-            <if test="name != null">
-                name,
-            </if>
-            <if test="password != null">
-                password,
-            </if>
-            <if test="regionId != null">
-                region_id,
-            </if>
-            <if test="userInfoIndex != null">
-                user_info_index,
-            </if>
-            <if test="username != null">
-                username,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                #{id},
-            </if>
-            <if test="createTime != null">
-                #{createTime},
-            </if>
-            <if test="createUserId != null">
-                #{createUserId},
-            </if>
-            <if test="deleteTime != null">
-                #{deleteTime},
-            </if>
-            <if test="deleteUserId != null">
-                #{deleteUserId},
-            </if>
-            <if test="isDelete != null">
-                #{isDelete},
-            </if>
-            <if test="updateTime != null">
-                #{updateTime},
-            </if>
-            <if test="updateUserId != null">
-                #{updateUserId},
-            </if>
-            <if test="departmentId != null">
-                #{departmentId},
-            </if>
-            <if test="headUrl != null">
-                #{headUrl},
-            </if>
-            <if test="landingTime != null">
-                #{landingTime},
-            </if>
-            <if test="mobile != null">
-                #{mobile},
-            </if>
-            <if test="name != null">
-                #{name},
-            </if>
-            <if test="password != null">
-                #{password},
-            </if>
-            <if test="regionId != null">
-                #{regionId},
-            </if>
-            <if test="userInfoIndex != null">
-                #{userInfoIndex},
-            </if>
-            <if test="username != null">
-                #{username},
-            </if>
-
-        </trim>
-    </insert>
     <!-- 根据主键查询用户及角色、权限列表 start-->
     <resultMap id="BaseResultMap" type="com.example.demo.entity.user.UserInfo">
         <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="create_user_id" property="createUserId" jdbcType="INTEGER"/>
-        <result column="delete_time" property="deleteTime" jdbcType="TIMESTAMP"/>
-        <result column="delete_user_id" property="deleteUserId" jdbcType="INTEGER"/>
         <result column="is_delete" property="isDelete" jdbcType="INTEGER"/>
-        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
-        <result column="update_user_id" property="updateUserId" jdbcType="INTEGER"/>
         <result column="department_id" property="departmentId" jdbcType="INTEGER"/>
         <result column="head_url" property="headUrl" jdbcType="VARCHAR"/>
         <result column="landing_time" property="landingTime" jdbcType="TIMESTAMP"/>
         <result column="mobile" property="mobile" jdbcType="VARCHAR"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="password" property="password" jdbcType="VARCHAR"/>
-        <result column="region_id" property="regionId" jdbcType="INTEGER"/>
         <result column="user_info_index" property="userInfoIndex" jdbcType="INTEGER"/>
         <result column="username" property="username" jdbcType="VARCHAR"/>
         <collection property="roles" ofType="NewsLabel" select="findByMenus" column="id"/>
@@ -154,13 +36,7 @@
 
     <resultMap id="BaseResultMapFindByMenus" type="com.example.demo.entity.user.Role">
         <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="create_user_id" property="createUserId" jdbcType="INTEGER"/>
-        <result column="delete_time" property="deleteTime" jdbcType="TIMESTAMP"/>
-        <result column="delete_user_id" property="deleteUserId" jdbcType="INTEGER"/>
         <result column="is_delete" property="isDelete" jdbcType="INTEGER"/>
-        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
-        <result column="update_user_id" property="updateUserId" jdbcType="INTEGER"/>
         <result column="describes" property="describes" jdbcType="VARCHAR"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="role_index" property="roleIndex" jdbcType="INTEGER"/>
@@ -179,13 +55,7 @@
     </select>
     <resultMap id="MenuBaseResultMap" type="com.example.demo.entity.user.Menu">
         <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="create_user_id" property="createUserId" jdbcType="INTEGER"/>
-        <result column="delete_time" property="deleteTime" jdbcType="TIMESTAMP"/>
-        <result column="delete_user_id" property="deleteUserId" jdbcType="INTEGER"/>
         <result column="is_delete" property="isDelete" jdbcType="INTEGER"/>
-        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
-        <result column="update_user_id" property="updateUserId" jdbcType="INTEGER"/>
         <result column="describes" property="describes" jdbcType="VARCHAR"/>
         <result column="menu_icon" property="menuIcon" jdbcType="VARCHAR"/>
         <result column="menu_index" property="menuIndex" jdbcType="INTEGER"/>

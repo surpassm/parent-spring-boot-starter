@@ -11,5 +11,4 @@ import com.example.demo.entity.user.GroupRole;
   */
 public interface GroupRoleMapper extends tk.mybatis.mapper.common.Mapper<GroupRole> {
 
-    int insertSelectiveCustom(GroupRole groupRole);
 }

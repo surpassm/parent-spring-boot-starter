@@ -13,7 +13,6 @@ import java.util.List;
   */
 public interface MenuMapper extends tk.mybatis.mapper.common.Mapper<Menu> {
 
-    int insertSelectiveCustom(@Param("menu")Menu menu);
 	/**
 	 * 根据父级Id查询
 	 * @param parentId

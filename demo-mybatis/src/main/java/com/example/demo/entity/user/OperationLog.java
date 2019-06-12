@@ -6,5 +6,5 @@ package com.example.demo.entity.user;
  * Version 1.0
  * Description
  */
-public class OperationLog {
+public class OperationLog  {
 }

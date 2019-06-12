@@ -64,7 +64,7 @@ public class SurpassmAuthenticationSuccessHandler extends SavedRequestAwareAuthe
                                         Authentication authentication) throws IOException, ServletException {
 
         logger.info("登录成功");
-        String header = request.getHeader("Authorization");
+        String header = request.getHeader("Login");
         if (header == null || !header.startsWith("Basic ")) {
             throw new SurpassmAuthenticationException("请求头中无client信息");
         }
